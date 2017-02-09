@@ -11,5 +11,6 @@ namespace ADLibrary.Sorting
     /// </summary>
     public interface ISorter
     {
+        void sort(IComparable[] array);
     }
 }
