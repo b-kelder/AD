@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public interface IList<T>
+    public interface ICollection<T>
     {
         void add(T item);
         T get(int index);

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Sorting
 {
-    /// <summary>
-    /// Interface for all sorting classes
-    /// </summary>
-    public interface ISorter
+    public class BubbleSort : ISorter
     {
+        public void sort(IComparable[] array)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
