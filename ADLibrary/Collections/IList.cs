@@ -11,6 +11,8 @@ namespace ADLibrary.Collections
         void add(T item);
         T get(int index);
         int indexOf(T item);
+        bool contains(T item);
+        void insert(T item, int index);
         void remove(int index);
         int count();
     }
