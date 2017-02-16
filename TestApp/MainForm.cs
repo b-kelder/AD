@@ -51,7 +51,7 @@ namespace TestApp
             }
 
             Action testMethod = () => {
-                BubbleSort.sort(arr);
+                SmartBubbleSort.sort(arr);
             };
 
             pt = new PerformanceTester(testMethod, (ms) => {

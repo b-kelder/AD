@@ -15,5 +15,6 @@ namespace ADLibrary.Collections
         void insert(T item, int index);
         void remove(int index);
         int count();
+        T[] toArray();
     }
 }

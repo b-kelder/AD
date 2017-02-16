@@ -91,9 +91,6 @@ namespace ADLibrary.Collections
 
         public void insert(T item, int index)
         {
-            Console.WriteLine("Start of insert");
-            DumpContents();
-
             if(index < 0)
             {
                 throw new ArgumentOutOfRangeException("index", "Index cannot be negative");
@@ -114,9 +111,6 @@ namespace ADLibrary.Collections
                 // Move everything starting at index 1 position back
                 Array.Copy(array, index, array, index + 1, nextFreeIndex - index);
             }
-
-            Console.WriteLine("End of insert");
-            DumpContents();
         }
 
         public int count()
@@ -124,18 +118,11 @@ namespace ADLibrary.Collections
             return nextFreeIndex;
         }
 
-        public void DumpContents()
+        public T[] toArray()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("Size: " + array.Length);
-            builder.AppendLine("Count: " + count());
-            builder.AppendLine("Items:");
-            for(int i = 0; i < array.Length; i++)
-            {
-                builder.Append(", ");
-                builder.Append(i);
-            }
-            Console.WriteLine(builder.ToString());
+            T[] result = new T[count()];
+            array.CopyTo(result, 0);
+            return result;
         }
     }
 }
