@@ -16,15 +16,15 @@ namespace ADLibrary.Sorting
         {
             IComparable temp;                                   //Create a variable to temporary save an item.
 
-            for (int i = array.Length - 1; i >= 1; i--)         //loop door iets? !@##$!$%@%^$
+            for (int i = 0; i < array.Length; i++)         //loop door iets? !@##$!$%@%^$
             {
-                for (int j = 0; j < array.Length; j++)          //loop door iets? !@##$!$%@%^$
+                for (int j = 1; j < array.Length - i; j++)          //loop door iets? !@##$!$%@%^$
                 {
-                    if (array[j].CompareTo(array[j + 1]) > 0)   //Check if the current item is larger than next item in the array.
+                    if (array[j - 1].CompareTo(array[j]) > 0)   //Check if the current item is larger than next item in the array.
                     {
                         temp = array[j];                        //If so, temporary save the current item.
-                        array[j] = array[j + 1];                //Give the smaller of the two the index of the larger one.
-                        array[j + 1] = temp;                    //Give the larger item the index of the smaller one, basicly swapping them.
+                        array[j] = array[j - 1];                //Give the smaller of the two the index of the larger one.
+                        array[j - 1] = temp;                    //Give the larger item the index of the smaller one, basicly swapping them.
                     }
                 }
             }

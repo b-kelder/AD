@@ -27,8 +27,8 @@ namespace ADLibrary.Sorting
                 }
 
                 IComparable temp = array[i];                                //After finding the new smallest item, temporary save the next unsorted item.
-                array[i] = array[indexSmallest];                            //Put the smallest item on its new index.
-                array[indexSmallest] = temp;                                //Put the temporary saved item back in the array, basicly swapping them.
+                array[i] = array[indexSmallest];                            //Give the smaller of the two the index of the larger one.
+                array[indexSmallest] = temp;                                //Give the larger item the index of the smaller one, basicly swapping them.
             }
         }
     }
