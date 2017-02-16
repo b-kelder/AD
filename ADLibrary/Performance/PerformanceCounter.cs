@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace AD_Lib.Performance
+namespace ADLibrary.Performance
 {
     public class PerformanceCounter
     {
@@ -15,8 +16,6 @@ namespace AD_Lib.Performance
 
         private long frequency;
         private long start;
-        private IntPtr processorAffinity;
-        private bool affinityLocked;
 
         /// <summary>
         /// Creates a new PerformanceCounter.
@@ -27,40 +26,8 @@ namespace AD_Lib.Performance
             if(!QueryPerformanceFrequency(out frequency))
             {
                 // Should never happen on Windows XP or later according to MSDN
-                throw new QueryPerformanceCounterException("QueryPerformanceCounter not supported on this machine.");
+                throw new Win32Exception("QueryPerformanceCounter not supported on this machine.");
             }
-        }
-
-        /// <summary>
-        /// Locks the current process' processor affinity to the last available processor.
-        /// Can be used to optimize testing conditions.
-        /// </summary>
-        public void lockAffinity()
-        {
-            if(affinityLocked)
-                return;
-
-            var process = Process.GetCurrentProcess();
-            // Store existing affinity.
-            processorAffinity = process.ProcessorAffinity;
-
-            // Create an affinity mask that only allows the highest number processor on this system and apply it.
-            IntPtr lockedAffinity = (IntPtr)(0x1 << Environment.ProcessorCount - 1);
-            process.ProcessorAffinity = lockedAffinity;
-
-            affinityLocked = true;
-        }
-
-        /// <summary>
-        /// Restores this process' processor affinity to its previous value if it's currently locked.
-        /// </summary>
-        public void releaseAffinity()
-        {
-            if(!affinityLocked)
-                return;
-
-            Process.GetCurrentProcess().ProcessorAffinity = processorAffinity;
-            affinityLocked = false;
         }
 
         /// <summary>
@@ -69,12 +36,6 @@ namespace AD_Lib.Performance
         /// </summary>
         public void startCounter()
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            // Do we need this here or does GC.WaitForPendingFinalizers() already put us back in the ready queue?
-            Thread.Sleep(1);
-
             QueryPerformanceCounter(out start);
         }
 
@@ -114,17 +75,5 @@ namespace AD_Lib.Performance
     {
         Milliseconds,
         Microseconds
-    }
-
-
-    [Serializable]
-    public class QueryPerformanceCounterException : Exception
-    {
-        public QueryPerformanceCounterException() { }
-        public QueryPerformanceCounterException(string message) : base(message) { }
-        public QueryPerformanceCounterException(string message, Exception inner) : base(message, inner) { }
-        protected QueryPerformanceCounterException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }
