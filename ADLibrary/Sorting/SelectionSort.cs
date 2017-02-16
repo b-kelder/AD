@@ -19,11 +19,11 @@ namespace ADLibrary.Sorting
                     {
                         indexSmallest = j;
                     }
-
-                    IComparable temp = array[i];
-                    array[i] = array[indexSmallest];
-                    array[indexSmallest] = temp;
                 }
+
+                IComparable temp = array[i];
+                array[i] = array[indexSmallest];
+                array[indexSmallest] = temp;
             }
         }
     }
