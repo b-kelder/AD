@@ -10,7 +10,20 @@ namespace ADLibrary.Sorting
     {
         public void sort(IComparable[] array)
         {
-            throw new NotImplementedException();
+            IComparable temp;
+
+            for (int i = array.Length - 1; i >= 1; i--)
+            {
+                for (int j = 0; j < array.Length; j++)
+                {
+                    if (array[j].CompareTo(array[j + 1]) > 0)
+                    {
+                        temp = array[j];
+                        array[j] = array[j + 1];
+                        array[j + 1] = temp;
+                    }
+                }
+            }
         }
     }
 }
