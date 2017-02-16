@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Sorting
 {
-    public class BubbleSort : ISorter
+    public static class BubbleSort
     {
         /// <summary>
         /// Method that sorts and IComparable array using the bubble sort algorithm.
         /// </summary>
         /// <param name="array">The array to sort.</param>
-        public void sort(IComparable[] array)
+        public static void sort<T>(T[] array) where T : IComparable
         {
-            IComparable temp;                                   //Create a variable to temporary save an item.
+            T temp;                                   //Create a variable to temporary save an item.
 
             for (int i = 0; i < array.Length; i++)         //loop door iets? !@##$!$%@%^$
             {

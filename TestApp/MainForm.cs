@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ADLibrary.Collections;
 using ADLibrary.Performance;
+using ADLibrary.Sorting;
 
 namespace TestApp
 {
@@ -41,6 +42,25 @@ namespace TestApp
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
+            int[] arr = new int[1000];
+            var rand = new Random();
+
+            for(int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = rand.Next() % 100;
+            }
+
+            Action testMethod = () => {
+                BubbleSort.sort(arr);
+            };
+
+            pt = new PerformanceTester(testMethod, (ms) => {
+                logBox.Invoke(new Action(() =>
+                {
+                    logBox.AppendText("Test result: " + ms + "ms\r\n");
+                    //logBox.Text += string.Join(", ", arr);
+                }));
+            });
             pt.run();
         }
     }

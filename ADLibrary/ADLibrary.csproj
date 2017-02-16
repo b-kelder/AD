@@ -46,7 +46,6 @@
     <Compile Include="Performance\PerformanceTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sorting\BubbleSort.cs" />
-    <Compile Include="Sorting\ISorter.cs" />
     <Compile Include="Sorting\SelectionSort.cs" />
   </ItemGroup>
   <ItemGroup />

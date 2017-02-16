@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Sorting
 {
-    class SelectionSort : ISorter
+    public static class SelectionSort
     {
         /// <summary>
         /// Method that sorts and IComparable array using the selection sort algorithm.
         /// </summary>
         /// <param name="array">The array to sort.</param>
-        public void sort(IComparable[] array)
+        public static void sort<T>(T[] array) where T : IComparable
         {
             for (int i = 0; i < array.Length - 1; i++)                      //Loop through all items in the array.
             {
@@ -26,7 +26,7 @@ namespace ADLibrary.Sorting
                     }
                 }
 
-                IComparable temp = array[i];                                //After finding the new smallest item, temporary save the next unsorted item.
+                T temp = array[i];                                //After finding the new smallest item, temporary save the next unsorted item.
                 array[i] = array[indexSmallest];                            //Give the smaller of the two the index of the larger one.
                 array[indexSmallest] = temp;                                //Give the larger item the index of the smaller one, basicly swapping them.
             }
