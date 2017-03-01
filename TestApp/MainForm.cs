@@ -14,18 +14,35 @@ using System.Reflection;
 
 namespace TestApp
 {
+    /// <summary>
+    /// Main form used to test performance of collections and sorting algorithms in ADLibrary.
+    /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Used to store info about an action that should be tested.
+        /// </summary>
+        struct TestAction
+        {
+            public string name;
+            public Action action;
+        }
+
+        /// <summary>
+        /// Used to store sorting algorithms in a list box
+        /// </summary>
         class SortingListItem
         {
             string name;
             MethodInfo sortingMethod;
 
+            // Delegate that matches the sorting algorithms' sort method
             public delegate void sort<T>(T[] array) where T : IComparable;
 
             public SortingListItem(Type sortingType)
             {
                 name = sortingType.Name;
+                // All sort classes must have a static method called sort
                 sortingMethod = sortingType.GetMethod("sort", BindingFlags.Static | BindingFlags.Public);
                 Console.WriteLine(sortingMethod.Name);
             }
@@ -52,104 +69,183 @@ namespace TestApp
 
         PerformanceTester pt;
 
-        /// <summary>
-        /// List of actions that are currently being tested. Null if no test is running.
-        /// </summary>
-        List<Action> currentTestActions;
-        int currentTestActionIndex;
-
         public MainForm()
         {
             InitializeComponent();
-
-            pt = new PerformanceTester(() =>
-            {
-                var al = new Arraylist<int>();
-                for(int i = 0; i < 1000000; i++)
-                {
-                    al.add(i);
-                }
-            }, genericTestCallback);
 
             populateCollectionsTab();
             populateSortingTab();
         }
 
-        private void genericTestCallback(long ms)
+        #region output
+        /// <summary>
+        /// Writes text to the log box and ends with a newline.
+        /// Can be called from other threads.
+        /// </summary>
+        /// <param name="text">The text to log</param>
+        private void log(string text)
         {
-            MessageBox.Show("Result: " + ms + "ms");
-            logBox.Invoke(new Action(() =>
+            if(logBox.InvokeRequired)
             {
-                logBox.Text += ("Test result: " + ms + "ms\r\n");
-            }));
+                logBox.Invoke(new Action(() =>
+                {
+                    log(text);
+                }));
+                return;
+            }
+            logBox.AppendText(text + "\r\n");
         }
+
+        private void error(string text)
+        {
+            log("ERROR: " + text);
+        }
+
+        private void warning(string text)
+        {
+            log("WARNING: " + text);
+        }
+        #endregion
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
-            // Generate some test data
-            var arr = generateSortingTestData<int>();
-
-            var origArray = new int[arr.Length];
-            arr.CopyTo(origArray, 0);
-
-            // Generate test actions
-            var actionsToTest = generateSortingActions<int>(arr);
-
-            if(actionsToTest.Count > 0)
+            if(tabControl.SelectedTab == tabSorting)
             {
-                currentTestActions = actionsToTest;
+                if(sortingListBox.CheckedItems.Count > 0)
+                {
+                    // Generate some test data
+                    var arr = generateSortingTestData();
 
-                Action<int> runAction = null;
-                Action<long> callback = (ms) => {
-                    // Ensure that this is run from the main/UI thread
-                    logBox.Invoke(new Action(() =>
+                    var origArray = new int[arr.Length];
+                    arr.CopyTo(origArray, 0);
+
+                    // Generate test actions
+                    var actionsToTest = generateSortingActions<int>(arr);
+
+                    if(actionsToTest.Count > 0)
                     {
-                        logBox.AppendText("Test result: " + ms + "ms\r\n");
+                        int testIndex = 0;
+                        int iterationCounter = 0;
+                        int targetIterations = Convert.ToInt32(sortingIterations.Value);
+                        long totalTime = 0;                     // Used to store total time for all iterations of an action
 
-                        if(currentTestActionIndex + 1 < currentTestActions.Count)
+                        int progressBarDelta = 100 / (actionsToTest.Count * targetIterations);
+                        if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
+                            progressBarDelta = 1;
+
+                        Action<int> runAction = null;
+                        // Action run when a single test is finished
+                        Action<long> callback = (ms) => 
                         {
-                            // Run the next action in the list
-                            runAction.Invoke(currentTestActionIndex + 1);
-                        }
-                        else
+                            // Ensure that this is run from the main/UI thread
+                            this.Invoke(new Action(() =>
+                            {
+                                log("Test result for " + actionsToTest[testIndex].name + ": " + ms + "ms");
+                                totalTime += ms;
+
+                                // Update progress bar
+                                testProgressBar.Value += progressBarDelta;
+
+                                if(iterationCounter < targetIterations)
+                                {
+                                    // We need more iterations, run the same test again
+                                    runAction.Invoke(testIndex);
+                                }
+                                else if(testIndex + 1 < actionsToTest.Count)
+                                {
+                                    // Log average time
+                                    log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations);
+
+                                    // Reset iteration specific things
+                                    log("");                        // Blank line
+                                    iterationCounter = 0;
+                                    totalTime = 0;
+                                    // Run the next action in the list
+                                    runAction.Invoke(testIndex + 1);
+                                }
+                                else
+                                {
+                                    // Done testing
+                                    // Log average time
+                                    log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
+                                    log("Tests completed!");
+                                    log("");                        // Blank line
+                                    onTestsFinished();
+                                }
+                            }));
+                        };
+
+                        // Runs a test
+                        runAction = (index) =>
                         {
-                            // Done testing, reset fields
-                            currentTestActionIndex = 0;
-                            currentTestActions = null;
-                            logBox.AppendText("Test completed!\r\n");
-                            onTestsFinished();
-                        }
-                    }));
-                };
+                            testIndex = index;
+                            iterationCounter++;
 
-                runAction = (index) => {
-                    currentTestActionIndex = index;
+                            // Reset test array
+                            origArray.CopyTo(arr, 0);
 
-                    // Reset test array
-                    origArray.CopyTo(arr, 0);
+                            // Run test
+                            pt = new PerformanceTester(actionsToTest[index].action, callback);
+                            pt.run();
+                        };
 
-                    pt = new PerformanceTester(currentTestActions[index], callback);
-                    pt.run();
-                };
+                        // Log some info about the test data
+                        log("Test data size: " + arr.Length);
+                        log("Test data method: " + sortingComboBox.Text);
 
-                // Start the first action
-                onTestsStarted();
-                runAction.Invoke(0);
+                        // Start the first action
+                        onTestsStarted();
+                        runAction.Invoke(0);
+                    }
+                }
+                else
+                {
+                    warning("No algorithms selected!");
+                }
+            }
+            else
+            {
+                warning("Collection testing is not yet supported!");
             }
         }
 
         /// <summary>
         /// Generates an array with test data for sorting algorithms based on the form's current settings.
         /// </summary>
-        private T[] generateSortingTestData<T>() where T : IComparable
+        private int[] generateSortingTestData()
         {
-            T[] arr = new T[Convert.ToInt32(sortingUpDown.Value)];
-            var rand = new Random();
-
-            for(int i = 0; i < arr.Length; i++)
+            int[] arr = new int[Convert.ToInt32(sortingUpDown.Value)];
+            if(sortingComboBox.Text.Equals("Random"))
             {
-                arr[i] = default(T);// rand.Next() % 100;
+                var rand = new Random();
+
+                log("Generating random test data");
+                for(int i = 0; i < arr.Length; i++)
+                {
+                    arr[i] = rand.Next() % 1000;
+                }
             }
+            else if(sortingComboBox.Text.Equals("Ascending"))
+            {
+                log("Generating ascending test data");
+                for(int i = 0; i < arr.Length; i++)
+                {
+                    arr[i] = i;
+                }
+            }
+            else if(sortingComboBox.Text.Equals("Descending"))
+            {
+                log("Generating descending test data");
+                for(int i = 0; i < arr.Length; i++)
+                {
+                    arr[i] = arr.Length - i;
+                }
+            }
+            else
+            {
+                error("Invalid test data generation method selected!");
+            }
+
             return arr;
         }
 
@@ -159,20 +255,26 @@ namespace TestApp
         /// <typeparam name="T">The type the sorting data</typeparam>
         /// <param name="testData">The data to sort</param>
         /// <returns></returns>
-        private List<Action> generateSortingActions<T>(T[] testData) where T : IComparable
+        private List<TestAction> generateSortingActions<T>(T[] testData) where T : IComparable
         {
-            var actions = new List<Action>();
+            var actions = new List<TestAction>();
 
-            // Sorting tab
+            // Get checked items
             foreach(var algorithm in sortingListBox.CheckedItems)
             {
                 var sli = algorithm as SortingListItem;
+                // Get the correct delegate
                 var d = sli.GetDelegate<T>();
+                // Create and add the action to the list
                 Action action = () =>
                 {
                     d(testData);
                 };
-                actions.Add(action);
+                actions.Add(new TestAction()
+                {
+                    action = action,
+                    name = sli.ToString()
+                });
             }
 
             return actions;
@@ -191,16 +293,22 @@ namespace TestApp
             }
         }
 
+        /// <summary>
+        /// Called when tests are finished.
+        /// </summary>
         private void onTestsFinished()
         {
             buttonRun.Enabled = true;
             testProgressBar.Value = 100;
         }
 
+        /// <summary>
+        /// Called when tests are started.
+        /// </summary>
         private void onTestsStarted()
         {
             buttonRun.Enabled = false;
-            testProgressBar.Value = 10;
+            testProgressBar.Value = 0;
         }
 
         /// <summary>
@@ -219,6 +327,10 @@ namespace TestApp
             sortingComboBox.SelectedIndex = 0;                              // "Random"
         }
 
+        /// <summary>
+        /// Finds and returns all valid sorting types in the library.
+        /// </summary>
+        /// <returns>List of valid sorting types</returns>
         private Type[] getSortingTypes()
         {
             // Get all types in the sorting namespace
@@ -232,6 +344,10 @@ namespace TestApp
             return typelist.Where(t => null != t.GetMethod("sort", BindingFlags.Static | BindingFlags.Public)).ToArray();
         }
 
+        /// <summary>
+        /// Finds and returns all valid collection types in the library.
+        /// </summary>
+        /// <returns>Array of valid collection types</returns>
         private Type[] getCollectionTypes()
         {
             // Get all types in the collections namespace
@@ -245,6 +361,16 @@ namespace TestApp
             return typelist.Where(t => t.GetInterfaces().Any(x =>
                             x.IsGenericType &&
                             x.GetGenericTypeDefinition() == typeof(ADLibrary.Collections.ICollection<>))).ToArray();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Make sure the test thread is aborted before we close the window.
+            // This prevents issues with a callback being invoked after the window is already closed.
+            if(pt != null)
+            {
+                pt.abort();
+            }
         }
     }
 }

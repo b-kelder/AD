@@ -13,15 +13,31 @@ namespace ADLibrary.Performance
     /// </summary>
     public class PerformanceTester
     {
+        /// <summary>
+        /// Our performance counter.
+        /// </summary>
         PerformanceCounter pfc;
+        /// <summary>
+        /// The action to test.
+        /// </summary>
         Action action;
+        /// <summary>
+        /// Callback to invoke when done testing. Test time in ms is passed.
+        /// </summary>
         Action<long> callback;
+        /// <summary>
+        /// The last test time in ms.
+        /// </summary>
         long lastRunTime;
+        /// <summary>
+        /// The currently running test thread. Null if no thread is running.
+        /// </summary>
+        Thread testThread;
 
         /// <summary>
         /// Creates a new PerformanceTester for the given action. The callback is invoked upon completion.
-        /// Invoke run() to start the test.
-        /// Callback will be invoked from a different thread.
+        /// Call run() to start the test.
+        /// Callback will be invoked from the test thread.
         /// </summary>
         /// <param name="actionToTest">The action to time</param>
         /// <param name="callback">The callback to invoke upon completion</param>
@@ -42,6 +58,19 @@ namespace ADLibrary.Performance
         }
 
         /// <summary>
+        /// Aborts and waits for the test thread to finish.
+        /// Should be called from UI thread before closing the form.
+        /// </summary>
+        public void abort()
+        {
+            if(testThread != null)
+            {
+                testThread.Abort();
+                testThread.Join();
+            }
+        }
+
+        /// <summary>
         /// Starts the test thread.
         /// </summary>
         public void run()
@@ -49,6 +78,7 @@ namespace ADLibrary.Performance
             Thread thread = new Thread(new ThreadStart(threadRun));
             thread.Priority = ThreadPriority.Highest;                       // Give high priority to the test thread
             thread.Start();
+            testThread = thread;                                            // Allow aborting
         }
 
         /// <summary>
@@ -61,13 +91,15 @@ namespace ADLibrary.Performance
                 setThreadProcessorAffinity();               // Set affinity to last processor
                 GC.Collect();                               // GC now to prevent it from happening during the test
                 GC.WaitForPendingFinalizers();
-                // Should we do a Thread.Sleep(1) here to put it back in the queue and maximise the time until we get interrupted?
+                
+                Thread.Sleep(1);                            // Go back to ready queue?
 
                 pfc.startCounter();                         // Start the timer
                 action.Invoke();                            // Invoke the action that should be timed
                 lastRunTime = pfc.stopCounter();            // Stop the timer and store result
             }
 
+            testThread = null;                              // Prevent aborting
             callback.Invoke(lastRunTime);                   // Invoke callback to indicate we are done
         }
 
