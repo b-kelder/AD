@@ -21,6 +21,7 @@ namespace ADLibrary.Performance
         /// <summary>
         /// Creates a new PerformanceTester for the given action. The callback is invoked upon completion.
         /// Invoke run() to start the test.
+        /// Callback will be invoked from a different thread.
         /// </summary>
         /// <param name="actionToTest">The action to time</param>
         /// <param name="callback">The callback to invoke upon completion</param>
@@ -60,6 +61,7 @@ namespace ADLibrary.Performance
                 setThreadProcessorAffinity();               // Set affinity to last processor
                 GC.Collect();                               // GC now to prevent it from happening during the test
                 GC.WaitForPendingFinalizers();
+                // Should we do a Thread.Sleep(1) here to put it back in the queue and maximise the time until we get interrupted?
 
                 pfc.startCounter();                         // Start the timer
                 action.Invoke();                            // Invoke the action that should be timed

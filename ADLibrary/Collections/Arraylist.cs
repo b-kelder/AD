@@ -8,6 +8,23 @@ namespace ADLibrary.Collections
         private T[] array;
         private int nextFreeIndex;
 
+        private int scaleFactor;
+
+        /// <summary>
+        /// The amount the internal array is scaled by when it is full.
+        /// </summary>
+        public int ScaleFactor
+        {
+            get { return scaleFactor; }
+            set
+            {
+                if(value > 1)
+                {
+                    scaleFactor = value;
+                }
+            }
+        }
+
         public Arraylist() : this(10)
         {
         }
@@ -19,6 +36,7 @@ namespace ADLibrary.Collections
                 throw new ArgumentOutOfRangeException("startSize", "Start size cannot be 0 or negative");
             }
 
+            ScaleFactor = 3;
             array = new T[startSize];
             nextFreeIndex = 0;
         }
@@ -28,7 +46,7 @@ namespace ADLibrary.Collections
         /// </summary>
         private void expand()
         {
-            var tmp = new T[array.Length * 3];
+            var tmp = new T[array.Length * scaleFactor];
             array.CopyTo(tmp, 0);
             array = tmp;
         }
@@ -91,11 +109,6 @@ namespace ADLibrary.Collections
 
         public void insert(T item, int index)
         {
-            if(index < 0)
-            {
-                throw new ArgumentOutOfRangeException("index", "Index cannot be negative");
-            }
-
             if(index >= nextFreeIndex)
             {
                 add(item);
