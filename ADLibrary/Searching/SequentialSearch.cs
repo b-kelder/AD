@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Searching
 {
-    class SequentialSearch
+    public class SequentialSearch
     {
         /// <summary>
         /// Sequential Search for an item in a array and return its index.

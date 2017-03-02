@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Sorting 
 {
-    class InsertionSort
+    public static class InsertionSort
     {
         /// <summary>
         /// Method that sorts and IComparable array using the insertion sort algorithm.
