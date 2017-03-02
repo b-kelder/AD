@@ -23,7 +23,7 @@ namespace ADLibrary.Collections
         /// Adds an item to the queue.
         /// </summary>
         /// <param name="item">Item to add.</param>
-        public void enqueue(T item)
+        public virtual void enqueue(T item)
         {
             list.add(item);
         }
@@ -33,7 +33,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <returns>The oldest item in the queue.</returns>
         /// <exception cref="InvalidOperationException">Thrown when the queue is empty.</exception>
-        public T dequeue()
+        public virtual T dequeue()
         {
             if(list.count() > 0)
             {
@@ -50,7 +50,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <returns>The oldest item in the queue.</returns>
         /// <exception cref="InvalidOperationException">Thrown when the queue is empty.</exception>
-        public T peek()
+        public virtual T peek()
         {
             if(list.count() > 0)
             {
@@ -65,7 +65,7 @@ namespace ADLibrary.Collections
         /// <summary>
         /// Clears the queue.
         /// </summary>
-        public void clear()
+        public virtual void clear()
         {
             list.clear();
         }
@@ -75,7 +75,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="item">The item to find.</param>
         /// <returns>True if item is in the queue.</returns>
-        public bool contains(T item)
+        public virtual bool contains(T item)
         {
             return list.contains(item);
         }
@@ -84,7 +84,7 @@ namespace ADLibrary.Collections
         /// Returns the amount of items in the queue.
         /// </summary>
         /// <returns>Amount of items in the queue.</returns>
-        public int count()
+        public virtual int count()
         {
             return list.count();
         }
@@ -93,7 +93,7 @@ namespace ADLibrary.Collections
         /// Returns an array containing all items in the queue. The oldest item is at index 0.
         /// </summary>
         /// <returns>Array containing items in the queue.</returns>
-        public T[] toArray()
+        public virtual T[] toArray()
         {
             return list.toArray();
         }

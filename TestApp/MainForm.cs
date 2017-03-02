@@ -69,9 +69,11 @@ namespace TestApp
         Type[] sortingTypes;
 
         PerformanceTester pt;
+        Random random;
 
         public MainForm()
         {
+            random = new Random();
             InitializeComponent();
 
             populateCollectionsTab();
@@ -217,13 +219,11 @@ namespace TestApp
         {
             int[] arr = new int[Convert.ToInt32(sortingUpDown.Value)];
             if(sortingComboBox.Text.Equals("Random"))
-            {
-                var rand = new Random();
-
+            { 
                 log("Generating random test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = rand.Next() % 1000;
+                    arr[i] = random.Next() % 1000;
                 }
             }
             else if(sortingComboBox.Text.Equals("Ascending"))
