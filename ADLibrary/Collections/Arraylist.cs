@@ -25,18 +25,24 @@ namespace ADLibrary.Collections
             }
         }
 
-        public Arraylist() : this(10)
+		/// <summary>
+        /// Creates an Arraylist with an initial size of 10 and a scale factor of 3.
+        /// </summary>
+        public Arraylist() : this(10, 3)
         {
         }
 
-        public Arraylist(int startSize)
+		/// <summary>
+        /// Creates an Arraylist with the specified start size and scale factor.
+        /// </summary>
+        public Arraylist(int startSize, int scaleFactor)
         {
             if(startSize < 1)
             {
                 throw new ArgumentOutOfRangeException("startSize", "Start size cannot be 0 or negative");
             }
 
-            ScaleFactor = 3;
+            ScaleFactor = scaleFactor;
             array = new T[startSize];
             nextFreeIndex = 0;
         }
