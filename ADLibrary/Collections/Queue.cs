@@ -14,9 +14,6 @@ namespace ADLibrary.Collections
     {
         Arraylist<T> list;
 
-        /// <summary>
-        /// Creates a new queue.
-        /// </summary>
         public Queue()
         {
             list = new Arraylist<T>();
