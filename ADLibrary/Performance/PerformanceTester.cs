@@ -117,7 +117,7 @@ namespace ADLibrary.Performance
             // Find the ProcessThread for this thread.
             ProcessThread thread = Process.GetCurrentProcess().Threads.Cast<ProcessThread>()
                                        .Where(t => t.Id == osThreadId).Single();
-            // Set the thread's processor affinity
+            // Set the thread's processor affinity to the last processor
             thread.ProcessorAffinity = new IntPtr(1 << (Environment.ProcessorCount - 1));
         }
     }

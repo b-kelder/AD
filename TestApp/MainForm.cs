@@ -20,6 +20,13 @@ namespace TestApp
     /// </summary>
     public partial class MainForm : Form
     {
+        enum DataGenerationMode
+        {
+            Random,
+            Ascending,
+            Descending
+        }
+
         /// <summary>
         /// Used to store info about an action that should be tested.
         /// </summary>
@@ -45,7 +52,6 @@ namespace TestApp
                 name = sortingType.Name;
                 // All sort classes must have a static method called sort
                 sortingMethod = sortingType.GetMethod("sort", BindingFlags.Static | BindingFlags.Public);
-                Console.WriteLine(sortingMethod.Name);
             }
 
             public override string ToString()
@@ -78,6 +84,7 @@ namespace TestApp
 
             populateCollectionsTab();
             populateSortingTab();
+            populateSearchingTab();
         }
 
         #region output
@@ -112,94 +119,103 @@ namespace TestApp
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
+            List<TestAction> actionsToTest = new List<TestAction>();
+            int[] testData = null;
+            int[] originalTestData = null;
+            int targetIterations = 1;
+
             if(tabControl.SelectedTab == tabSorting)
             {
                 if(sortingListBox.CheckedItems.Count > 0)
                 {
                     // Generate some test data
-                    var arr = generateSortingTestData();
-
-                    var origArray = new int[arr.Length];
-                    arr.CopyTo(origArray, 0);
+                    testData = generateTestData(Convert.ToInt32(sortingUpDown.Value), getSelectedDataGenerationMode());
+                    originalTestData = new int[testData.Length];
+                    testData.CopyTo(originalTestData, 0);
 
                     // Generate test actions
-                    var actionsToTest = generateSortingActions<int>(arr);
+                    actionsToTest = generateSortingActions<int>(testData);
 
-                    if(actionsToTest.Count > 0)
+                    targetIterations = Convert.ToInt32(sortingIterations.Value);
+
+                    // Log some info about the test data
+                    log("Test data size: " + testData.Length);
+                    log("Test data method: " + sortingComboBox.Text);
+                }
+                else
+                {
+                    warning("No algorithms selected!");
+                }
+            }
+            else if(tabControl.SelectedTab == tabSearching)
+            {
+                if(searchingListBox.CheckedItems.Count > 0)
+                {
+                    // Generate some test data
+                    var dgm = getSelectedDataGenerationMode();
+                    testData = generateTestData(Convert.ToInt32(searchingUpDown.Value), dgm);
+                    originalTestData = new int[testData.Length];
+                    testData.CopyTo(originalTestData, 0);
+
+                    int valueToFind = testData[testData.Length / 2];
+
+                    // Create test actions
+                    foreach(var checkedItem in searchingListBox.CheckedItems)
                     {
-                        int testIndex = 0;
-                        int iterationCounter = 0;
-                        int targetIterations = Convert.ToInt32(sortingIterations.Value);
-                        long totalTime = 0;                     // Used to store total time for all iterations of an action
-
-                        int progressBarDelta = 100 / (actionsToTest.Count * targetIterations);
-                        if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
-                            progressBarDelta = 1;
-
-                        Action<int> runAction = null;
-                        // Action run when a single test is finished
-                        Action<long> callback = (ms) => 
+                        if(checkedItem.Equals("BinarySearch"))
                         {
-                            // Ensure that this is run from the main/UI thread
-                            this.Invoke(new Action(() =>
+                            if(dgm == DataGenerationMode.Ascending)
                             {
-                                log("Test result for " + actionsToTest[testIndex].name + ": " + ms + "ms");
-                                totalTime += ms;
-
-                                // Update progress bar
-                                testProgressBar.Value += progressBarDelta;
-
-                                if(iterationCounter < targetIterations)
+                                actionsToTest.Add(new TestAction()
                                 {
-                                    // We need more iterations, run the same test again
-                                    runAction.Invoke(testIndex);
-                                }
-                                else if(testIndex + 1 < actionsToTest.Count)
-                                {
-                                    // Log average time
-                                    log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations);
-
-                                    // Reset iteration specific things
-                                    log("");                        // Blank line
-                                    iterationCounter = 0;
-                                    totalTime = 0;
-                                    // Run the next action in the list
-                                    runAction.Invoke(testIndex + 1);
-                                }
-                                else
-                                {
-                                    // Done testing
-                                    // Log average time
-                                    log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
-                                    log("Tests completed!");
-                                    log("");                        // Blank line
-                                    onTestsFinished();
-                                }
-                            }));
-                        };
-
-                        // Runs a test
-                        runAction = (index) =>
+                                    name = "BinarySearch",
+                                    action = () =>
+                                    {
+                                        BinarySearch.search(testData, valueToFind);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                warning("BinarySearch only works on sorted data sets, not running test!");
+                            }
+                        }
+                        else if(checkedItem.Equals("SequentialSearch"))
                         {
-                            testIndex = index;
-                            iterationCounter++;
-
-                            // Reset test array
-                            origArray.CopyTo(arr, 0);
-
-                            // Run test
-                            pt = new PerformanceTester(actionsToTest[index].action, callback);
-                            pt.run();
-                        };
-
-                        // Log some info about the test data
-                        log("Test data size: " + arr.Length);
-                        log("Test data method: " + sortingComboBox.Text);
-
-                        // Start the first action
-                        onTestsStarted();
-                        runAction.Invoke(0);
+                            actionsToTest.Add(new TestAction()
+                            {
+                                name = "SequentialSearch",
+                                action = () =>
+                                {
+                                    SequentialSearch.search(testData, valueToFind);
+                                }
+                            });
+                        }
+                        else if(checkedItem.Equals("MinSearch"))
+                        {
+                            actionsToTest.Add(new TestAction()
+                            {
+                                name = "MinSearch",
+                                action = () =>
+                                {
+                                    MinMaxSearch.findMin(testData);
+                                }
+                            });
+                        }
+                        else if(checkedItem.Equals("MaxSearch"))
+                        {
+                            actionsToTest.Add(new TestAction()
+                            {
+                                name = "MaxSearch",
+                                action = () =>
+                                {
+                                    MinMaxSearch.findMax(testData);
+                                }
+                            });
+                        }
                     }
+
+                    targetIterations = Convert.ToInt32(searchingIterations.Value);
                 }
                 else
                 {
@@ -209,24 +225,128 @@ namespace TestApp
             else
             {
                 warning("Collection testing is not yet supported!");
+                return;
             }
+
+            // Run the tests
+            if(actionsToTest.Count > 0)
+            {
+                int testIndex = 0;
+                int iterationCounter = 0;
+                long totalTime = 0;                     // Used to store total time for all iterations of an action
+
+                int progressBarDelta = 100 / (actionsToTest.Count * targetIterations);
+                if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
+                    progressBarDelta = 1;
+
+                Action<int> runAction = null;
+                // Action run when a single test is finished
+                Action<long> callback = (ms) =>
+                {
+                    // Ensure that this is run from the main/UI thread
+                    this.Invoke(new Action(() =>
+                    {
+                        log("Test result for " + actionsToTest[testIndex].name + ": " + ms + "ms");
+                        totalTime += ms;
+
+                        // Update progress bar
+                        testProgressBar.Value += progressBarDelta;
+
+                        if(iterationCounter < targetIterations)
+                        {
+                            // We need more iterations, run the same test again
+                            runAction.Invoke(testIndex);
+                        }
+                        else if(testIndex + 1 < actionsToTest.Count)
+                        {
+                            // Log average time
+                            log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
+                            log("Total time for " + actionsToTest[testIndex].name + ": " + totalTime + "ms over " + targetIterations + " iterations");
+
+                            // Reset iteration specific things
+                            log("");                        // Blank line
+                            iterationCounter = 0;
+                            totalTime = 0;
+                            // Run the next action in the list
+                            runAction.Invoke(testIndex + 1);
+                        }
+                        else
+                        {
+                            // Done testing
+                            // Log average time
+                            log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
+                            log("Total time for " + actionsToTest[testIndex].name + ": " + totalTime + "ms over " + targetIterations + " iterations");
+
+                            log("Tests completed!");
+                            log("");                        // Blank line
+                            onTestsFinished();
+                        }
+                    }));
+                };
+
+                // Runs the test action at index in the list
+                runAction = (index) =>
+                {
+                    testIndex = index;
+                    iterationCounter++;
+
+                    // Reset test array
+                    originalTestData.CopyTo(testData, 0);
+
+                    // Run test
+                    pt = new PerformanceTester(actionsToTest[index].action, callback);
+                    pt.run();
+                };
+
+                // Start the first action
+                onTestsStarted();
+                runAction.Invoke(0);
+            }
+        }
+
+        private DataGenerationMode getSelectedDataGenerationMode()
+        {
+            string text;
+            if(tabControl.SelectedTab == tabSorting)
+            {
+                text = sortingComboBox.Text;
+            }
+            else
+            {
+                text = searchingDataMethod.Text;
+            }
+            if(text.Equals("Random"))
+            {
+                return DataGenerationMode.Random;
+            }
+            else if(text.Equals("Ascending"))
+            {
+                return DataGenerationMode.Ascending;
+            }
+            else if(text.Equals("Descending"))
+            {
+                return DataGenerationMode.Descending;
+            }
+            return (DataGenerationMode)(-1);
         }
 
         /// <summary>
         /// Generates an array with test data for sorting algorithms based on the form's current settings.
         /// </summary>
-        private int[] generateSortingTestData()
+        /// <param name="amount">The size of the array.</param>
+        /// <param name="method">The sort of data to generate (Random, Ascending, Descending)</param>
+        private int[] generateTestData(int amount, DataGenerationMode method)
         {
-            int[] arr = new int[Convert.ToInt32(sortingUpDown.Value)];
-            if(sortingComboBox.Text.Equals("Random"))
+            int[] arr = new int[amount];
+            if(method == DataGenerationMode.Random)
             { 
                 log("Generating random test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = random.Next() % 1000;
+                    arr[i] = random.Next();
                 }
             }
-            else if(sortingComboBox.Text.Equals("Ascending"))
+            else if(method == DataGenerationMode.Ascending)
             {
                 log("Generating ascending test data");
                 for(int i = 0; i < arr.Length; i++)
@@ -234,7 +354,7 @@ namespace TestApp
                     arr[i] = i;
                 }
             }
-            else if(sortingComboBox.Text.Equals("Descending"))
+            else if(method == DataGenerationMode.Descending)
             {
                 log("Generating descending test data");
                 for(int i = 0; i < arr.Length; i++)
@@ -282,19 +402,6 @@ namespace TestApp
         }
 
         /// <summary>
-        /// Sets up the tab for collection testing.
-        /// </summary>
-        private void populateCollectionsTab()
-        {
-            collectionTypes = getCollectionTypes();
-            foreach(var type in collectionTypes)
-            {
-                // Generic types have `1 behind their name so we remove that bit
-                collectionsListBox.Items.Add(type.Name.Remove(type.Name.IndexOf('`')), false);
-            }
-        }
-
-        /// <summary>
         /// Called when tests are finished.
         /// </summary>
         private void onTestsFinished()
@@ -313,6 +420,19 @@ namespace TestApp
         }
 
         /// <summary>
+        /// Sets up the tab for collection testing.
+        /// </summary>
+        private void populateCollectionsTab()
+        {
+            collectionTypes = getCollectionTypes();
+            foreach(var type in collectionTypes)
+            {
+                // Generic types have `1 behind their name so we remove that bit
+                collectionsListBox.Items.Add(type.Name.Remove(type.Name.IndexOf('`')), false);
+            }
+        }
+
+        /// <summary>
         /// Sets up the tab for sorting testing.
         /// </summary>
         private void populateSortingTab()
@@ -325,7 +445,24 @@ namespace TestApp
             }
 
             // Test data settings
-            sortingComboBox.SelectedIndex = 0;                              // "Random"
+            sortingComboBox.SelectedIndex = 0;                              // "Random" data generation
+        }
+
+        /// <summary>
+        /// Sets up the tab for search testing.
+        /// </summary>
+        private void populateSearchingTab()
+        {
+            // Get the types of sorting algorithms that we have
+            searchingListBox.Items.Add("BinarySearch");
+            searchingListBox.Items.Add("SequentialSearch");
+            searchingListBox.Items.Add("MinSearch");
+            searchingListBox.Items.Add("MaxSearch");
+            searchingListBox.Items.Add("THIS IS BROKEN PLS HALP");
+
+            // Test data settings
+            searchingDataMethod.SelectedIndex = 1;                          // "Ascending" data generation
+            searchingLocation.SelectedIndex = 1;                            // Item is in the middle (start, middle, end, random)
         }
 
         /// <summary>
@@ -341,7 +478,7 @@ namespace TestApp
             {
                 Console.WriteLine(typelist[i].Name);
             }
-            // Make sure they have a static sort method.
+            // Make sure they have a static sort method
             return typelist.Where(t => null != t.GetMethod("sort", BindingFlags.Static | BindingFlags.Public)).ToArray();
         }
 

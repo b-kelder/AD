@@ -51,6 +51,7 @@
     <Compile Include="Searching\MinMaxSearch.cs" />
     <Compile Include="Searching\SequentialSearch.cs" />
     <Compile Include="Sorting\BubbleSort.cs" />
+    <Compile Include="Sorting\HeapSort.cs" />
     <Compile Include="Sorting\InsertionSort.cs" />
     <Compile Include="Sorting\SelectionSort.cs" />
     <Compile Include="Sorting\SmartBubbleSort.cs" />
