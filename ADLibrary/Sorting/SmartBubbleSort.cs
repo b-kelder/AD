@@ -10,22 +10,22 @@ namespace ADLibrary.Sorting
     {
         public static void sort<T>(T[] array) where T : IComparable
         {
-            int n = array.Length;
+            int length = array.Length;
             do
             {
-                int newn = 0;
-                for(int i = 1; i < n; i++)
+                int newLength = 0;
+                for(int i = 1; i < length; i++)
                 {
                     if(array[i - 1].CompareTo(array[i]) > 0)
                     {
-                        newn = i;
+                        newLength = i;
                         T temp = array[i];
                         array[i] = array[i - 1];
                         array[i - 1] = temp;
                     }
                 }
-                n = newn;
-            } while(n > 0);
+                length = newLength;
+            } while(length > 0);
         }
     }
 }
