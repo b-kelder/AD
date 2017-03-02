@@ -3,12 +3,20 @@ using System.Text;
 
 namespace ADLibrary.Collections
 {
+    /// <summary>
+    /// A generic array list.
+    /// </summary>
+    /// <typeparam name="T">The type to store in this array list.</typeparam>
     public class Arraylist<T> : ICollection<T>
     {
+        /// <summary>
+        /// Internal storage array.
+        /// </summary>
         private T[] array;
-        private int nextFreeIndex;
-
-        private int scaleFactor;
+        /// <summary>
+        /// The next index of the array that may be used to store an item. Also the amount of items in our list.
+        /// </summary>
+        private int itemCount;
 
         /// <summary>
         /// The amount the internal array is scaled by when it is full.
@@ -24,11 +32,12 @@ namespace ADLibrary.Collections
                 }
             }
         }
+        private int scaleFactor;
 
-		/// <summary>
-        /// Creates an Arraylist with an initial size of 10 and a scale factor of 3.
+        /// <summary>
+        /// Creates an Arraylist with an initial size of 15 and a scale factor of 3.
         /// </summary>
-        public Arraylist() : this(10, 3)
+        public Arraylist() : this(15, 3)
         {
         }
 
@@ -44,11 +53,11 @@ namespace ADLibrary.Collections
 
             ScaleFactor = scaleFactor;
             array = new T[startSize];
-            nextFreeIndex = 0;
+            itemCount = 0;
         }
 
         /// <summary>
-        /// Expands our internal array to 3 times it's current size.
+        /// Expands our internal array based on the scale factor.
         /// </summary>
         private void expand()
         {
@@ -57,34 +66,51 @@ namespace ADLibrary.Collections
             array = tmp;
         }
 
+        /// <summary>
+        /// Adds a new item to the end of the list.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
         public void add(T item)
         {
-            if(nextFreeIndex == array.Length)
+            if(itemCount >= array.Length)
             {
                 expand();
             }
-            array[nextFreeIndex] = item;
-            nextFreeIndex++;
+            array[itemCount] = item;
+            itemCount++;
         }
 
+        /// <summary>
+        /// Clears the array list.
+        /// </summary>
         public void clear()
         {
             array = new T[array.Length];
-            nextFreeIndex = 0;
+            itemCount = 0;
         }
 
+        /// <summary>
+        /// Returns the item on index.
+        /// </summary>
+        /// <param name="index">The index of the item to return.</param>
+        /// <returns>The item at index.</returns>
         public T get(int index)
         {
-            if(index >= 0 && index < nextFreeIndex)
+            if(index >= 0 && index < itemCount)
             {
                 return array[index];
             }
             throw new ArgumentOutOfRangeException("index", "Index out of bounds");
         }
 
+        /// <summary>
+        /// Returns the index of the first occurence of item.
+        /// </summary>
+        /// <param name="item">The item to find.</param>
+        /// <returns>The index of the item or -1 if it can't be found.</returns>
         public int indexOf(T item)
         {
-            for(int i = 0; i < nextFreeIndex; i++)
+            for(int i = 0; i < itemCount; i++)
             {
                 if(array[i].Equals(item))
                 {
@@ -94,13 +120,21 @@ namespace ADLibrary.Collections
             return -1;
         }
 
-        public void remove(int index)
+        /// <summary>
+        /// Removes the item at index.
+        /// </summary>
+        /// <param name="index">The index of the item to remove.</param>
+        public void removeAt(int index)
         {
-            if(index >= 0 && index < nextFreeIndex)
+            if(index >= 0 && index < itemCount)
             {
-                // Copy the contents of array after the item to one position earlier.
-                Array.Copy(array, index + 1, array, index, nextFreeIndex - index - 1);
-                nextFreeIndex--;
+                if(index < itemCount - 1)               // It is not the last item
+                {
+                    // Copy every item after index to 1 position earlier to make the array continuous again
+                    Array.Copy(array, index + 1, array, index, itemCount - (index + 1));
+                }
+
+                itemCount--;
             }
             else
             {
@@ -108,40 +142,93 @@ namespace ADLibrary.Collections
             }
         }
 
+        /// <summary>
+        /// Checks if item is in this array list.
+        /// </summary>
+        /// <param name="item">The item to find.</param>
+        /// <returns>true if item is in the list</returns>
         public bool contains(T item)
         {
             return indexOf(item) >= 0;
         }
 
+        /// <summary>
+        /// Inserts the item at the position specified by index in the list.
+        /// If index is larger than the amount of items in the list the item will be added to the list instead.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="index">Index of the item.</param>
         public void insert(T item, int index)
         {
-            if(index >= nextFreeIndex)
+            if(index >= itemCount)
             {
+                // Just add it to the end.
                 add(item);
+            }
+            else if(index < 0)
+            {
+                throw new ArgumentOutOfRangeException("index", "Index can not be negative!");
             }
             else
             {
-                // See if we have space left in our array
-                if(nextFreeIndex == array.Length)
+                // See if we have to expand the array
+                if(itemCount >= array.Length)
                 {
-                    // No? Make it bigger
                     expand();
                 }
-                // Move everything starting at index 1 position back
-                Array.Copy(array, index, array, index + 1, nextFreeIndex - index);
+                // Move everything, starting at index, 1 position back to make room for our new item
+                Array.Copy(array, index, array, index + 1, itemCount - index);
+                array[index] = item;
+                // Account for the item being inserted
+                itemCount++;
             }
         }
 
+        /// <summary>
+        /// The amount of items in the list.
+        /// </summary>
+        /// <returns>Amount of items in the list.</returns>
         public int count()
         {
-            return nextFreeIndex;
+            return itemCount;
         }
 
+        /// <summary>
+        /// Returns an array containing all items in this list.
+        /// </summary>
+        /// <returns>Array containing all items in the list.</returns>
         public T[] toArray()
         {
             T[] result = new T[count()];
-            array.CopyTo(result, 0);
+            Array.Copy(array, result, result.Length);
             return result;
+        }
+
+        /// <summary>
+        /// Removes the first occurence of item in this list.
+        /// </summary>
+        /// <param name="item">The item to remove.</param>
+        public void remove(T item)
+        {
+            int index = indexOf(item);
+            if(index >= 0)
+            {
+                removeAt(index);
+            }
+        }
+
+        public void dumpContents()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("array.Length = " + array.Length);
+            sb.AppendLine("nextFreeIndex = " + itemCount);
+
+            for(int i = 0; i < itemCount; i++)
+            {
+                sb.Append(array[i] + " ");
+            }
+
+            Console.WriteLine(sb.ToString());
         }
     }
 }

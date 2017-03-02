@@ -75,6 +75,37 @@ namespace TestApp
 
             populateCollectionsTab();
             populateSortingTab();
+
+            var list = new Arraylist<string>();
+            list.dumpContents();
+
+            list.add("a");
+            list.add("b");
+            list.add("d");
+
+            list.dumpContents();
+
+            list.insert("c", 2);
+
+            list.dumpContents();
+
+            list.remove("b");
+
+            list.dumpContents();
+
+            list.add("a");
+            list.add("b");
+            list.add("d");
+
+            list.dumpContents();
+
+            list.remove("d");
+
+            list.dumpContents();
+
+            list.remove("d");
+
+            list.dumpContents();
         }
 
         #region output
