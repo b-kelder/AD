@@ -8,7 +8,13 @@ namespace ADLibrary.Searching
 {
     class MinMaxSearch
     {
-        public static void search<T>(T[] array, T item) where T : IComparable
+        /// <summary>
+        /// Min Max Search for an item in a array and return its index.
+        /// </summary>
+        /// <param name="array">The array to search through.</param>
+        /// <param name="item">The item to search for.</param>
+        /// <returns>The index where the item can be found.</returns>
+        public static int search<T>(T[] array, T item) where T : IComparable
         {
             throw new NotImplementedException();
         }

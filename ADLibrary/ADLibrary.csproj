@@ -45,6 +45,9 @@
     <Compile Include="Performance\PerformanceCounter.cs" />
     <Compile Include="Performance\PerformanceTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Searching\BinarySearch.cs" />
+    <Compile Include="Searching\MinMaxSearch.cs" />
+    <Compile Include="Searching\SequentialSearch.cs" />
     <Compile Include="Sorting\BubbleSort.cs" />
     <Compile Include="Sorting\InsertionSort.cs" />
     <Compile Include="Sorting\SelectionSort.cs" />
