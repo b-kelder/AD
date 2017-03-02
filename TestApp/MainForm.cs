@@ -11,6 +11,7 @@ using ADLibrary.Collections;
 using ADLibrary.Performance;
 using ADLibrary.Sorting;
 using System.Reflection;
+using ADLibrary.Searching;
 
 namespace TestApp
 {
@@ -75,8 +76,6 @@ namespace TestApp
 
             populateCollectionsTab();
             populateSortingTab();
-
-            var list = new Arraylist<string>();
         }
 
         #region output
