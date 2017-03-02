@@ -121,13 +121,15 @@ namespace ADLibrary.Collections
         }
 
         /// <summary>
-        /// Removes the item at index.
+        /// Removes the item at index and returns it.
         /// </summary>
         /// <param name="index">The index of the item to remove.</param>
-        public void removeAt(int index)
+        /// <returns>The item that was removed</returns>
+        public T removeAt(int index)
         {
             if(index >= 0 && index < itemCount)
             {
+                T removedItem = array[index];
                 if(index < itemCount - 1)               // It is not the last item
                 {
                     // Copy every item after index to 1 position earlier to make the array continuous again
@@ -135,6 +137,7 @@ namespace ADLibrary.Collections
                 }
 
                 itemCount--;
+                return removedItem;
             }
             else
             {

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Collections\Arraylist.cs" />
     <Compile Include="Collections\ICollection.cs" />
+    <Compile Include="Collections\Queue.cs" />
     <Compile Include="Performance\PerformanceCounter.cs" />
     <Compile Include="Performance\PerformanceTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
