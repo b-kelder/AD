@@ -213,6 +213,17 @@ namespace TestApp
                                 }
                             });
                         }
+                        else if (checkedItem.Equals("RandomSearch"))
+                        {
+                            actionsToTest.Add(new TestAction()
+                            {
+                                name = "RandomSearch",
+                                action = () =>
+                                {
+                                    RandomSearch.search(testData, valueToFind);
+                                }
+                            });
+                        }
                     }
 
                     targetIterations = Convert.ToInt32(searchingIterations.Value);
@@ -468,6 +479,7 @@ namespace TestApp
             searchingListBox.Items.Add("SequentialSearch");
             searchingListBox.Items.Add("MinSearch");
             searchingListBox.Items.Add("MaxSearch");
+            searchingListBox.Items.Add("RandomSearch");
             searchingListBox.Items.Add("THIS IS BROKEN PLS HALP");
 
             // Test data settings
