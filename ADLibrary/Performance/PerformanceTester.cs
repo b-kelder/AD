@@ -22,11 +22,11 @@ namespace ADLibrary.Performance
         /// </summary>
         Action action;
         /// <summary>
-        /// Callback to invoke when done testing. Test time in ms is passed.
+        /// Callback to invoke when done testing. Test time in us is passed.
         /// </summary>
         Action<long> callback;
         /// <summary>
-        /// The last test time in ms.
+        /// The last test time in us.
         /// </summary>
         long lastRunTime;
         /// <summary>
@@ -96,7 +96,7 @@ namespace ADLibrary.Performance
 
                 pfc.startCounter();                         // Start the timer
                 action.Invoke();                            // Invoke the action that should be timed
-                lastRunTime = pfc.stopCounter();            // Stop the timer and store result
+                lastRunTime = pfc.stopCounter(TimerResult.Microseconds);            // Stop the timer and store result
             }
 
             testThread = null;                              // Prevent aborting

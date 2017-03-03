@@ -241,13 +241,13 @@ namespace TestApp
 
                 Action<int> runAction = null;
                 // Action run when a single test is finished
-                Action<long> callback = (ms) =>
+                Action<long> callback = (us) =>
                 {
                     // Ensure that this is run from the main/UI thread
                     this.Invoke(new Action(() =>
                     {
-                        log("Test result for " + actionsToTest[testIndex].name + ": " + ms + "ms");
-                        totalTime += ms;
+                        log("Test result for " + actionsToTest[testIndex].name + ": " + createMsString(us));
+                        totalTime += us;
 
                         // Update progress bar
                         testProgressBar.Value += progressBarDelta;
@@ -260,8 +260,8 @@ namespace TestApp
                         else if(testIndex + 1 < actionsToTest.Count)
                         {
                             // Log average time
-                            log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
-                            log("Total time for " + actionsToTest[testIndex].name + ": " + totalTime + "ms over " + targetIterations + " iterations");
+                            log("Average time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime / targetIterations));
+                            log("Total time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
                             // Reset iteration specific things
                             log("");                        // Blank line
@@ -274,8 +274,8 @@ namespace TestApp
                         {
                             // Done testing
                             // Log average time
-                            log("Average time for " + actionsToTest[testIndex].name + ": " + totalTime / targetIterations + "ms");
-                            log("Total time for " + actionsToTest[testIndex].name + ": " + totalTime + "ms over " + targetIterations + " iterations");
+                            log("Average time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime / targetIterations));
+                            log("Total time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
                             log("Tests completed!");
                             log("");                        // Blank line
@@ -302,6 +302,16 @@ namespace TestApp
                 onTestsStarted();
                 runAction.Invoke(0);
             }
+        }
+
+        /// <summary>
+        /// Creates a string with the format 0.00 ms
+        /// </summary>
+        /// <param name="microseconds">The value to convert in microseconds</param>
+        /// <returns>String in ms</returns>
+        private string createMsString(long microseconds)
+        {
+            return Math.Round(((double)microseconds) / 1000, 2) + " ms";
         }
 
         private DataGenerationMode getSelectedDataGenerationMode()
