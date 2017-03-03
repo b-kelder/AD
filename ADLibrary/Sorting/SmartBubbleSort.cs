@@ -17,19 +17,19 @@ namespace ADLibrary.Sorting
             int length = array.Length;
             do
             {
-                int newLength = 0;
-                for(int i = 1; i < length; i++)
+                int newLength = 0;                                  // Will contain the index of the last swap
+                for(int i = 1; i < length; i++)                     // Loop up to the index of the last swap, everything after that is already sorted
                 {
-                    if(array[i - 1].CompareTo(array[i]) > 0)
+                    if(array[i - 1].CompareTo(array[i]) > 0)        // If the previous item is larger we swap
                     {
-                        newLength = i;
+                        newLength = i;                              // Store the index of this swap
                         T temp = array[i];
                         array[i] = array[i - 1];
                         array[i - 1] = temp;
                     }
                 }
                 length = newLength;
-            } while(length > 0);
+            } while(length > 0);                                    // Keep going until everything is sorted (no swap in the previous run)
         }
     }
 }

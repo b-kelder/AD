@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Arraylist.cs" />
+    <Compile Include="Collections\BucketHash.cs" />
     <Compile Include="Collections\ICollection.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\Queue.cs" />
