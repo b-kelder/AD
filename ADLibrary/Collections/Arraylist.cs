@@ -220,18 +220,33 @@ namespace ADLibrary.Collections
             }
         }
 
-        public void dumpContents()
+        // Overloading [] for convenience
+        public T this[int key]
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("array.Length = " + array.Length);
-            sb.AppendLine("nextFreeIndex = " + itemCount);
-
-            for(int i = 0; i < itemCount; i++)
+            get
             {
-                sb.Append(array[i] + " ");
+                // the same as get()
+                if(key >= 0 && key < itemCount)
+                {
+                    return array[key];
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("key", "Key is out of range");
+                }
             }
-
-            Console.WriteLine(sb.ToString());
+            set
+            {
+                // Overwrite item at position
+                if(key >= 0 && key < itemCount)
+                {
+                    array[key] = value;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("key", "Key is out of range");
+                }
+            }
         }
     }
 }

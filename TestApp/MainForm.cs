@@ -246,6 +246,7 @@ namespace TestApp
                 int iterationCounter = 0;
                 long totalTime = 0;                     // Used to store total time for all iterations of an action
 
+                // TODO: Fix progress bar
                 int progressBarDelta = 100 / (actionsToTest.Count * targetIterations);
                 if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
                     progressBarDelta = 1;
@@ -261,7 +262,7 @@ namespace TestApp
                         totalTime += us;
 
                         // Update progress bar
-                        testProgressBar.Value += progressBarDelta;
+                        testProgressBar.Value = Math.Min(testProgressBar.Value + progressBarDelta, 100);
 
                         if(iterationCounter < targetIterations)
                         {
