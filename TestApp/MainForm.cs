@@ -120,6 +120,7 @@ namespace TestApp
         private void buttonRun_Click(object sender, EventArgs e)
         {
             List<TestAction> actionsToTest = new List<TestAction>();
+            AdvancedLog advancedLog = new AdvancedLog();
             int[] testData = null;
             int[] originalTestData = null;
             int targetIterations = 1;
@@ -141,6 +142,13 @@ namespace TestApp
                     // Log some info about the test data
                     log("Test data size: " + testData.Length);
                     log("Test data method: " + sortingComboBox.Text);
+
+                    // Show the advanced log
+                    if (checkBoxShowArray.Checked)
+                    {
+                        advancedLog.printUnsorted(testData);
+                        advancedLog.Show();
+                    }
                 }
                 else
                 {
@@ -285,6 +293,7 @@ namespace TestApp
                         else
                         {
                             // Done testing
+                            advancedLog.printSorted(testData);
                             // Log average time
                             log("Average time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime / targetIterations));
                             log("Total time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
@@ -537,6 +546,36 @@ namespace TestApp
         private void buttonClear_Click(object sender, EventArgs e)
         {
             logBox.Clear();
+        }
+
+        private void sortingUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            checkForAdvancedLog();
+        }
+
+        private void checkBoxShowArray_CheckedChanged(object sender, EventArgs e)
+        {
+            checkForAdvancedLog();
+        }
+
+        private void checkForAdvancedLog()
+        {
+            int limit = 100000;
+            if (sortingUpDown.Value > limit)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Advanced log with more than " + limit);
+                sb.AppendLine("items is not supported in the");
+                sb.AppendLine("unregistered version.");
+                labelWaring.Text = sb.ToString();
+                checkBoxShowArray.Checked = false;
+                checkBoxShowArray.Enabled = false;
+            }
+            else
+            {
+                checkBoxShowArray.Enabled = true;
+                labelWaring.Text = "";
+            }
         }
     }
 }

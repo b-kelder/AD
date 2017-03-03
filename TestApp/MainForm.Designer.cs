@@ -49,6 +49,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.sortingIterations = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxShowArray = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.labelWaring = new System.Windows.Forms.Label();
             this.tabSearching = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.searchingListBox = new System.Windows.Forms.CheckedListBox();
@@ -92,7 +95,7 @@
             this.logBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logBox.Location = new System.Drawing.Point(18, 378);
+            this.logBox.Location = new System.Drawing.Point(22, 384);
             this.logBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
@@ -147,7 +150,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.54407F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.45593F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 266F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
             this.tableLayoutPanel1.Controls.Add(this.collectionsListBox, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
@@ -169,7 +172,7 @@
             this.collectionsListBox.Location = new System.Drawing.Point(4, 25);
             this.collectionsListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.collectionsListBox.Name = "collectionsListBox";
-            this.collectionsListBox.Size = new System.Drawing.Size(272, 207);
+            this.collectionsListBox.Size = new System.Drawing.Size(270, 207);
             this.collectionsListBox.TabIndex = 0;
             // 
             // label1
@@ -185,7 +188,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(284, 0);
+            this.label2.Location = new System.Drawing.Point(282, 0);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 20);
@@ -195,7 +198,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(569, 0);
+            this.label3.Location = new System.Drawing.Point(565, 0);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 20);
@@ -275,11 +278,16 @@
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.label8, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.sortingIterations, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.checkBoxShowArray, 1, 4);
+            this.tableLayoutPanel3.Controls.Add(this.label15, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.labelWaring, 1, 5);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(420, 25);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowCount = 6;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -311,6 +319,7 @@
             0,
             0,
             0});
+            this.sortingUpDown.ValueChanged += new System.EventHandler(this.sortingUpDown_ValueChanged);
             // 
             // label5
             // 
@@ -377,6 +386,34 @@
             0,
             0,
             0});
+            // 
+            // checkBoxShowArray
+            // 
+            this.checkBoxShowArray.AutoSize = true;
+            this.checkBoxShowArray.Location = new System.Drawing.Point(136, 113);
+            this.checkBoxShowArray.Name = "checkBoxShowArray";
+            this.checkBoxShowArray.Size = new System.Drawing.Size(22, 21);
+            this.checkBoxShowArray.TabIndex = 8;
+            this.checkBoxShowArray.UseVisualStyleBackColor = true;
+            this.checkBoxShowArray.CheckedChanged += new System.EventHandler(this.checkBoxShowArray_CheckedChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(3, 115);
+            this.label15.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(88, 20);
+            this.label15.TabIndex = 9;
+            this.label15.Text = "Show array";
+            // 
+            // labelWaring
+            // 
+            this.labelWaring.AutoSize = true;
+            this.labelWaring.Location = new System.Drawing.Point(136, 137);
+            this.labelWaring.Name = "labelWaring";
+            this.labelWaring.Size = new System.Drawing.Size(0, 20);
+            this.labelWaring.TabIndex = 6;
             // 
             // tabSearching
             // 
@@ -457,7 +494,8 @@
             this.tableLayoutPanel5.Location = new System.Drawing.Point(420, 25);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 6;
+            this.tableLayoutPanel5.RowCount = 7;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -669,7 +707,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MinimumSize = new System.Drawing.Size(817, 533);
+            this.MinimumSize = new System.Drawing.Size(916, 750);
             this.Name = "MainForm";
             this.Text = "AD Library Testing - Unregistered version";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -743,6 +781,9 @@
         private System.Windows.Forms.ComboBox searchingLocation;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.CheckBox checkBoxShowArray;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label labelWaring;
     }
 }
 
