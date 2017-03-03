@@ -510,5 +510,10 @@ namespace TestApp
                 pt.abort();
             }
         }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            logBox.Clear();
+        }
     }
 }

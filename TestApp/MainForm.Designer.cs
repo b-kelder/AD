@@ -70,6 +70,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testProgressBar = new System.Windows.Forms.ProgressBar();
+            this.buttonClear = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabCollections.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -102,7 +103,7 @@
             // buttonRun
             // 
             this.buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRun.Location = new System.Drawing.Point(758, 334);
+            this.buttonRun.Location = new System.Drawing.Point(640, 334);
             this.buttonRun.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(112, 35);
@@ -639,15 +640,28 @@
             this.testProgressBar.Location = new System.Drawing.Point(18, 334);
             this.testProgressBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.testProgressBar.Name = "testProgressBar";
-            this.testProgressBar.Size = new System.Drawing.Size(735, 35);
+            this.testProgressBar.Size = new System.Drawing.Size(614, 35);
             this.testProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.testProgressBar.TabIndex = 4;
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.Location = new System.Drawing.Point(760, 334);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(112, 35);
+            this.buttonClear.TabIndex = 5;
+            this.buttonClear.Text = "Clear";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(894, 694);
+            this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.testProgressBar);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.buttonRun);
@@ -728,6 +742,7 @@
         private System.Windows.Forms.NumericUpDown searchingIterations;
         private System.Windows.Forms.ComboBox searchingLocation;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button buttonClear;
     }
 }
 
