@@ -10,27 +10,26 @@ namespace ADLibrary.Collections
     {
         private Node<T> next;
         private Node<T> head;
+        private int nodeCount;
 
-        public SinglyLinkedList()
+        public SinglyLinkedList() { }
+
+        public void add(T data)
         {
-
-        }
-
-        public void add(T element)
-        {
-            Node<T> toAdd = new Node<T>();
-            toAdd.element = element;
+            Node<T> toAdd = new Node<T>(data);
             Node<T> current = head;
             while (current != null)
             {
                 current = current.next;
             }
             current.next = toAdd;
+            nodeCount++;
         }
 
         public void clear()
         {
             head = null;
+            nodeCount = 0;
         }
 
         public bool contains(T item)
@@ -38,7 +37,7 @@ namespace ADLibrary.Collections
             Node<T> current = head;
             while (current != null)
             {
-                if (current.element.Equals(item))
+                if (current.data.Equals(item))
                 {
                     return true;
                 }
@@ -49,14 +48,7 @@ namespace ADLibrary.Collections
 
         public int count()
         {
-            int count = 0;
-            Node<T> current = head;
-            while (current != null)
-            {
-                current = current.next;
-                count++;
-            }
-            return count;
+            return nodeCount;
         }
 
         public T[] toArray()
@@ -68,11 +60,11 @@ namespace ADLibrary.Collections
     internal class Node<T>
     {
         public Node<T> next { get; set; }
-        public T element { get; set; }
+        public T data { get; set; }
 
-        public Node()
+        public Node(T element)
         {
-
+            this.data = element;
         }
     }
 }
