@@ -45,6 +45,7 @@
     <Compile Include="Collections\ICollection.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\Queue.cs" />
+    <Compile Include="Collections\DoublyLinkedList.cs" />
     <Compile Include="Collections\SinglyLinkedList.cs" />
     <Compile Include="Collections\Stack.cs" />
     <Compile Include="Performance\PerformanceCounter.cs" />

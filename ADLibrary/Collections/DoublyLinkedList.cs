@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public class SinglyLinkedList<T> : ICollection<T>
+    public class DoublyLinkedList<T> : ICollection<T>
     {
-        private SinglyNode<T> head;
+        private DoublyNode<T> head;
         private int nodeCount;
 
-        public SinglyLinkedList() { }
+        public DoublyLinkedList() { }
 
         public void add(T data)
         {
-            SinglyNode<T> toAdd = new SinglyNode<T>(data);
-            SinglyNode<T> current = head;
+            DoublyNode<T> toAdd = new DoublyNode<T>(data);
+            DoublyNode<T> current = head;
             while (current != null)
             {
                 current = current.next;
             }
             current.next = toAdd;
+            toAdd.previous = current;
             nodeCount++;
         }
 
         public void remove(T data)
         {
-            SinglyNode<T> current = head;
-            SinglyNode<T> previous = null;
+            DoublyNode<T> current = head;
             while (current != null)
             {
                 if (current.data.Equals(data))
@@ -37,10 +37,10 @@ namespace ADLibrary.Collections
                     {
                         head = current.next;
                     }
-                    previous.next = current.next;
+                    current.previous.next = current.next;
+                    current.next.previous = current.previous;
                     return;
                 }
-                previous = current;
                 current = current.next;
             }
         }
@@ -53,7 +53,7 @@ namespace ADLibrary.Collections
 
         public bool contains(T item)
         {
-            SinglyNode<T> current = head;
+            DoublyNode<T> current = head;
             while (current != null)
             {
                 if (current.data.Equals(item))
@@ -76,13 +76,13 @@ namespace ADLibrary.Collections
         }
     }
 
-    internal class SinglyNode<T>
+    internal class DoublyNode<T>
     {
-        public SinglyNode<T> next { get; set; }
-        //public Node<T> previous { get; set; }
+        public DoublyNode<T> next { get; set; }
+        public DoublyNode<T> previous { get; set; }
         public T data { get; set; }
 
-        public SinglyNode(T element)
+        public DoublyNode(T element)
         {
             this.data = element;
         }
