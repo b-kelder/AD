@@ -7,7 +7,7 @@ namespace ADLibrary.Collections
     /// A generic array list.
     /// </summary>
     /// <typeparam name="T">The type to store in this array list.</typeparam>
-    public class Arraylist<T> : ICollection<T>
+    public class Arraylist<T> : IList<T>
     {
         /// <summary>
         /// Internal storage array.
