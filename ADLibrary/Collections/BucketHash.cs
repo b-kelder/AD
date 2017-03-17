@@ -10,7 +10,7 @@
             buckets = new Arraylist<T>[SIZE];
             for(int i = 0; i < SIZE; i++)
             {
-                buckets[i] = new Arraylist<T>(1, 2);
+                buckets[i] = new Arraylist<T>(1, 2);        // The buckets are lists of size 1 that double in size when full
             }
         }
 
