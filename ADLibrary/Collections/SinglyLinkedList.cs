@@ -15,14 +15,35 @@ namespace ADLibrary.Collections
 
         public void add(T data)
         {
-            SinglyNode<T> toAdd = new SinglyNode<T>(data);
-            SinglyNode<T> current = head;
-            while (current != null)
+            SinglyNode<T> toAdd = new SinglyNode<T>(data);            
+            if (head == null)
             {
-                current = current.next;
+                head = toAdd;
             }
-            current.next = toAdd;
+            else
+            {
+                SinglyNode<T> current = head;
+                while (current.next != null)
+                {
+                    current = current.next;
+                }
+                current.next = toAdd;
+            }
             nodeCount++;
+        }
+
+        public T get(int index)
+        {
+            if (index >= nodeCount)
+                throw new IndexOutOfRangeException();
+
+            SinglyNode<T> nodeToGet = head;
+            for (int i = 0; i <= index; i++)
+            {
+                nodeToGet = nodeToGet.next;
+            }
+
+            return nodeToGet.data;
         }
 
         public void remove(T data)
@@ -79,7 +100,6 @@ namespace ADLibrary.Collections
     internal class SinglyNode<T>
     {
         public SinglyNode<T> next { get; set; }
-        //public Node<T> previous { get; set; }
         public T data { get; set; }
 
         public SinglyNode(T element)

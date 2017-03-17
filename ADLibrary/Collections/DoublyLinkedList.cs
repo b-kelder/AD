@@ -16,14 +16,35 @@ namespace ADLibrary.Collections
         public void add(T data)
         {
             DoublyNode<T> toAdd = new DoublyNode<T>(data);
-            DoublyNode<T> current = head;
-            while (current != null)
+            if (head == null)
             {
-                current = current.next;
+                head = toAdd;
             }
-            current.next = toAdd;
-            toAdd.previous = current;
+            else
+            {
+                DoublyNode<T> current = head;
+                while (current.next != null)
+                {
+                    current = current.next;
+                }
+                toAdd.previous = current;
+                current.next = toAdd;
+            }
             nodeCount++;
+        }
+
+        public T get(int index)
+        {
+            if (index >= nodeCount)
+                throw new IndexOutOfRangeException();
+
+            DoublyNode<T> nodeToGet = head;
+            for (int i = 0; i <= index; i++)
+            {
+                nodeToGet = nodeToGet.next;
+            }
+
+            return nodeToGet.data;
         }
 
         public void remove(T data)
