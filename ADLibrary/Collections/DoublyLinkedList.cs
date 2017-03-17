@@ -39,7 +39,7 @@ namespace ADLibrary.Collections
                 throw new IndexOutOfRangeException();
 
             DoublyNode<T> nodeToGet = head;
-            for (int i = 0; i <= index; i++)
+            for (int i = 0; i < index; i++)
             {
                 nodeToGet = nodeToGet.next;
             }
@@ -58,12 +58,19 @@ namespace ADLibrary.Collections
                     {
                         head = current.next;
                     }
-                    current.previous.next = current.next;
-                    current.next.previous = current.previous;
+                    if(current.previous != null)
+                    {
+                        current.previous.next = current.next;
+                    }
+                    if (current.next != null)
+                    {
+                        current.next.previous = current.previous;
+                    }
+                    nodeCount--;
                     return;
                 }
                 current = current.next;
-            }
+            } 
         }
 
         public void clear()

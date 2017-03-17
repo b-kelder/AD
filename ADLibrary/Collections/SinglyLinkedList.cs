@@ -38,7 +38,7 @@ namespace ADLibrary.Collections
                 throw new IndexOutOfRangeException();
 
             SinglyNode<T> nodeToGet = head;
-            for (int i = 0; i <= index; i++)
+            for (int i = 0; i < index; i++)
             {
                 nodeToGet = nodeToGet.next;
             }
@@ -58,12 +58,44 @@ namespace ADLibrary.Collections
                     {
                         head = current.next;
                     }
-                    previous.next = current.next;
+                    if (previous != null)
+                    {
+                        previous.next = current.next;
+                    }
+                    nodeCount--;
                     return;
                 }
                 previous = current;
                 current = current.next;
             }
+        }
+
+        public void removeAtIndex(int index)
+        {
+            if (index >= nodeCount)
+                throw new IndexOutOfRangeException();
+
+            SinglyNode<T> nodeToGet = head;
+            SinglyNode<T> previous = null;
+            for (int i = 0; i < index; i++)
+            {
+                if (i == (index - 1))
+                {
+                    previous = nodeToGet;
+                }
+                nodeToGet = nodeToGet.next;
+            }
+
+            if (nodeToGet == head)
+            {
+                head = nodeToGet.next;
+            }
+            if (previous != null)
+            {
+                previous.next = nodeToGet.next;
+            }
+            nodeCount--;
+            return;
         }
 
         public void clear()
