@@ -10,7 +10,7 @@ namespace ADLibrary.Collections
     /// A LIFO collection of type T.
     /// </summary>
     /// <typeparam name="T">The type to store in the stack.</typeparam>
-    public class Stack<T> : ICollection<T>
+    public class Stack<T> : IList<T>
     {
         /// <summary>
         /// The next free index on the stack. Also the amount of items on the stack.

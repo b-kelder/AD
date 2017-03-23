@@ -530,7 +530,7 @@ namespace TestApp
             // Make sure thay they implement our ICollection interface.
             return typelist.Where(t => t.GetInterfaces().Any(x =>
                             x.IsGenericType &&
-                            x.GetGenericTypeDefinition() == typeof(ADLibrary.Collections.ICollection<>))).ToArray();
+                            x.GetGenericTypeDefinition() == typeof(ADLibrary.Collections.IList<>))).ToArray();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

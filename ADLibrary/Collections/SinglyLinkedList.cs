@@ -55,34 +55,34 @@ namespace ADLibrary.Collections
             }
         }
 
-        public void removeAt(int index)
+        public T removeAt(int index)
         {
             if (index >= nodeCount && index < 0)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            SinglyNode<T> nodeToGet = head;
+            SinglyNode<T> nodeToRemove = head;
             SinglyNode<T> previous = null;
             for (int i = 0; i < index; i++)
             {
                 if (i == (index - 1))
                 {
-                    previous = nodeToGet;
+                    previous = nodeToRemove;
                 }
-                nodeToGet = nodeToGet.next;
+                nodeToRemove = nodeToRemove.next;
             }
 
-            if (nodeToGet == head)
+            if (nodeToRemove == head)
             {
-                head = nodeToGet.next;
+                head = nodeToRemove.next;
             }
             if (previous != null)
             {
-                previous.next = nodeToGet.next;
+                previous.next = nodeToRemove.next;
             }
             nodeCount--;
-            return;
+            return nodeToRemove.data;
         }
 
         public void clear()
@@ -142,7 +142,20 @@ namespace ADLibrary.Collections
 
         public void insert(T item, int index)
         {
-            throw new NotImplementedException();
+            if (index > nodeCount)
+            {
+                add(item);
+            }
+
+            SinglyNode<T> current = head;
+            for (int i = 0; i < index - 1; i++)
+            {
+                current = current.next;
+            }
+
+            SinglyNode<T> toAdd = new SinglyNode<T>(item);
+            toAdd.next = current.next;
+            current.next = toAdd;
         }
     }
 

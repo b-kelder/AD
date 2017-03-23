@@ -1,6 +1,6 @@
 ﻿namespace ADLibrary.Collections
 {
-    public interface IList<T> : ICollection<T>
+    public interface IList<T> : IList<T>
     {
         void add(T item);
         T get(int index);
