@@ -10,7 +10,7 @@ namespace ADLibrary.Collections
     /// A FIFO queue.
     /// </summary>
     /// <typeparam name="T">The type to store.</typeparam>
-    public class Queue<T> : IList<T>
+    public class Queue<T> : ICollection<T>
     {
         Arraylist<T> list;
 

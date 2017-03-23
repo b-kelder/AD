@@ -4,7 +4,7 @@
     /// Interface for all our collections. 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IList<T>
+    public interface ICollection<T>
     {
         bool contains(T item);
         void clear();

@@ -41,13 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Arraylist.cs" />
-    <Compile Include="Collections\BucketHash.cs" />
-    <Compile Include="Collections\HashTableFullException.cs" />
+    <Compile Include="Hashing\BucketHash.cs" />
+    <Compile Include="Hashing\HashTableFullException.cs" />
     <Compile Include="Collections\ICollection.cs" />
     <Compile Include="Collections\IList.cs" />
-    <Compile Include="Collections\LinearHash.cs" />
+    <Compile Include="Hashing\LinearHash.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
-    <Compile Include="Collections\QuadraticHash.cs" />
+    <Compile Include="Hashing\QuadraticHash.cs" />
     <Compile Include="Collections\Queue.cs" />
     <Compile Include="Collections\DoublyLinkedList.cs" />
     <Compile Include="Collections\SinglyLinkedList.cs" />

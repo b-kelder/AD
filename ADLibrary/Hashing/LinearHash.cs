@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ADLibrary.Collections
+﻿namespace ADLibrary.Hashing
 {
     /// <summary>
     /// Demo class for Linear Hash implementation.

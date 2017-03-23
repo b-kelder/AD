@@ -1,4 +1,6 @@
-﻿namespace ADLibrary.Collections
+﻿using ADLibrary.Collections;
+
+namespace ADLibrary.Hashing
 {
     /// <summary>
     /// Bucket hash demo class.
