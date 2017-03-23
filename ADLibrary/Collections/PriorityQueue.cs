@@ -184,14 +184,14 @@ namespace ADLibrary.Collections
         }
 
         /// <summary>
-        /// TODO: Heapsort this before returnign.
-        /// Returns an array of all items in the queue in a rather useless order.
+        /// Returns an array of all items in the queue in order of importance. Highest item is first.
         /// </summary>
-        /// <returns>Array containing items in the queue</returns>
+        /// <returns>Array containing items in the queue.</returns>
         public override T[] toArray()
         {
             T[] result = new T[itemCount];
             Array.Copy(array, result, itemCount);
+            Sorting.HeapSort.sort(result);
             return result;
         }
     }
