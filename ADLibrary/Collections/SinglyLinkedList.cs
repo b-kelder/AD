@@ -157,9 +157,14 @@ namespace ADLibrary.Collections
             toAdd.next = current.next;
             current.next = toAdd;
         }
+
+        public SinglyNode<T> getFirstNode()
+        {
+            return head;
+        }
     }
 
-    internal class SinglyNode<T>
+    public class SinglyNode<T>
     {
         public SinglyNode<T> next { get; set; }
         public T data { get; set; }
