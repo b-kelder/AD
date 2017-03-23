@@ -3,7 +3,7 @@
     /// <summary>
     /// Bucket hash demo class.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type to store</typeparam>
     public class BucketHash<T>
     {
         const int SIZE = 101;

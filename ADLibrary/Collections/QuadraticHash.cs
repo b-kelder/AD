@@ -8,18 +8,16 @@ namespace ADLibrary.Collections
 {
     /// <summary>
     /// Quadratic Hash demo.
-    /// TODO: Find a way to deal with non-nullable types.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class QuadraticHash<T> where T : IComparable
+    public class QuadraticHash
     {
         const int SIZE = 101;               // Size of the hashtable
 
-        T[] hashtable;
+        string[] hashtable;
 
         public QuadraticHash()
         {
-            hashtable = new T[SIZE];
+            hashtable = new string[SIZE];
         }
 
         /// <summary>
@@ -41,12 +39,12 @@ namespace ADLibrary.Collections
         /// Removes the key from the collection.
         /// </summary>
         /// <param name="key">The key to remove</param>
-        public void remove(T key)
+        public void remove(string key)
         {
             var index = indexOf(key);
             if(index > 0)
             {
-                hashtable[index] = default(T);
+                hashtable[index] = default(string);
             }
         }
 
@@ -56,7 +54,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="key">The key to find</param>
         /// <returns>Index of key in hashtable</returns>
-        private int indexOf(T key)
+        private int indexOf(string key)
         {
             var colCount = 0;                                           // Stores the amount of collisions we had
             var normalizedHash = normalizeHash(key.GetHashCode());
@@ -76,7 +74,11 @@ namespace ADLibrary.Collections
             return -1;                                                  // Key not found
         }
 
-        public void insert(T key)
+        /// <summary>
+        /// Inserts an item into the table.
+        /// </summary>
+        /// <param name="key">The item to add.</param>
+        public void insert(string key)
         {
             var colCount = 0;                                           // Stores the amount of collisions we had
             var normalizedHash = normalizeHash(key.GetHashCode());

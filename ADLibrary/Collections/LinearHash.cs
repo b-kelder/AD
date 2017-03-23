@@ -6,67 +6,77 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public class LinearHash<T>
+    /// <summary>
+    /// Demo class for Linear Hash implementation.
+    /// </summary>
+    public class LinearHash
     {
-        const int BUCKET_SIZE = 2;
-
-        const int START_BUCKET_COUNT = 10;
         const int TABLE_SIZE = 101;
-        int level;
-        int bucketPointer;
+        string[] table;
 
-        Arraylist<T[]> buckets;
-
-        // TODO: Cache result of startBucketCount * (int)Math.Pow(2, level) ?
         public LinearHash()
         {
-            buckets = new Arraylist<T[]>(START_BUCKET_COUNT, BUCKET_SIZE);
+            table = new string[TABLE_SIZE];
         }
 
-        public int hash(T key)
+        /// <summary>
+        /// Returns an index for the table based on an item's hash value.
+        /// </summary>
+        /// <param name="key">The item.</param>
+        /// <returns>Index based on item hash.</returns>
+        private int hash(string key)
         {
             var hashValue = key.GetHashCode();
-            hashValue = hashValue % buckets.count();
+            hashValue = hashValue % table.Length;
 
             if(hashValue < 0)
             {
-                hashValue += buckets.count();
+                hashValue += table.Length;
             }
             return hashValue;
         }
 
-        private int index(T key)
+        /// <summary>
+        /// Inserts an item into the table.
+        /// </summary>
+        /// <param name="item">The item to insert.</param>
+        public void insert(string item)
         {
-            var hashed = hash(key);
-            int temp = hashed % (START_BUCKET_COUNT * (int)Math.Pow(2, level));       // 2^x is always an integer anyway
-            if(temp < bucketPointer)
+            int index = hash(item);
+            int offset = 0;
+            while(offset < table.Length)                    // Loop as long as we have space in the table
             {
-                return hashed % (START_BUCKET_COUNT * (int)Math.Pow(2, level + 1));
+                int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
+                if(table[iterationIndex] == null)
+                {
+                    table[iterationIndex] = item;           // Store and return if spot is empty
+                    return;
+                }
+
+                offset++;                                   // Try the next spot
             }
-            else
-            {
-                return temp;
-            }
+            throw new HashTableFullException();             // The entire table has been checked, it must be full if we hit this point
         }
 
-        private void addBucket()
+        /// <summary>
+        /// Removes an item from the table.
+        /// </summary>
+        /// <param name="item">The item to remove.</param>
+        public void remove(string item)
         {
-            buckets.add(new T[BUCKET_SIZE]);
-            if(bucketPointer == START_BUCKET_COUNT * (int)Math.Pow(2, level))
+            int index = hash(item);
+            int offset = 0;
+            while(offset < table.Length)                    // Loop as long as we have space in the table
             {
-                bucketPointer = 0;
-                level++;
-            }
-            else
-            {
-                bucketPointer++;
-            }
-        }
+                int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
+                if(table[iterationIndex] == item)
+                {
+                    table[iterationIndex] = null;           // Set spot to null if we find the item
+                    return;
+                }
 
-        public void insert(T item)
-        {
-            var bucketIndex = index(item);
-            throw new DataMisalignedException();
+                offset++;                                   // Try the next spot
+            }
         }
     }
 }
