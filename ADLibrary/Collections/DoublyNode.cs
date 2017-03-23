@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-     class DoublyNode<T>
+    public class DoublyNode<T>
     {
         public DoublyNode<T> next { get; set; }
         public DoublyNode<T> previous { get; set; }
