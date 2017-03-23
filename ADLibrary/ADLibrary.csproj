@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Arraylist.cs" />
+    <Compile Include="Collections\LinkedListIterator.cs" />
     <Compile Include="Hashing\BucketHash.cs" />
     <Compile Include="Hashing\HashTableFullException.cs" />
     <Compile Include="Collections\ICollection.cs" />
