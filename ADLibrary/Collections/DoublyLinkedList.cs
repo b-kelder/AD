@@ -175,16 +175,4 @@ namespace ADLibrary.Collections
             current.next = toAdd;
         }
     }
-
-    internal class DoublyNode<T>
-    {
-        public DoublyNode<T> next { get; set; }
-        public DoublyNode<T> previous { get; set; }
-        public T data { get; set; }
-
-        public DoublyNode(T element)
-        {
-            this.data = element;
-        }
-    }
 }

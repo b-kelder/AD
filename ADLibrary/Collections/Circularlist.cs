@@ -9,7 +9,6 @@ namespace ADLibrary.Collections
     class Circularlist<T> : IList<T>
     {
         private DoublyNode<T> head;
-        private DoublyNode<T> tail;
         private int nodeCount;
 
         public Circularlist() { }
@@ -101,7 +100,79 @@ namespace ADLibrary.Collections
 
         public T[] toArray()
         {
-            throw new NotImplementedException();
+            T[] array = new T[nodeCount];
+
+            DoublyNode<T> current = head;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                array[i] = current.data;
+                current = current.next;
+            }
+
+            return array;
+        }
+
+        public int indexOf(T item)
+        {
+            DoublyNode<T> current = head;
+            int index = 0;
+            while (current != null)
+            {
+                if (current.data.Equals(item))
+                {
+                    return index;
+                }
+                index++;
+                current = current.next;
+            }
+            return -1;
+        }
+
+        public T removeAt(int index)
+        {
+            if (index >= nodeCount && index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            DoublyNode<T> nodeToRemove = head;
+            for (int i = 0; i < index; i++)
+            {
+                nodeToRemove = nodeToRemove.next;
+            }
+
+            if (nodeToRemove == head)
+            {
+                head = nodeToRemove.next;
+            }
+            if (nodeToRemove.previous != null)
+            {
+                nodeToRemove.previous.next = nodeToRemove.next;
+            }
+            if (nodeToRemove.next != null)
+            {
+                nodeToRemove.next.previous = nodeToRemove.previous;
+            }
+            nodeCount--;
+            return nodeToRemove.data;
+        }
+
+        public void insert(T item, int index)
+        {
+            if (index > nodeCount)
+            {
+                add(item);
+            }
+
+            DoublyNode<T> current = head;
+            for (int i = 0; i < index - 1; i++)
+            {
+                current = current.next;
+            }
+
+            DoublyNode<T> toAdd = new DoublyNode<T>(item);
+            toAdd.next = current.next;
+            current.next = toAdd;
         }
     }
 }
