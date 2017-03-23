@@ -170,7 +170,7 @@ namespace ADLibrary.Collections
             }
             else if(index < 0)
             {
-                throw new ArgumentOutOfRangeException("index", "Index can not be negative!");
+                throw new IndexOutOfRangeException();
             }
             else
             {
@@ -179,7 +179,7 @@ namespace ADLibrary.Collections
                 {
                     expand();
                 }
-                // Move everything, starting at index, 1 position back to make room for our new item
+                // Move everything, starting at index (it is included), 1 position back to make room for our new item
                 Array.Copy(array, index, array, index + 1, itemCount - index);
                 array[index] = item;
                 // Account for the item being inserted

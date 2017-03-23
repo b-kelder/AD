@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public class SinglyLinkedList<T> : ICollection<T>
+    public class SinglyLinkedList<T> : IList<T>
     {
         private SinglyNode<T> head;
         private int nodeCount;
@@ -48,32 +48,19 @@ namespace ADLibrary.Collections
 
         public void remove(T data)
         {
-            SinglyNode<T> current = head;
-            SinglyNode<T> previous = null;
-            while (current != null)
+            int index = indexOf(data);
+            if (index >= 0)
             {
-                if (current.data.Equals(data))
-                {
-                    if (current == head)
-                    {
-                        head = current.next;
-                    }
-                    if (previous != null)
-                    {
-                        previous.next = current.next;
-                    }
-                    nodeCount--;
-                    return;
-                }
-                previous = current;
-                current = current.next;
+                removeAt(index);
             }
         }
 
-        public void removeAtIndex(int index)
+        public void removeAt(int index)
         {
-            if (index >= nodeCount)
+            if (index >= nodeCount && index < 0)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             SinglyNode<T> nodeToGet = head;
             SinglyNode<T> previous = null;
@@ -124,6 +111,36 @@ namespace ADLibrary.Collections
         }
 
         public T[] toArray()
+        {
+            T[] array = new T[nodeCount];
+
+            SinglyNode<T> current = head;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                array[i] = current.data;
+                current = current.next;
+            }
+
+            return array;
+        }
+
+        public int indexOf(T item)
+        {
+            SinglyNode<T> current = head;
+            int index = 0;
+            while (current != null)
+            {
+                if (current.data.Equals(item))
+                {
+                    return index;
+                }
+                index++;
+                current = current.next;  
+            }
+            return -1;
+        }
+
+        public void insert(T item, int index)
         {
             throw new NotImplementedException();
         }
