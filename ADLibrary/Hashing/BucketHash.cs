@@ -12,6 +12,7 @@ namespace ADLibrary.Hashing
     public class BucketHash<TKey, TValue>
     {
         Arraylist<KeyValuePair<TKey, TValue>>[] buckets;
+        int itemCount;
 
         public BucketHash(int size)
         {
@@ -20,6 +21,16 @@ namespace ADLibrary.Hashing
             {
                 buckets[i] = new Arraylist<KeyValuePair<TKey, TValue>>(1, 2);        // The buckets are lists of size 1 that double in size when full
             }
+            itemCount = 0;
+        }
+
+        /// <summary>
+        /// The amount of items in the collection.
+        /// </summary>
+        /// <returns>Amount of items in the table.</returns>
+        public int count()
+        {
+            return itemCount;
         }
 
         /// <summary>
@@ -49,7 +60,19 @@ namespace ADLibrary.Hashing
             var kvPair = new KeyValuePair<TKey, TValue>(key, value);
             if(!buckets[hashValue].contains(kvPair))                  // Only add it if it's not already stored in there
             {
-                buckets[hashValue].add(kvPair);
+                var bucket = buckets[hashValue];
+                var bucketSize = bucket.count();
+                for(int i = 0; i < bucketSize; i++)                     // See if the key is already stored
+                {
+                    if(bucket[i].Key.Equals(key))
+                    {
+                        bucket[i] = kvPair;                             // Overwrite its value if that's the case
+                        return;
+                    }
+                }
+
+                bucket.add(kvPair);                                     // If the key's not in the bucket yet we add a new KV pair
+                itemCount++;
             }
         }
 
@@ -87,6 +110,7 @@ namespace ADLibrary.Hashing
             {
                 if(bucket[i].Key.Equals(key))
                 {
+                    itemCount--;
                     return bucket.removeAt(i).Value;
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using ADLibrary.Collections;
+using System.Collections.Generic;
 
 namespace TestApp.Tests
 {
@@ -17,6 +18,11 @@ namespace TestApp.Tests
             collectionTests = new System.Collections.Generic.List<ITestable>();
         }
 
+        /// <summary>
+        /// Creates integer test data.
+        /// </summary>
+        /// <param name="amount">The amount of entries.</param>
+        /// <returns>Array of test data.</returns>
         private int[] getIntData(int amount)
         {
             int[] data = new int[amount];
@@ -27,6 +33,12 @@ namespace TestApp.Tests
             return data;
         }
 
+        /// <summary>
+        /// Creates test data for priority queues
+        /// </summary>
+        /// <param name="amount">The amount of entries.</param>
+        /// <param name="first">The item with the highest priority.</param>
+        /// <returns>Array of test data.</returns>
         private PriorityItem[] getPQueueData(int amount, out PriorityItem first)
         {
             PriorityItem[] data = new PriorityItem[amount];
@@ -43,6 +55,26 @@ namespace TestApp.Tests
             return data;
         }
 
+        /// <summary>
+        /// Creates test data for hash tables.
+        /// </summary>
+        /// <param name="amount">The amount of entries.</param>
+        /// <returns>Array of test data.</returns>
+        private KeyValuePair<string, int>[] getHashTableData(int amount)
+        {
+            var data = new KeyValuePair<string, int>[amount];
+
+            for(int i = 0; i < amount; i++)
+            {
+                data[i] = new KeyValuePair<string, int>("Entry nr. " + i, random.Next());
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// Creates tests and adds them to the list.
+        /// </summary>
         private void createTests()
         {
             collectionTests.Clear();
@@ -51,6 +83,7 @@ namespace TestApp.Tests
             var intData = getIntData(10000);
             PriorityItem pQueueHighestItem;
             var pQueueData = getPQueueData(10000, out pQueueHighestItem);
+            var hashTableData = getHashTableData(2500);
 
             // Tests
             // Stack
@@ -67,8 +100,16 @@ namespace TestApp.Tests
             var pQueueTest = new PriorityQueueTest<PriorityItem>();
             pQueueTest.setTestData(pQueueData, pQueueHighestItem);
             collectionTests.Add(pQueueTest);
+
+            // Bucket Hash
+            var bucketHashTest = new BucketHashTest<string, int>();
+            bucketHashTest.setTestData(hashTableData);
+            collectionTests.Add(bucketHashTest);
         }
 
+        /// <summary>
+        /// Creates and runs all tests.
+        /// </summary>
         public void run()
         {
             createTests();
