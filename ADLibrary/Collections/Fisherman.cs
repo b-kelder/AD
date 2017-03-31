@@ -39,8 +39,13 @@ namespace ADLibrary.Collections
             this.ownsFishingBoat = ownsFishingBoat;
         }
 
+        public string toString()
+        {
+            return firstName + " " + lastName;
+        }
+
         /// <summary>
-        /// Method used to compare the skill of two fisherman and determan who is beter
+        /// Method used to compare the skill of two fisherman and determine who is beter
         /// </summary>
         /// <param name="other">The fisherman to compare against</param>
         /// <returns> 
