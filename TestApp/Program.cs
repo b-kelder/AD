@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TestApp.Tests;
 
 namespace TestApp
 {
@@ -14,9 +15,13 @@ namespace TestApp
         [STAThread]
         static void Main()
         {
+            CollectionTestManager mngr = new CollectionTestManager();
+            mngr.run();
+            /*
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+            */
         }
     }
 }
