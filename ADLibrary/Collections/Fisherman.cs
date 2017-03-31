@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    class Fisherman : IComparable<Fisherman>
+    public class Fisherman : IComparable<Fisherman>
     {
         string firstName;
         string lastName;
@@ -37,7 +37,29 @@ namespace ADLibrary.Collections
             }
             else
             {
-                return 0;
+                if (ownsFishingBoat == false && other.ownsFishingBoat)
+                {
+                    return 1;
+                }
+                else if (ownsFishingBoat && other.ownsFishingBoat == false)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (age < other.age)
+                    {
+                        return 1;
+                    }
+                    else if (age > other.age)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
             }
         }
     }
