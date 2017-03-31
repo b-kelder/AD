@@ -163,15 +163,4 @@ namespace ADLibrary.Collections
             return head;
         }
     }
-
-    public class SinglyNode<T>
-    {
-        public SinglyNode<T> next { get; set; }
-        public T data { get; set; }
-
-        public SinglyNode(T element)
-        {
-            this.data = element;
-        }
-    }
 }

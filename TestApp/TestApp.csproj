@@ -61,6 +61,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CollectionTests\CollectionTestBase.cs" />
+    <Compile Include="CollectionTests\ITestable.cs" />
+    <Compile Include="CollectionTests\PriorityQueueTest.cs" />
+    <Compile Include="CollectionTests\QueueTest.cs" />
+    <Compile Include="CollectionTests\StackTest.cs" />
+    <Compile Include="CollectionTests\CollectionTestManager.cs" />
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="AdvancedLog.resx">
       <DependentUpon>AdvancedLog.cs</DependentUpon>

@@ -216,6 +216,11 @@ namespace ADLibrary.Collections
             return item;
         }
 
+        public int getPriority()
+        {
+            return priority;
+        }
+
         public int CompareTo(object obj)
         {
             var other = obj as PriorityItem;

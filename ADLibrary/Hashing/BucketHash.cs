@@ -1,22 +1,24 @@
 ﻿using ADLibrary.Collections;
+using System;
+using System.Collections.Generic;
 
 namespace ADLibrary.Hashing
 {
     /// <summary>
-    /// Bucket hash demo class.
+    /// Bucket hash hashtable.
     /// </summary>
-    /// <typeparam name="T">The type to store</typeparam>
-    public class BucketHash<T>
+    /// <typeparam name="TKey">The type of the key</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
+    public class BucketHash<TKey, TValue>
     {
-        const int SIZE = 101;
-        Arraylist<T>[] buckets;
+        Arraylist<KeyValuePair<TKey, TValue>>[] buckets;
 
-        public BucketHash()
+        public BucketHash(int size)
         {
-            buckets = new Arraylist<T>[SIZE];
-            for(int i = 0; i < SIZE; i++)
+            buckets = new Arraylist<KeyValuePair<TKey, TValue>>[size];
+            for(int i = 0; i < size; i++)
             {
-                buckets[i] = new Arraylist<T>(1, 2);        // The buckets are lists of size 1 that double in size when full
+                buckets[i] = new Arraylist<KeyValuePair<TKey, TValue>>(1, 2);        // The buckets are lists of size 1 that double in size when full
             }
         }
 
@@ -25,7 +27,7 @@ namespace ADLibrary.Hashing
         /// </summary>
         /// <param name="key">The key to hash</param>
         /// <returns>Index for key</returns>
-        private int hash(T key)
+        private int hash(TKey key)
         {
             var i = key.GetHashCode();
             i = i % buckets.Length;
@@ -37,26 +39,58 @@ namespace ADLibrary.Hashing
         }
 
         /// <summary>
-        /// Inserts an item in the collection.
+        /// Sets an item in the collection.
         /// </summary>
-        /// <param name="item">The item to insert</param>
-        public void insert(T item)
+        /// <param name="key">The key to insert.</param>
+        /// <param name="value">The value for the key.</param>
+        public void set(TKey key, TValue value)
         {
-            var hashValue = hash(item);
-            if(!buckets[hashValue].contains(item))                  // Only add it if it's not already stored in there
+            var hashValue = hash(key);
+            var kvPair = new KeyValuePair<TKey, TValue>(key, value);
+            if(!buckets[hashValue].contains(kvPair))                  // Only add it if it's not already stored in there
             {
-                buckets[hashValue].add(item);
+                buckets[hashValue].add(kvPair);
             }
+        }
+
+        /// <summary>
+        /// Returns an item based on it's key.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>The value associated with the key.</returns>
+        public TValue get(TKey key)
+        {
+            var hashValue = hash(key);
+            var bucket = buckets[hashValue];
+            var bucketSize = bucket.count();
+            for(int i = 0; i < bucketSize; i++)
+            {
+                if(bucket[i].Key.Equals(key))
+                {
+                    return bucket[i].Value;
+                }
+            }
+            return default(TValue);
         }
 
         /// <summary>
         /// Removes an item from the collection.
         /// </summary>
-        /// <param name="item">The item to remove.</param>
-        public void remove(T item)
+        /// <param name="key">The key to remove.</param>
+        /// <returns>The value of the removed key.</returns>
+        public TValue remove(TKey key)
         {
-            var hashValue = hash(item);
-            buckets[hashValue].remove(item);
+            var hashValue = hash(key);
+            var bucket = buckets[hashValue];
+            var bucketSize = bucket.count();
+            for(int i = 0; i < bucketSize; i++)
+            {
+                if(bucket[i].Key.Equals(key))
+                {
+                    return bucket.removeAt(i).Value;
+                }
+            }
+            return default(TValue);
         }
     }
 }
