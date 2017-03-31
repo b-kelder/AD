@@ -168,7 +168,7 @@ namespace TestApp.Tests
                     }
                     catch(Exception e)
                     {
-                        outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message);
+                        outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message + "\r\n\t" + e.StackTrace);
                         exceptions++;
                     }
                 }

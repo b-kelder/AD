@@ -54,8 +54,14 @@ namespace ADLibrary.Hashing
         /// </summary>
         /// <param name="key">The key to insert.</param>
         /// <param name="value">The value for the key.</param>
+        /// /// <exception cref="ArgumentException">Thrown when key equals default(TKey)</exception>
         public void set(TKey key, TValue value)
         {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
             var hashValue = hash(key);
             var kvPair = new KeyValuePair<TKey, TValue>(key, value);
             if(!buckets[hashValue].contains(kvPair))                  // Only add it if it's not already stored in there
@@ -64,7 +70,9 @@ namespace ADLibrary.Hashing
                 var bucketSize = bucket.count();
                 for(int i = 0; i < bucketSize; i++)                     // See if the key is already stored
                 {
-                    if(bucket[i].Key.Equals(key))
+                    if(bucket[i].Key == null                            // null and default(TKey) are considered empty
+                        || bucket[i].Key.Equals(default(TKey))          
+                        || bucket[i].Key.Equals(key))
                     {
                         bucket[i] = kvPair;                             // Overwrite its value if that's the case
                         return;
@@ -83,6 +91,11 @@ namespace ADLibrary.Hashing
         /// <returns>The value associated with the key.</returns>
         public TValue get(TKey key)
         {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
             var hashValue = hash(key);
             var bucket = buckets[hashValue];
             var bucketSize = bucket.count();
@@ -103,6 +116,11 @@ namespace ADLibrary.Hashing
         /// <returns>The value of the removed key.</returns>
         public TValue remove(TKey key)
         {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
             var hashValue = hash(key);
             var bucket = buckets[hashValue];
             var bucketSize = bucket.count();

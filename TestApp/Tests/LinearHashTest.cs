@@ -19,8 +19,6 @@ namespace TestApp.Tests
 
         public override bool runTest()
         {
-            throw new NotImplementedException();
-            /*
             var hash = new LinearHash<TKey, TValue>(testData.Length);
 
             // Arrange data in dictionary so we can compare results easily
@@ -54,7 +52,7 @@ namespace TestApp.Tests
                 return false;
             }
 
-            return true;*/
+            return true;
         }
     }
 }

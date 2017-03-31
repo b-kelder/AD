@@ -1,16 +1,30 @@
-﻿namespace ADLibrary.Hashing
+﻿using System;
+using System.Collections.Generic;
+
+namespace ADLibrary.Hashing
 {
     /// <summary>
     /// Demo class for Linear Hash implementation.
     /// </summary>
-    public class LinearHash
-    {
-        const int TABLE_SIZE = 101;
-        string[] table;
 
-        public LinearHash()
+    public class LinearHash<TKey, TValue> : IHashtable<TKey, TValue>
+    {
+        KeyValuePair<TKey, TValue>[] table;
+
+        private int itemCount;
+
+        public LinearHash(int size)
         {
-            table = new string[TABLE_SIZE];
+            table = new KeyValuePair<TKey, TValue>[size];
+            itemCount = 0;
+        }
+
+        /// <summary>
+        /// Returns the amount of items in the table.
+        /// </summary>
+        public int count()
+        {
+            return itemCount;
         }
 
         /// <summary>
@@ -18,7 +32,7 @@
         /// </summary>
         /// <param name="key">The item.</param>
         /// <returns>Index based on item hash.</returns>
-        private int hash(string key)
+        private int hash(TKey key)
         {
             var hashValue = key.GetHashCode();
             hashValue = hashValue % table.Length;
@@ -34,16 +48,25 @@
         /// Inserts an item into the table.
         /// </summary>
         /// <param name="item">The item to insert.</param>
-        public void insert(string item)
+        /// <exception cref="ArgumentException">Thrown when key equals default(TKey)</exception>
+        public void set(TKey key, TValue item)
         {
-            int index = hash(item);
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int index = hash(key);
             int offset = 0;
-            while(offset < table.Length)                    // Loop as long as we have space in the table
+            while(offset < table.Length)                                    // Loop as long as we have space in the table
             {
                 int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
-                if(table[iterationIndex] == null)
+                if(key.Equals(table[iterationIndex].Key)
+                    || table[iterationIndex].Key == null                    // Key of null or default(TKey) is considered empty
+                    || table[iterationIndex].Key.Equals(default(TKey)))
                 {
-                    table[iterationIndex] = item;           // Store and return if spot is empty
+                    table[iterationIndex] = new KeyValuePair<TKey, TValue>(key, item);           // Store and return if spot is empty (default(TKey)) or the key is stored here
+                    itemCount++;
                     return;
                 }
 
@@ -56,21 +79,55 @@
         /// Removes an item from the table.
         /// </summary>
         /// <param name="item">The item to remove.</param>
-        public void remove(string item)
+        public TValue remove(TKey key)
         {
-            int index = hash(item);
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int index = hash(key);
             int offset = 0;
             while(offset < table.Length)                    // Loop as long as we have space in the table
             {
                 int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
-                if(table[iterationIndex] == item)
+                if(table[iterationIndex].Key != null && table[iterationIndex].Key.Equals(key))
                 {
-                    table[iterationIndex] = null;           // Set spot to null if we find the item
-                    return;
+                    TValue value = table[iterationIndex].Value;
+                    table[iterationIndex] = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                    return value;
                 }
 
                 offset++;                                   // Try the next spot
             }
+            return default(TValue);
+        }
+
+        /// <summary>
+        /// Returns the value associated with a key. default(TValue) on failure.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>The value or default(TValue)</returns>
+        public TValue get(TKey key)
+        {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int index = hash(key);
+            int offset = 0;
+            while(offset < table.Length)                    // Loop as long as we have space in the table
+            {
+                int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
+                if(table[iterationIndex].Key != null && table[iterationIndex].Key.Equals(key))
+                {
+                    return table[iterationIndex].Value;     // We found it so we return
+                }
+
+                offset++;                                   // Try the next spot
+            }
+            return default(TValue);
         }
     }
 }
