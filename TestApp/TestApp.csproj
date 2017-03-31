@@ -52,6 +52,7 @@
     <Compile Include="AdvancedLog.Designer.cs">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="FishermanGenerator.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -44,6 +44,7 @@
     <Compile Include="Collections\BinarySearchTree.cs" />
     <Compile Include="Collections\Circularlist.cs" />
     <Compile Include="Collections\DoublyNode.cs" />
+    <Compile Include="Collections\Fisherman.cs" />
     <Compile Include="Hashing\BucketHash.cs" />
     <Compile Include="Hashing\HashTableFullException.cs" />
     <Compile Include="Collections\ICollection.cs" />
