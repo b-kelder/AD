@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public class Fisherman : IComparable<Fisherman>
+    public class Fisherman : IComparable
     {
         //Store the data that defines the fisherman
         string firstName;
@@ -39,9 +39,9 @@ namespace ADLibrary.Collections
             this.ownsFishingBoat = ownsFishingBoat;
         }
 
-        public string toString()
+        public override string ToString()
         {
-            return firstName + " " + lastName;
+            return firstName + " " + lastName + " - " + lenghtLargestFishEverCaught + " cm";
         }
 
         /// <summary>
@@ -53,8 +53,15 @@ namespace ADLibrary.Collections
         /// -1 if this fisherman is worse
         /// 0 if the fisherman are equal in skill
         /// </returns>
-        public int CompareTo(Fisherman other)
+        public int CompareTo(object obj)
         {
+            Fisherman other = obj as Fisherman;
+
+            if(other == null)
+            {
+                return 1;               // We are always more skilled than non-fishermen
+            }
+
             //Check to see who caught the larger fish, and thus is a better fishingman
             if (lenghtLargestFishEverCaught > other.lenghtLargestFishEverCaught)
             {

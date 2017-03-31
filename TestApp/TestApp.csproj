@@ -71,6 +71,7 @@
     <Compile Include="Tests\ITestable.cs" />
     <Compile Include="Tests\PriorityQueueTest.cs" />
     <Compile Include="Tests\QueueTest.cs" />
+    <Compile Include="Tests\SortingTest.cs" />
     <Compile Include="Tests\StackTest.cs" />
     <Compile Include="Tests\CollectionTestManager.cs" />
     <Compile Include="Util.cs" />

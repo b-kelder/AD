@@ -50,10 +50,10 @@ namespace TestApp
             string firstName = firstNames[random.Next(firstNames.Count)];
             string lastName = lastNames[random.Next(lastNames.Count)];
             int age = random.Next(80);
-            int lenghtLargestFishEverCaught = random.Next(333);
+            int lenghtLargestFishEverCaught = 1 + random.Next(333);
             //Randomly select true or false
             bool ownsFishingBoat;
-            if (random.Next(1) == 1)
+            if (random.Next(2) == 1)
             {
                 ownsFishingBoat = true;
             }

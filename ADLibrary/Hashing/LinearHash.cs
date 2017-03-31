@@ -6,7 +6,6 @@ namespace ADLibrary.Hashing
     /// <summary>
     /// Demo class for Linear Hash implementation.
     /// </summary>
-
     public class LinearHash<TKey, TValue> : IHashtable<TKey, TValue>
     {
         KeyValuePair<TKey, TValue>[] table;

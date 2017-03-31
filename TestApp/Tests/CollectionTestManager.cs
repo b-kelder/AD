@@ -22,6 +22,24 @@ namespace TestApp.Tests
         }
 
         /// <summary>
+        /// Generates many fishermen.
+        /// </summary>
+        /// <param name="amount">The amount of fishermen to generate.</param>
+        /// <returns>Array of fishermen</returns>
+        private Fisherman[] getFishermen(int amount)
+        {
+            var data = new Fisherman[amount];
+            var fmg = new FishermanGenerator();
+
+            for(int i = 0; i < amount; i++)
+            {
+                data[i] = fmg.generateRandomFisherman();
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Creates integer test data.
         /// </summary>
         /// <param name="amount">The amount of entries.</param>
@@ -87,6 +105,7 @@ namespace TestApp.Tests
             PriorityItem pQueueHighestItem;
             var pQueueData = getPQueueData(10000, out pQueueHighestItem);
             var hashTableData = getHashTableData(2500);
+            var fishData = getFishermen(100000);
 
             // Tests
             // Stack
@@ -95,8 +114,8 @@ namespace TestApp.Tests
             collectionTests.Add(stackTest);
 
             // Queue
-            var queueTest = new QueueTest<int>();
-            queueTest.setTestData(intData);
+            var queueTest = new QueueTest<Fisherman>();
+            queueTest.setTestData(fishData);
             collectionTests.Add(queueTest);
 
             // PriorityQueue
