@@ -252,17 +252,15 @@ namespace TestApp
                 log(ctm.ToString());
 
                 onTestsFinished();
-                return;
             }
 
-            // Run the tests
+            // Run timed tests
             if(actionsToTime.Count > 0)
             {
                 int testIndex = 0;
                 int iterationCounter = 0;
                 long totalTime = 0;                     // Used to store total time for all iterations of an action
 
-                // TODO: Fix progress bar
                 int progressBarDelta = 100 / (actionsToTime.Count * targetIterations);
                 if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
                     progressBarDelta = 1;

@@ -108,12 +108,38 @@ namespace TestApp.Tests
             var bucketHashTest = new BucketHashTest<string, int>();
             bucketHashTest.setTestData(hashTableData);
             collectionTests.Add(bucketHashTest);
+
+            // Linear Hash
+            var linearHashTest = new LinearHashTest<string, int>();
+            linearHashTest.setTestData(hashTableData);
+            collectionTests.Add(linearHashTest);
+
+            // Quadratic Hash
+            var quadraticHashTest = new QuadraticHashTest<string, int>();
+            quadraticHashTest.setTestData(hashTableData);
+            collectionTests.Add(quadraticHashTest);
+
+            // Arraylist
+            var arraylistTest = new ArraylistTest<int>();
+            arraylistTest.setTestData(intData);
+            collectionTests.Add(arraylistTest);
+
+            // Linked List
+
+            // Doubly Linked List
+
+            // Circular List
+
+            // BST?????
+
+            // Iterator
         }
 
         /// <summary>
         /// Creates and runs all tests.
         /// </summary>
-        public void run()
+        /// <param name="times">The amount of times the tests should be run.</param>
+        public void run(int times = 3)
         {
             createTests();
 
@@ -123,29 +149,38 @@ namespace TestApp.Tests
 
             outputLine("Starting test run");
 
-            foreach(var test in collectionTests)
+            for(int i = 0; i < times; i++)
             {
-                try
+                foreach(var test in collectionTests)
                 {
-                    if(test.runTest())
+                    try
                     {
-                        outputLine(test.name + " cleared!");
-                        cleared++;
+                        if(test.runTest())
+                        {
+                            outputLine(test.name + " cleared!");
+                            cleared++;
+                        }
+                        else
+                        {
+                            outputLine(test.name + " failed!");
+                            failed++;
+                        }
                     }
-                    else
+                    catch(Exception e)
                     {
-                        outputLine(test.name + " failed!");
-                        failed++;
+                        outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message);
+                        exceptions++;
                     }
                 }
-                catch(Exception e)
+
+                if(i < times - 1)
                 {
-                    outputLine("Exception thrown when testing " + test.name + "\n" + e.Message + "\n" + e.StackTrace);
-                    exceptions++;
+                    outputLine("Done iteration with iteration " + (i + 1));
                 }
             }
 
             outputLine("Finished test run with the following results:");
+            outputLine("Iterations: " + times);
             outputLine("Cleared:    " + cleared);
             outputLine("Failed:     " + failed);
             outputLine("Exceptions: " + exceptions);

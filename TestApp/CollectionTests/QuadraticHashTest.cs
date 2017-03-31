@@ -7,19 +7,22 @@ using System.Threading.Tasks;
 
 namespace TestApp.Tests
 {
-    class BucketHashTest<TKey, TValue> : HashTestBase<TKey, TValue>
+    class QuadraticHashTest<TKey, TValue> : HashTestBase<TKey, TValue>
     {
         public override string name
         {
             get
             {
-                return "Bucket Hash";
+                return "Quadratic Hash";
             }
         }
 
         public override bool runTest()
         {
-            var hash = new BucketHash<TKey, TValue>(testData.Length);
+            throw new NotImplementedException();
+            /*
+
+            var hash = new QuadraticHash<TKey, TValue>(testData.Length);
 
             // Arrange data in dictionary so we can compare results easily
             var dictionary = new Dictionary<TKey, TValue>();
@@ -52,7 +55,7 @@ namespace TestApp.Tests
                 return false;
             }
 
-            return true;
+            return true;*/
         }
     }
 }
