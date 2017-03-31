@@ -61,12 +61,16 @@ namespace ADLibrary.Hashing
             while(offset < table.Length)                                    // Loop as long as we have space in the table
             {
                 int iterationIndex = (index + offset) % table.Length;       // This ensures we check all spots in the table even if we start at the back
-                if(key.Equals(table[iterationIndex].Key)
-                    || table[iterationIndex].Key == null                    // Key of null or default(TKey) is considered empty
+                if(table[iterationIndex].Key == null                        // Key of null or default(TKey) is considered empty
                     || table[iterationIndex].Key.Equals(default(TKey)))
                 {
-                    table[iterationIndex] = new KeyValuePair<TKey, TValue>(key, item);           // Store and return if spot is empty (default(TKey)) or the key is stored here
-                    itemCount++;
+                    table[iterationIndex] = new KeyValuePair<TKey, TValue>(key, item);
+                    itemCount++;                                            // Track item count
+                    return;
+                }
+                else if(key.Equals(table[iterationIndex].Key))              // Overwrite an existing value
+                {
+                    table[iterationIndex] = new KeyValuePair<TKey, TValue>(key, item);
                     return;
                 }
 
@@ -95,6 +99,7 @@ namespace ADLibrary.Hashing
                 {
                     TValue value = table[iterationIndex].Value;
                     table[iterationIndex] = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                    itemCount--;
                     return value;
                 }
 
