@@ -9,7 +9,7 @@ namespace ADLibrary.Hashing
     /// </summary>
     /// <typeparam name="TKey">The type of the key</typeparam>
     /// <typeparam name="TValue">The value type</typeparam>
-    public class BucketHash<TKey, TValue>
+    public class BucketHash<TKey, TValue> : IHashtable<TKey, TValue>
     {
         Arraylist<KeyValuePair<TKey, TValue>>[] buckets;
         int itemCount;
