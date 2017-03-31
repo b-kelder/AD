@@ -12,6 +12,7 @@ using ADLibrary.Performance;
 using ADLibrary.Sorting;
 using System.Reflection;
 using ADLibrary.Searching;
+using TestApp.Tests;
 
 namespace TestApp
 {
@@ -119,7 +120,7 @@ namespace TestApp
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
-            List<TestAction> actionsToTest = new List<TestAction>();
+            List<TestAction> actionsToTime = new List<TestAction>();
             AdvancedLog advancedLog = new AdvancedLog();
             int[] testData = null;
             int[] originalTestData = null;
@@ -135,7 +136,7 @@ namespace TestApp
                     testData.CopyTo(originalTestData, 0);
 
                     // Generate test actions
-                    actionsToTest = generateSortingActions<int>(testData);
+                    actionsToTime = generateSortingActions<int>(testData);
 
                     targetIterations = Convert.ToInt32(sortingIterations.Value);
 
@@ -174,7 +175,7 @@ namespace TestApp
                         {
                             if(dgm == DataGenerationMode.Ascending)
                             {
-                                actionsToTest.Add(new TestAction()
+                                actionsToTime.Add(new TestAction()
                                 {
                                     name = "BinarySearch",
                                     action = () =>
@@ -190,7 +191,7 @@ namespace TestApp
                         }
                         else if(checkedItem.Equals("SequentialSearch"))
                         {
-                            actionsToTest.Add(new TestAction()
+                            actionsToTime.Add(new TestAction()
                             {
                                 name = "SequentialSearch",
                                 action = () =>
@@ -201,7 +202,7 @@ namespace TestApp
                         }
                         else if(checkedItem.Equals("MinSearch"))
                         {
-                            actionsToTest.Add(new TestAction()
+                            actionsToTime.Add(new TestAction()
                             {
                                 name = "MinSearch",
                                 action = () =>
@@ -212,7 +213,7 @@ namespace TestApp
                         }
                         else if(checkedItem.Equals("MaxSearch"))
                         {
-                            actionsToTest.Add(new TestAction()
+                            actionsToTime.Add(new TestAction()
                             {
                                 name = "MaxSearch",
                                 action = () =>
@@ -223,7 +224,7 @@ namespace TestApp
                         }
                         else if (checkedItem.Equals("RandomSearch"))
                         {
-                            actionsToTest.Add(new TestAction()
+                            actionsToTime.Add(new TestAction()
                             {
                                 name = "RandomSearch",
                                 action = () =>
@@ -243,19 +244,26 @@ namespace TestApp
             }
             else
             {
-                warning("Collection testing is not yet supported!");
+                //                warning("Collection testing is not yet supported!");
+                onTestsStarted();
+
+                CollectionTestManager ctm = new CollectionTestManager();
+                ctm.run();
+                log(ctm.ToString());
+
+                onTestsFinished();
                 return;
             }
 
             // Run the tests
-            if(actionsToTest.Count > 0)
+            if(actionsToTime.Count > 0)
             {
                 int testIndex = 0;
                 int iterationCounter = 0;
                 long totalTime = 0;                     // Used to store total time for all iterations of an action
 
                 // TODO: Fix progress bar
-                int progressBarDelta = 100 / (actionsToTest.Count * targetIterations);
+                int progressBarDelta = 100 / (actionsToTime.Count * targetIterations);
                 if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
                     progressBarDelta = 1;
 
@@ -266,7 +274,7 @@ namespace TestApp
                     // Ensure that this is run from the main/UI thread
                     this.Invoke(new Action(() =>
                     {
-                        log("Test result for " + actionsToTest[testIndex].name + ": " + createMsString(us));
+                        log("Test result for " + actionsToTime[testIndex].name + ": " + createMsString(us));
                         totalTime += us;
 
                         // Update progress bar
@@ -277,11 +285,11 @@ namespace TestApp
                             // We need more iterations, run the same test again
                             runAction.Invoke(testIndex);
                         }
-                        else if(testIndex + 1 < actionsToTest.Count)
+                        else if(testIndex + 1 < actionsToTime.Count)
                         {
                             // Log average time
-                            log("Average time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime / targetIterations));
-                            log("Total time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
+                            log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
+                            log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
                             // Reset iteration specific things
                             log("");                        // Blank line
@@ -295,8 +303,8 @@ namespace TestApp
                             // Done testing
                             advancedLog.printSorted(testData);
                             // Log average time
-                            log("Average time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime / targetIterations));
-                            log("Total time for " + actionsToTest[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
+                            log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
+                            log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
                             log("Tests completed!");
                             log("");                        // Blank line
@@ -315,7 +323,7 @@ namespace TestApp
                     originalTestData.CopyTo(testData, 0);
 
                     // Run test
-                    pt = new PerformanceTester(actionsToTest[index].action, callback);
+                    pt = new PerformanceTester(actionsToTime[index].action, callback);
                     pt.run();
                 };
 

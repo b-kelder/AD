@@ -1,6 +1,7 @@
 ﻿using System;
 using ADLibrary.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace TestApp.Tests
 {
@@ -11,10 +12,12 @@ namespace TestApp.Tests
     {
         private static Random random;
         System.Collections.Generic.List<ITestable> collectionTests;
+        StringBuilder stringBuilder;
 
         public CollectionTestManager()
         {
             random = new Random();
+            stringBuilder = new StringBuilder();
             collectionTests = new System.Collections.Generic.List<ITestable>();
         }
 
@@ -150,7 +153,16 @@ namespace TestApp.Tests
 
         private void outputLine(string text)
         {
+            stringBuilder.AppendLine(text);
             Console.WriteLine(text);
+        }
+
+        /// <summary>
+        /// Returns the output as a string.
+        /// </summary>
+        public override string ToString()
+        {
+            return stringBuilder.ToString();
         }
     }
 }
