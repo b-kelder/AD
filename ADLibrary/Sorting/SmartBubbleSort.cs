@@ -15,13 +15,15 @@ namespace ADLibrary.Sorting
         public static void sort<T>(T[] array) where T : IComparable
         {
             int length = array.Length;
+            int nlength = 0;
             bool swapped = true;
 
             //Loop until no item is being swapped
-            while (swapped)
+            while (length > 0)
             {
                 //Reset the swapped var
-                swapped = false;
+                //swapped = false;
+                nlength = 0;
                 //Loop throught all the items
                 for (int i = 1; i < length; i++)
                 {
@@ -33,9 +35,11 @@ namespace ADLibrary.Sorting
                         array[i] = array[i - 1];
                         array[i - 1] = temp;
                         //Set the swapped var to true
-                        swapped = true;
+                        nlength = i;
                     }
                 }
+                length = nlength;
+                //
             }
         }
     }

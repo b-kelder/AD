@@ -24,7 +24,7 @@ namespace TestApp
             "Tapia","Gutierrez","Rueda","Galviz","Yuli","Rivera","Mamami",
             "Saucedo","Dominguez","Escobar","Martin","Crespo","Johnson",
             "Williams","Jones","Brown","David","Miller","Wilson","Anderson",
-            "Thomas","Jackson","White","Robinson", "Stoevelaar", "Brookuis",
+            "Gerritsön","Jackson","White","Robinson", "Stoevelaar", "Brookuis",
             "Piraat", "Post", "Brandweerman", "Sinter"
         };
 
@@ -78,6 +78,7 @@ namespace TestApp
             else if (firstName.Equals("Klaas") && lastName.Equals("Sinter"))
             {
                 firstName = "Sinterklaas";
+                lastName = "";
             }
 
             //Return a new fisherman with de stats devined above

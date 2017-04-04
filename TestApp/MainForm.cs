@@ -43,6 +43,10 @@ namespace TestApp
 
             sortingTestManager.populateSortingTab(sortingListBox);
             searchingTestManager.populateSearchingTab(searchingListBox);
+
+            searchingDataMethod.SelectedIndex = 0;
+            searchingLocation.SelectedIndex = 2;
+            sortingComboBox.SelectedIndex = 1;
         }
 
         #region output
@@ -73,14 +77,25 @@ namespace TestApp
         {
             log("WARNING: " + text);
         }
+
+        private string arrayToString<T>(T[] array)
+        {
+            var sb = new StringBuilder();
+            sb.Append("(");
+            foreach(var element in array)
+            {
+                sb.Append(element + ") - \r\n(");
+            }
+            sb.Append("FINISHED)");
+            return sb.ToString();
+        }
         #endregion
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
             List<TestAction> actionsToTime = new List<TestAction>();
-            AdvancedLog advancedLog = new AdvancedLog();
-            int[] testData = null;
-            int[] originalTestData = null;
+            Fisherman[] testData = null;
+            Fisherman[] originalTestData = null;
             int targetIterations = 1;
 
             if(tabControl.SelectedTab == tabSorting)
@@ -89,7 +104,7 @@ namespace TestApp
                 {
                     // Generate some test data
                     testData = generateTestData(Convert.ToInt32(sortingUpDown.Value), getSelectedDataGenerationMode());
-                    originalTestData = new int[testData.Length];
+                    originalTestData = new Fisherman[testData.Length];
                     testData.CopyTo(originalTestData, 0);
 
                     // Generate test actions
@@ -100,13 +115,6 @@ namespace TestApp
                     // Log some info about the test data
                     log("Test data size: " + testData.Length);
                     log("Test data method: " + sortingComboBox.Text);
-
-                    // Show the advanced log
-                    if (checkBoxShowArray.Checked)
-                    {
-                        advancedLog.printUnsorted(testData);
-                        advancedLog.Show();
-                    }
                 }
                 else
                 {
@@ -120,10 +128,10 @@ namespace TestApp
                     // Generate some test data
                     var dgm = getSelectedDataGenerationMode();
                     testData = generateTestData(Convert.ToInt32(searchingUpDown.Value), dgm);
-                    originalTestData = new int[testData.Length];
+                    originalTestData = new Fisherman[testData.Length];
                     testData.CopyTo(originalTestData, 0);
 
-                    int valueToFind = testData[testData.Length / 2];
+                    Fisherman valueToFind = testData[testData.Length / 2];
 
                     actionsToTime = searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), valueToFind);
 
@@ -190,14 +198,15 @@ namespace TestApp
                         }
                         else
                         {
-                            // Done testing
-                            advancedLog.printSorted(testData);
                             // Log average time
                             log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
                             log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
                             log("Tests completed!");
                             log("");                        // Blank line
+
+                            log(arrayToString(testData));
+
                             onTestsFinished();
                         }
                     }));
@@ -264,15 +273,17 @@ namespace TestApp
         /// </summary>
         /// <param name="amount">The size of the array.</param>
         /// <param name="method">The sort of data to generate (Random, Ascending, Descending)</param>
-        private int[] generateTestData(int amount, DataGenerationMode method)
+        private Fisherman[] generateTestData(int amount, DataGenerationMode method)
         {
-            int[] arr = new int[amount];
+            Fisherman[] arr = new Fisherman[amount];
+            FishermanGenerator fmg = new FishermanGenerator();
+
             if(method == DataGenerationMode.Random)
             { 
                 log("Generating random test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = random.Next();
+                    arr[i] = fmg.generateRandomFisherman();
                 }
             }
             else if(method == DataGenerationMode.Ascending)
@@ -280,7 +291,7 @@ namespace TestApp
                 log("Generating ascending test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = i;
+                    arr[i] = new Fisherman("Henk", "Henk", 99, i * 3, false);
                 }
             }
             else if(method == DataGenerationMode.Descending)
@@ -288,7 +299,7 @@ namespace TestApp
                 log("Generating descending test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = arr.Length - i;
+                    arr[i] = new Fisherman("Henk", "Henk", 99, (arr.Length - i) * 3, false);
                 }
             }
             else
