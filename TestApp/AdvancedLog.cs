@@ -17,7 +17,7 @@ namespace TestApp
             InitializeComponent();
         }
 
-        public void printUnsorted(IComparable[] testData)
+        public void printUnsorted(int[] testData)
         {
             var sb = new StringBuilder();
             for (int i = 0; i < testData.Length; i++)
@@ -27,7 +27,7 @@ namespace TestApp
             unsortedLog.AppendText(sb.ToString());
         }
 
-        public void printSorted(IComparable[] testData)
+        public void printSorted(int[] testData)
         {
             var sb = new StringBuilder();
             for (int i = 0; i < testData.Length; i++)

@@ -53,6 +53,9 @@
     <Compile Include="AdvancedLog.Designer.cs">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchingTestManager.cs" />
+    <Compile Include="SortingTestManager.cs" />
+    <Compile Include="TestAction.cs" />
     <Compile Include="Tests\ArraylistTest.cs" />
     <Compile Include="Tests\BucketHashTest.cs" />
     <Compile Include="Tests\HashTestBase.cs" />
