@@ -61,6 +61,13 @@
     <Compile Include="Tests\HashTestBase.cs" />
     <Compile Include="Tests\LinearHashTest.cs" />
     <Compile Include="Tests\QuadraticHashTest.cs" />
+	<Compile Include="Tests\CollectionTestBase.cs" />
+    <Compile Include="Tests\ITestable.cs" />
+    <Compile Include="Tests\PriorityQueueTest.cs" />
+    <Compile Include="Tests\QueueTest.cs" />
+    <Compile Include="Tests\SortingTest.cs" />
+    <Compile Include="Tests\StackTest.cs" />
+    <Compile Include="Tests\CollectionTestManager.cs" />
     <Compile Include="FishermanGenerator.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -70,13 +77,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\CollectionTestBase.cs" />
-    <Compile Include="Tests\ITestable.cs" />
-    <Compile Include="Tests\PriorityQueueTest.cs" />
-    <Compile Include="Tests\QueueTest.cs" />
-    <Compile Include="Tests\SortingTest.cs" />
-    <Compile Include="Tests\StackTest.cs" />
-    <Compile Include="Tests\CollectionTestManager.cs" />
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="AdvancedLog.resx">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
