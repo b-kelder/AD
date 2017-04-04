@@ -33,7 +33,7 @@ namespace TestApp.Tests
 
             for(int i = 0; i < amount; i++)
             {
-                data[i] = fmg.generateRandomFisherman();
+                data[i] = fmg.generateCompletelyRandomFisherman();
             }
 
             return data;
