@@ -199,10 +199,11 @@ namespace TestApp.Tests
             }
 
             outputLine("Finished test run with the following results:");
-            outputLine("Iterations: " + times);
-            outputLine("Cleared:    " + cleared);
-            outputLine("Failed:     " + failed);
-            outputLine("Exceptions: " + exceptions);
+            outputLine("Iterations:     " + times);
+            outputLine("Total Tests:    " + collectionTests.Count * times);
+            outputLine("Cleared:        " + cleared);
+            outputLine("Failed:         " + failed);
+            outputLine("Exceptions:     " + exceptions);
         }
 
         private void outputLine(string text)
