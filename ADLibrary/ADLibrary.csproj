@@ -42,13 +42,15 @@
   <ItemGroup>
     <Compile Include="Collections\Arraylist.cs" />
     <Compile Include="Collections\BinarySearchTree.cs" />
-    <Compile Include="Collections\CircularList.cs" />
+    <Compile Include="Collections\Circularlist.cs" />
     <Compile Include="Collections\DoublyNode.cs" />
+    <Compile Include="Collections\Fisherman.cs" />
     <Compile Include="Collections\SinglyNode.cs" />
     <Compile Include="Hashing\BucketHash.cs" />
     <Compile Include="Hashing\HashTableFullException.cs" />
     <Compile Include="Collections\ICollection.cs" />
     <Compile Include="Collections\IList.cs" />
+    <Compile Include="Hashing\IHashtable.cs" />
     <Compile Include="Hashing\LinearHash.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Hashing\QuadraticHash.cs" />
