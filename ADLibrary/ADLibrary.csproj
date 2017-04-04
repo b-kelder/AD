@@ -45,6 +45,7 @@
     <Compile Include="Collections\Circularlist.cs" />
     <Compile Include="Collections\DoublyNode.cs" />
     <Compile Include="Collections\Fisherman.cs" />
+    <Compile Include="Collections\LinkedListIterator.cs" />
     <Compile Include="Collections\SinglyNode.cs" />
     <Compile Include="Hashing\BucketHash.cs" />
     <Compile Include="Hashing\HashTableFullException.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Searching\BinarySearch.cs" />
     <Compile Include="Searching\MinMaxSearch.cs" />
-    <Compile Include="Searching\RandomSearch.cs" />
     <Compile Include="Searching\SequentialSearch.cs" />
     <Compile Include="Sorting\BubbleSort.cs" />
     <Compile Include="Sorting\HeapSort.cs" />

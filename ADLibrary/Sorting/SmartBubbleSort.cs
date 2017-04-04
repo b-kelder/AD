@@ -15,21 +15,28 @@ namespace ADLibrary.Sorting
         public static void sort<T>(T[] array) where T : IComparable
         {
             int length = array.Length;
-            do
+            bool swapped = true;
+
+            //Loop until no item is being swapped
+            while (swapped)
             {
-                int newLength = 0;                                  // Will contain the index of the last swap
-                for(int i = 1; i < length; i++)                     // Loop up to the index of the last swap, everything after that is already sorted
+                //Reset the swapped var
+                swapped = false;
+                //Loop throught all the items
+                for (int i = 1; i < length; i++)
                 {
-                    if(array[i - 1].CompareTo(array[i]) > 0)        // If the previous item is larger we swap
+                    //If item is largen than item after it
+                    if (array[i - 1].CompareTo(array[i]) > 0)
                     {
-                        newLength = i;                              // Store the index of this swap
+                        //Swap the items
                         T temp = array[i];
                         array[i] = array[i - 1];
                         array[i - 1] = temp;
+                        //Set the swapped var to true
+                        swapped = true;
                     }
                 }
-                length = newLength;
-            } while(length > 0);                                    // Keep going until everything is sorted (no swap in the previous run)
+            }
         }
     }
 }
