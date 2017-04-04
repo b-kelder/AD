@@ -126,7 +126,109 @@ namespace ADLibrary.Collections
 
         public void remove(T item)
         {
-            throw new NotImplementedException();
+            TreeNode<T> current = root;
+            TreeNode<T> parent = root;
+            bool isLeftChild = true;
+
+            while (current.data.CompareTo(item) != 0)
+            {
+                parent = current;
+                if (item.CompareTo(current.data) < 0)
+                {
+                    isLeftChild = true;
+                    current = current.left;
+                } else
+                {
+                    isLeftChild = false;
+                    current = current.right;
+                }
+                if (current == null)
+                {
+                    return;
+                }
+            }
+
+            if ((current.left == null) && (current.right == null))
+            {
+                if (current == root)
+                {
+                    root = null;
+                }
+                else if (isLeftChild)
+                {
+                    parent.left = null;
+                }
+                else
+                {
+                    parent.right = null;
+                }
+            }
+            else if (current.right == null)
+            {
+                if (current == root)
+                {
+                    root = current.left;
+                }
+                else if (isLeftChild)
+                {
+                    parent.left = current.left;
+                }
+                else
+                {
+                    parent.right = current.right;
+                }
+            }
+            else if (current.left == null)
+            {
+                if (current == root)
+                {
+                    root = current.right;
+                }
+                else if (isLeftChild)
+                {
+                    parent.left = parent.right;
+                }
+                else
+                {
+                    parent.right = current.right;
+                }
+            }
+            else
+            {
+                TreeNode<T> successor = getSuccessor(current);
+                if (current == root)
+                {
+                    root = successor;
+                }
+                else if (isLeftChild)
+                {
+                    parent.left = successor;
+                }
+                else
+                {
+                    parent.right = successor;
+                }
+                successor.left = current.left;
+            }
+        }
+
+        public TreeNode<T> getSuccessor(TreeNode<T> delNode)
+        {
+            TreeNode<T> successorParent = delNode;
+            TreeNode<T> successor = delNode;
+            TreeNode<T> current = delNode.right;
+            while (!(current == null))
+            {
+                successorParent = current;
+                successor = current;
+                current = current.left;
+            }
+            if (!(successor == delNode.right))
+            {
+                successorParent.left = successor.right;
+                successor.right = delNode.right;
+            }
+            return successor;
         }
 
         public int count()
