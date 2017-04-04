@@ -283,7 +283,7 @@ namespace TestApp
                 log("Generating random test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = fmg.generateRandomFisherman();
+                    arr[i] = fmg.generateCompletelyRandomFisherman();
                 }
             }
             else if(method == DataGenerationMode.Ascending)
@@ -291,7 +291,7 @@ namespace TestApp
                 log("Generating ascending test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = new Fisherman("Henk", "Henk", 99, i * 3, false);
+                    arr[i] = fmg.generateRandomFisherman(i * 3);
                 }
             }
             else if(method == DataGenerationMode.Descending)
@@ -299,7 +299,7 @@ namespace TestApp
                 log("Generating descending test data");
                 for(int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = new Fisherman("Henk", "Henk", 99, (arr.Length - i) * 3, false);
+                    arr[i] = fmg.generateRandomFisherman((arr.Length - i) * 3);
                 }
             }
             else

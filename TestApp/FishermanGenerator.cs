@@ -44,7 +44,7 @@ namespace TestApp
         /// Method to generate a random fisherman
         /// </summary>
         /// <returns>A fisherman object</returns>
-        public Fisherman generateCompleteRandomFisherman()
+        public Fisherman generateCompletelyRandomFisherman()
         {
             //Create random variables.
             string firstName = firstNames[random.Next(firstNames.Count)];
