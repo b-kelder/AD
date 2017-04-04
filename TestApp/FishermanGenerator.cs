@@ -30,6 +30,8 @@ namespace TestApp
 
         //Random object to create random fishermans
         Random random;
+        //Keep track if thomas has been created
+        bool thomasHasBeenCreated;
 
         /// <summary>
         /// Constructor of the Fisherman class
@@ -38,6 +40,8 @@ namespace TestApp
         {
             //Initialize random object
             random = new Random();
+            //Default to false
+            thomasHasBeenCreated = false;
         }
 
         /// <summary>
@@ -62,12 +66,22 @@ namespace TestApp
                 ownsFishingBoat = false;
             }
 
-            //If name equals Thomas Stoevelaar, give him predefined stats.
+            //If name equals Thomas Stoevelaar, give him predefined stats
             if (firstName.Equals("Thomas") && lastName.Equals("Stoevelaar"))
             {
-                age = 19;
-                lenghtLargestFishEverCaught = 9999999;
-                ownsFishingBoat = false;
+                //Just make sure he has not been created before
+                if (thomasHasBeenCreated)
+                {
+                    firstName = "Mark";
+                    lastName = "Rutte";
+                }
+                else
+                {
+                    age = 19;
+                    lenghtLargestFishEverCaught = 9999999;
+                    ownsFishingBoat = false;
+                    thomasHasBeenCreated = true;
+                }
             }
             //Make sure Gandalf is just Gandalf
             else if (firstName.Equals("Gandalf"))
