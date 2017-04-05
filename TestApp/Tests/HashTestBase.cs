@@ -18,6 +18,6 @@ namespace TestApp.Tests
             this.testData = testData;
         }
 
-        public abstract bool runTest();
+        public abstract void runTest();
     }
 }

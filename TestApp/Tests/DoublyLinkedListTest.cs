@@ -7,20 +7,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
-    public class ArraylistTest<K> : CollectionTestBase<Arraylist<K>, K>
+    public class DoublyLinkedListTest<K> : CollectionTestBase<DoublyLinkedList<K>, K>
     {
         public override string name
         {
             get
             {
-                return "Arraylist";
+                return "Doubly Linked List";
             }
         }
 
         public override void runTest()
         {
-            var list = new Arraylist<K>();
-
+            var list = new DoublyLinkedList<K>();
+           
             // Test add
             foreach(var item in testData)
             {
@@ -48,6 +48,12 @@ namespace TestApp.Tests
                 Assert.AreEqual(testData[i], list.get(i));
             }
 
+            // Verify that the head exists
+            /*if(list.getFirstNode() == null)
+            {
+                return false;
+            }*/
+
             // Empty the list
             for(int i = 0; i < testData.Length; i++)
             {
@@ -56,6 +62,11 @@ namespace TestApp.Tests
 
             Assert.AreEqual(0, list.count());
 
+            // Verify that the head is gone
+            /*if(list.getFirstNode() != null)
+            {
+                return false;
+            }*/
         }
     }
 }

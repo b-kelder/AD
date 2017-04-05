@@ -3,6 +3,7 @@ using ADLibrary.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
@@ -16,7 +17,7 @@ namespace TestApp.Tests
             }
         }
 
-        public override bool runTest()
+        public override void runTest()
         {
             var queue = new Queue<K>();
 
@@ -26,22 +27,23 @@ namespace TestApp.Tests
                 queue.enqueue(testData[i]);
             }
 
+            // Count
+            Assert.AreEqual(testData.Length, queue.count());
+
+            // Contains
+            Assert.AreEqual(true, queue.contains(testData[0]));
+
             // Test peek result
-            if(!queue.peek().Equals(testData[0]))
-            {
-                return false;
-            }
+            Assert.AreEqual(testData[0], queue.peek());
 
             // Test dequeue results
             for(int i = 0; i < this.testData.Length; i++)
             {
-                if(!queue.dequeue().Equals(testData[i]))
-                {
-                    return false;
-                }
+                Assert.AreEqual(testData[i], queue.dequeue());
             }
 
-            return true;
+            // Count
+            Assert.AreEqual(0, queue.count());
         }
     }
 }

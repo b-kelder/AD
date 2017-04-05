@@ -14,9 +14,6 @@ namespace TestApp.Tests
             this.testData = (K[])testData.Clone();
         }
 
-        public virtual bool runTest()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void runTest();
     }
 }

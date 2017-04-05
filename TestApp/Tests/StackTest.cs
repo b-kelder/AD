@@ -1,5 +1,6 @@
 ﻿using System;
 using ADLibrary.Collections;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
@@ -13,7 +14,7 @@ namespace TestApp.Tests
             }
         }
 
-        public override bool runTest()
+        public override void runTest()
         {
             var stack = new Stack<K>();
 
@@ -23,22 +24,21 @@ namespace TestApp.Tests
                 stack.push(testData[i]);
             }
 
-            // Test peek result
-            if(!stack.peek().Equals(testData[testData.Length - 1]))
-            {
-                return false;
-            }
+            // Count
+            Assert.AreEqual(testData.Length, stack.count());
+
+            // Test peek
+            Assert.AreEqual(testData[testData.Length - 1], stack.peek());
+            Assert.AreEqual(testData.Length, stack.count());
 
             // Test pop results
             for(int i = this.testData.Length - 1; i >= 0; i--)
             {
-                if(!stack.pop().Equals(testData[i]))
-                {
-                    return false;
-                }
+                Assert.AreEqual(testData[i], stack.pop());
             }
 
-            return true;
+            // Count
+            Assert.AreEqual(0, stack.count());
         }
     }
 }

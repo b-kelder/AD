@@ -1,4 +1,5 @@
 ﻿using ADLibrary.Hashing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,8 @@ namespace TestApp.Tests
             }
         }
 
-        public override bool runTest()
+        public override void runTest()
         {
-            throw new NotImplementedException();
-            /*
-
             var hash = new QuadraticHash<TKey, TValue>(testData.Length);
 
             // Arrange data in dictionary so we can compare results easily
@@ -41,21 +39,13 @@ namespace TestApp.Tests
             foreach(var data in dictionary)
             {
                 var result = hash.get(data.Key);
-                if(!result.Equals(data.Value))
-                {
-                    return false;
-                }
-                hash.remove(data.Key);
+                Assert.AreEqual(data.Value, result);
+                result = hash.remove(data.Key);
+                Assert.AreEqual(data.Value, result);
             }
 
             // Ensure all items have been removed
-            if(hash.count() > 0)
-            {
-                Console.WriteLine(hash.count());
-                return false;
-            }
-
-            return true;*/
+            Assert.AreEqual(0, hash.count());
         }
     }
 }

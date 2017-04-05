@@ -225,27 +225,11 @@ namespace ADLibrary.Collections
         {
             get
             {
-                // the same as get()
-                if(key >= 0 && key < itemCount)
-                {
-                    return array[key];
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("key", "Key is out of range");
-                }
+                return get(key);
             }
             set
             {
-                // Overwrite item at position
-                if(key >= 0 && key < itemCount)
-                {
-                    array[key] = value;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("key", "Key is out of range");
-                }
+                insert(value, key);
             }
         }
     }

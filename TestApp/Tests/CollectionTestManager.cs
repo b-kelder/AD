@@ -104,7 +104,7 @@ namespace TestApp.Tests
             var intData = getIntData(10000);
             PriorityItem pQueueHighestItem;
             var pQueueData = getPQueueData(10000, out pQueueHighestItem);
-            var hashTableData = getHashTableData(2500);
+            var hashTableData = getHashTableData(2503);                         // Is prime
             var fishData = getFishermen(100000);
 
             // Tests
@@ -149,8 +149,14 @@ namespace TestApp.Tests
             collectionTests.Add(linkedListTest);
 
             // Doubly Linked List
+            var doublyLinkedListTest = new DoublyLinkedListTest<int>();
+            doublyLinkedListTest.setTestData(intData);
+            collectionTests.Add(doublyLinkedListTest);
 
             // Circular List
+            var circularListTest = new LinkedListTest<int>();
+            circularListTest.setTestData(intData);
+            collectionTests.Add(circularListTest);
 
             // BST?????
 
@@ -161,13 +167,13 @@ namespace TestApp.Tests
         /// Creates and runs all tests.
         /// </summary>
         /// <param name="times">The amount of times the tests should be run.</param>
-        public void run(int times = 1)
+        public void run(int times = 1, bool showStackTrace = false)
         {
             createTests();
 
-            int failed = 0;
-            int cleared = 0;
-            int exceptions = 0;
+            HashSet<string> cleared = new HashSet<string>();
+            HashSet<string> failed = new HashSet<string>();
+            HashSet<string> exceptions = new HashSet<string>();
 
             outputLine("Starting test run");
 
@@ -177,21 +183,23 @@ namespace TestApp.Tests
                 {
                     try
                     {
-                        if(test.runTest())
-                        {
-                            outputLine(test.name + " cleared!");
-                            cleared++;
-                        }
-                        else
-                        {
-                            outputLine(test.name + " failed!");
-                            failed++;
-                        }
+                        test.runTest();
+                        outputLine(test.name + " cleared!");
+                        cleared.Add(test.name);
                     }
                     catch(Exception e)
                     {
-                        outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message + "\r\n\t" + e.StackTrace);
-                        exceptions++;
+                        if(showStackTrace)
+                        {
+                            outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message + "\r\n\t" + e.StackTrace);
+                        }
+                        else
+                        {
+                            outputLine("Exception thrown when testing " + test.name + "\r\n\t" + e.Message);
+                        }
+                        outputLine(test.name + " failed!");
+                        exceptions.Add(test.name);
+                        failed.Add(test.name);
                     }
                 }
 
@@ -204,9 +212,25 @@ namespace TestApp.Tests
             outputLine("Finished test run with the following results:");
             outputLine("Iterations:     " + times);
             outputLine("Total Tests:    " + collectionTests.Count * times);
-            outputLine("Cleared:        " + cleared);
-            outputLine("Failed:         " + failed);
-            outputLine("Exceptions:     " + exceptions);
+            outputLine("Cleared:        " + cleared.Count);
+            outputLine("Failed:         " + failed.Count);
+            outputLine("Exceptions:     " + exceptions.Count);
+            outputLine("");
+            outputLine("Failed tests:");
+            outputHashSet(failed);
+
+            outputLine("Cleared tests:");
+            outputHashSet(cleared);
+
+        }
+
+        private void outputHashSet(HashSet<string> set)
+        {
+            foreach(var str in set)
+            {
+                outputLine(str);
+            }
+            outputLine("");
         }
 
         private void outputLine(string text)

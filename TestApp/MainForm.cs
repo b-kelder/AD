@@ -83,20 +83,6 @@ namespace TestApp
             log("WARNING: " + text);
         }
 
-        private string arrayToString<T>(T[] array)
-        {
-            if(array == null)
-                return "";
-
-            var sb = new StringBuilder();
-            sb.Append("(");
-            foreach(var element in array)
-            {
-                sb.Append(element + ") - \r\n(");
-            }
-            sb.Append("FINISHED)");
-            return sb.ToString();
-        }
         #endregion
 
         /// <summary>
@@ -163,7 +149,7 @@ namespace TestApp
                 // Collection tests
                 // These are a bit different, they all run in one go for all of them instead of seperate
                 actionsToTime.Add(new TestAction {
-                    action = () => { collectionTestManager.run(); log(collectionTestManager.ToString()); },
+                    action = () => { collectionTestManager.run(1, true); log(collectionTestManager.ToString()); },
                     name = "Collection tests",
                 });
                 // Put something in the output log to ensure the user that things are happening
@@ -224,7 +210,7 @@ namespace TestApp
                             log("Tests completed!");
                             log("");                        // Blank line
 
-                            log(arrayToString(testData));   // Dump last used array?
+                            log(Util.arrayToString(testData));   // Dump last used array?
 
                             onTestsFinished();
                         }

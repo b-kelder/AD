@@ -23,10 +23,9 @@ namespace TestApp.Tests
             this.testData = testData;
         }
 
-        public bool runTest()
+        public void runTest()
         {
             HeapSort.sort(testData);
-            return true;
         }
     }
 }

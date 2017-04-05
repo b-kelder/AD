@@ -3,6 +3,7 @@ using ADLibrary.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
@@ -29,7 +30,7 @@ namespace TestApp.Tests
             this.expectedFirst = firstValue;
         }
 
-        public override bool runTest()
+        public override void runTest()
         {
             var queue = new PriorityQueue<T>(testData.Length);
 
@@ -39,24 +40,22 @@ namespace TestApp.Tests
                 queue.enqueue(testData[i]);
             }
 
+            // Count
+            Assert.AreEqual(testData.Length, queue.count());
+
+            // Contains
+            Assert.AreEqual(true, queue.contains(testData[0]));
+
             // Test peek result
-            if(!queue.peek().Equals(expectedFirst))
-            {
-                return false;
-            }
+            Assert.AreEqual(this.expectedFirst, queue.peek());
 
             // Test count results on dequeue
             int dataSize = this.testData.Length;
             for(int i = 0; i < this.testData.Length; i++)
             {
                 queue.dequeue();
-                if(queue.count() != dataSize - i - 1)           // Compare size with expected size
-                {
-                    return false;
-                }
+                Assert.AreEqual(dataSize - i - 1, queue.count());           // Compare size with expected size
             }
-
-            return true;
         }
     }
 }

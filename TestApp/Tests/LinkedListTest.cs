@@ -17,7 +17,7 @@ namespace TestApp.Tests
             }
         }
 
-        public override bool runTest()
+        public override void runTest()
         {
             var list = new SinglyLinkedList<K>();
 
@@ -28,46 +28,39 @@ namespace TestApp.Tests
             }
 
             // Check length
-            if(list.count() != testData.Length)
-            {
-                return false;
-            }
+            Assert.AreEqual(testData.Length, list.count());
 
             // Check removeAt
             int halfPoint = testData.Length / 2;
             K removedItem = list.removeAt(halfPoint);
-            if(!removedItem.Equals(testData[halfPoint]) || list.count() != testData.Length - 1)
-            {
-                return false;
-            }
-
-            // Check length
-            if(list.count() != testData.Length - 1)
-            {
-                Console.WriteLine("POST REMOVE LENGTH");
-                return false;
-            }
+            Assert.AreEqual(testData[halfPoint], removedItem);
+            Assert.AreEqual(testData.Length - 1, list.count());
 
             // Check insert
             list.insert(removedItem, halfPoint);
 
             // Check length
-            if(list.count() != testData.Length)
-            {
-                Console.WriteLine("POST INSERT LENGTH");
-                return false;
-            }
+            Assert.AreEqual(testData.Length, list.count());
 
             // Validate contents
             for(int i = 0; i < testData.Length; i++)
             {
-                if(!testData[i].Equals(list.get(i)))
-                {
-                    return false;
-                }
+                Assert.AreEqual(testData[i], list.get(i));
             }
 
-            return true;
+            // Verify that the head exists
+            Assert.AreNotEqual(null, list.getFirstNode());
+
+            // Empty the list
+            for(int i = 0; i < testData.Length; i++)
+            {
+                list.removeAt(0);
+            }
+
+            Assert.AreEqual(0, list.count());
+
+            // Verify that the head is gone
+            Assert.AreEqual(null, list.getFirstNode());
         }
     }
 }

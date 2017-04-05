@@ -1,17 +1,29 @@
-﻿namespace ADLibrary.Hashing
+﻿using System;
+using System.Collections.Generic;
+
+namespace ADLibrary.Hashing
 {
     /// <summary>
-    /// Quadratic Hash demo.
+    /// Demo class for Quadratic Hash implementation.
     /// </summary>
-    public class QuadraticHash
+    public class QuadraticHash<TKey, TValue> : IHashtable<TKey, TValue>
     {
-        const int SIZE = 101;               // Size of the hashtable
+        KeyValuePair<TKey, TValue>[] table;
 
-        string[] hashtable;
+        private int itemCount;
 
-        public QuadraticHash()
+        public QuadraticHash(int size)
         {
-            hashtable = new string[SIZE];
+            table = new KeyValuePair<TKey, TValue>[size];
+            itemCount = 0;
+        }
+
+        /// <summary>
+        /// Returns the amount of items in the table.
+        /// </summary>
+        public int count()
+        {
+            return itemCount;
         }
 
         /// <summary>
@@ -21,75 +33,118 @@
         /// <returns></returns>
         private int normalizeHash(int hash)
         {
-            hash = hash % SIZE;
+            hash = hash % table.Length;
             if(hash < 0)
             {
-                hash += SIZE;
+                hash += table.Length;
             }
             return hash;
         }
 
         /// <summary>
-        /// Removes the key from the collection.
-        /// </summary>
-        /// <param name="key">The key to remove</param>
-        public void remove(string key)
-        {
-            var index = indexOf(key);
-            if(index > 0)
-            {
-                hashtable[index] = default(string);
-            }
-        }
-
-        /// <summary>
-        /// Returns the index of key in hashtable.
-        /// -1 is returned when key can not be found.
-        /// </summary>
-        /// <param name="key">The key to find</param>
-        /// <returns>Index of key in hashtable</returns>
-        private int indexOf(string key)
-        {
-            var colCount = 0;                                           // Stores the amount of collisions we had
-            var normalizedHash = normalizeHash(key.GetHashCode());
-            while(colCount < SIZE)
-            {
-                if(hashtable[normalizedHash] != null &&
-                    hashtable[normalizedHash].Equals(key))              // Check if spot is not empty and the key is stored here
-                {
-                    return normalizedHash;                              // Key was found, return index
-                }
-                else
-                {
-                    colCount++;
-                    normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
-                }
-            }
-            return -1;                                                  // Key not found
-        }
-
-        /// <summary>
         /// Inserts an item into the table.
         /// </summary>
-        /// <param name="key">The item to add.</param>
-        public void insert(string key)
+        /// <param name="item">The item to insert.</param>
+        /// <exception cref="ArgumentException">Thrown when key equals default(TKey)</exception>
+        public void set(TKey key, TValue item)
         {
-            var colCount = 0;                                           // Stores the amount of collisions we had
-            var normalizedHash = normalizeHash(key.GetHashCode());
-            while(colCount < SIZE)
+            if(key == null || key.Equals(default(TKey)))
             {
-                if(hashtable[normalizedHash] == null)                   // Check if spot is empty
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int normalizedHash = normalizeHash(key.GetHashCode());
+            int colCount = 0;
+            while(colCount < table.Length)                                    // Loop as long as we have space in the table
+            {
+                if(table[normalizedHash].Key == null                        // Key of null or default(TKey) is considered empty
+                    || table[normalizedHash].Key.Equals(default(TKey)))
                 {
-                    hashtable[normalizedHash] = key;                    // Add an return
+                    table[normalizedHash] = new KeyValuePair<TKey, TValue>(key, item);
+                    itemCount++;                                            // Track item count
                     return;
                 }
-                else
+                else if(key.Equals(table[normalizedHash].Key))              // Overwrite an existing value
                 {
-                    colCount++;
-                    normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
+                    table[normalizedHash] = new KeyValuePair<TKey, TValue>(key, item);
+                    return;
                 }
+
+                normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
+                colCount++;
             }
-            throw new HashTableFullException();                         // Hash table is full if j >= SIZE
+            throw new HashTableFullException();             // The entire table has been checked, it must be full if we hit this point
+        }
+
+        public static string arrayToString<T>(T[] array)
+        {
+            if(array == null)
+                return "";
+
+            var sb = new System.Text.StringBuilder();
+            sb.Append("(");
+            foreach(var element in array)
+            {
+                sb.Append(element + ") - \r\n(");
+            }
+            sb.Append("FINISHED)");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Removes an item from the table.
+        /// </summary>
+        /// <param name="item">The item to remove.</param>
+        public TValue remove(TKey key)
+        {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int normalizedHash = normalizeHash(key.GetHashCode());
+            int colCount = 0;
+            while(colCount < table.Length)                    // Loop as long as we have space in the table
+            {
+                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))
+                {
+                    TValue value = table[normalizedHash].Value;
+                    table[normalizedHash] = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                    itemCount--;
+                    return value;
+                }
+
+                normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
+                colCount++; 
+            }
+            return default(TValue);
+        }
+
+        /// <summary>
+        /// Returns the value associated with a key. default(TValue) on failure.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>The value or default(TValue)</returns>
+        public TValue get(TKey key)
+        {
+            if(key == null || key.Equals(default(TKey)))
+            {
+                throw new ArgumentException("key can not be default(TKey) or NULL");
+            }
+
+            int normalizedHash = normalizeHash(key.GetHashCode());
+            int colCount = 0;
+            while(colCount < table.Length)                    // Loop as long as we have space in the table
+            {
+                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))
+                {
+                    return table[normalizedHash].Value;
+                }
+
+                normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
+                colCount++;
+            }
+            return default(TValue);
         }
     }
 }

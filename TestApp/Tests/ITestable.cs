@@ -9,6 +9,6 @@ namespace TestApp.Tests
     interface ITestable
     {
         string name { get; }
-        bool runTest();
+        void runTest();
     }
 }
