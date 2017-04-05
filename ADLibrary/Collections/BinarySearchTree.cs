@@ -144,6 +144,7 @@ namespace ADLibrary.Collections
         {
             //Remove any linkt to existing nodes
             root = null;
+            nodeCount = 0;
         }
 
         /// <summary>
