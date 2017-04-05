@@ -10,7 +10,7 @@ namespace ADLibrary.Collections
     /// A generic singly linked list
     /// </summary>
     /// <typeparam name="T">The type to store.</typeparam>
-    public class SinglyLinkedList<T> : IList<T>
+    public class SinglyLinkedList<T> : IList<T> where T: new()
     {
         /// <summary>
         /// The first node in the list
@@ -24,7 +24,10 @@ namespace ADLibrary.Collections
         /// <summary>
         /// The default constructor for SinglyLinkedList
         /// </summary>
-        public SinglyLinkedList() { }
+        public SinglyLinkedList()
+        {
+            head = new SinglyNode<T>(new T());
+        }
 
         /// <summary>
         /// Method to add data to the list
@@ -34,23 +37,17 @@ namespace ADLibrary.Collections
         {
             //Create a node to store the data in
             SinglyNode<T> toAdd = new SinglyNode<T>(data); 
-            //If head is null, add data to the start           
-            if (head == null)
+
+            //Create node to keep track of where we are
+            SinglyNode<T> current = head;
+            //Loop until we are at the end
+            while (current.next != null)
             {
-                head = toAdd;
+                current = current.next;
             }
-            else
-            {
-                //Create node to keep track of where we are
-                SinglyNode<T> current = head;
-                //Loop until we are at the end
-                while (current.next != null)
-                {
-                    current = current.next;
-                }
-                //Add node
-                current.next = toAdd;
-            }
+            //Add node
+            current.next = toAdd;
+            
             //Increase node count
             nodeCount++;
         }
@@ -69,7 +66,7 @@ namespace ADLibrary.Collections
             }
 
             //Create node to keep track of where we are
-            SinglyNode<T> nodeToGet = head;
+            SinglyNode<T> nodeToGet = head.next;
             //Loop until we are at the index
             for (int i = 0; i < index; i++)
             {
@@ -110,7 +107,7 @@ namespace ADLibrary.Collections
             }
 
             //Create nodes to store where we are and the node before it
-            SinglyNode<T> nodeToRemove = head;
+            SinglyNode<T> nodeToRemove = head.next;
             SinglyNode<T> previous = null;
             //Loop until we are at the index
             for (int i = 0; i < index; i++)
@@ -122,13 +119,6 @@ namespace ADLibrary.Collections
                     previous = nodeToRemove;
                 }
                 nodeToRemove = nodeToRemove.next;
-            }
-
-            //If the node to remove is the head
-            if (nodeToRemove == head)
-            {
-                //The new head becomes the next of the previous node
-                head = nodeToRemove.next;
             }
             //If previous node exists
             if (previous != null)
@@ -147,7 +137,7 @@ namespace ADLibrary.Collections
         public void clear()
         {
             //Remove any linkt to existing nodes
-            head = null;
+            head.next = null;
             nodeCount = 0;
         }
 
@@ -159,7 +149,7 @@ namespace ADLibrary.Collections
         public bool contains(T item)
         {
             //Create node to keep track of where we are
-            SinglyNode<T> current = head;
+            SinglyNode<T> current = head.next;
             //Loop until we are at the end
             while (current != null)
             {
@@ -192,7 +182,7 @@ namespace ADLibrary.Collections
             T[] array = new T[nodeCount];
 
             //Create node to keep track of where we are
-            SinglyNode<T> current = head;
+            SinglyNode<T> current = head.next;
             //Loop through all nodes
             for (int i = 0; i < nodeCount; i++)
             {
@@ -213,7 +203,7 @@ namespace ADLibrary.Collections
         public int indexOf(T item)
         {
             //Create node to keep track of where we are
-            SinglyNode<T> current = head;
+            SinglyNode<T> current = head.next;
             int index = 0;
             //Loop until we are at the end
             while (current != null)
