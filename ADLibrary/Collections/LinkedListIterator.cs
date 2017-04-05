@@ -3,13 +3,13 @@
 namespace ADLibrary.Collections
 {
     /// <summary>
-    /// An iterator for a singly linked list.
+    /// An iterator for a singly linked list ONLY
     /// </summary>
     /// <typeparam name="T">The type that is stored in the list</typeparam>
-    public class LinkedListIterator<T>
+    public class LinkedListIterator<T> where T : new()
     {
-        SinglyNode<T> current;
-        SinglyNode<T> previous;
+        ISinglyNode<T> current;
+        ISinglyNode<T> previous;
         SinglyLinkedList<T> list;
 
         /// <summary>
@@ -19,56 +19,56 @@ namespace ADLibrary.Collections
         public LinkedListIterator(SinglyLinkedList<T> linkedList)
         {
             list = linkedList;
-            current = list.getFirstNode();
+            current = list.getHeadNode();
             previous = null;
         }
 
         /// <summary>
-        /// Inserts an item before the current node and sets the current node to the inserted node.
+        /// Inserts an item before the current node.
         /// </summary>
         /// <param name="item">The item to insert.</param>
         /// <exception cref="InsertBeforeHeaderException"></exception>
         public void insertBeforeCurrent(T item)
         {
-            if(current == list.getFirstNode())
+            if(current == list.getHeadNode())
             {
                 throw new InsertBeforeHeaderException();
             }
             else
             {
-                var node = new SinglyNode<T>(item);
-                node.next = current;
+                var node = new Node<T>(item);
+                node.next = (Node<T>)current;
                 previous.next = node;
-                current = node;
             }
         }
 
         /// <summary>
-        /// Inserts an item after the current node and sets the current node to the inserted node.
+        /// Inserts an item after the current node.
         /// </summary>
         /// <param name="item">The item to insert.</param>
         public void insertAfterCurrent(T item)
         {
-            var node = new SinglyNode<T>(item);
+            var node = new Node<T>(item);
+            node.next = current.next;
             current.next = node;
-            advance();
         }
 
         /// <summary>
-        /// Removes the current node from the list.
+        /// Removes the current node from the list and moves up.
         /// </summary>
         public void remove()
         {
             previous.next = current.next;
+            current = current.next;
         }
 
         /// <summary>
         /// Returns the current node.
         /// </summary>
         /// <returns>Current node</returns>
-        public SinglyNode<T> getCurrent()
+        public Node<T> getCurrent()
         {
-            return current;
+            return (Node<T>)current;
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace ADLibrary.Collections
         /// </summary>
         public void reset()
         {
-            current = list.getFirstNode();
+            current = list.getHeadNode();
             previous = null;
         }
     }

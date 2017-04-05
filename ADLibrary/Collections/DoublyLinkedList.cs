@@ -6,173 +6,131 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
-    public class DoublyLinkedList<T> : IList<T>
+    public class DoublyLinkedList<T> : SinglyLinkedList<T> where T: new()
     {
-        private DoublyNode<T> head;
-        private int nodeCount;
-
-        public DoublyLinkedList() { }
-
-        public void add(T data)
+        public DoublyLinkedList()
         {
-            DoublyNode<T> toAdd = new DoublyNode<T>(data);
-            if (head == null)
+            head = new Node<T>(new T());
+            nodeCount = 0;
+            head.next = null;
+            head.previous = null;
+        }
+
+        /// <summary>
+        /// Method to add data to the list
+        /// </summary>
+        /// <param name="data">The data to add</param>
+        public override void add(T data)
+        {
+            //Create a node to store the data in
+            var toAdd = new Node<T>(data);
+
+            //Create node to keep track of where we are
+            IDoublyNode<T> current = head;
+            //Loop until we are at the end
+            while(current.next != null)
             {
-                head = toAdd;
+                current = current.next;
             }
-            else
-            {
-                DoublyNode<T> current = head;
-                while (current.next != null)
-                {
-                    current = current.next;
-                }
-                toAdd.previous = current;
-                current.next = toAdd;
-            }
+            //Add node
+            current.next = toAdd;
+            toAdd.previous = (Node<T>)current;
+
+            //Increase node count
             nodeCount++;
         }
 
-        public T get(int index)
+        /// <summary>
+        /// Method to remove data at a specific index
+        /// </summary>
+        /// <param name="index">The index to remove the data from</param>
+        /// <returns>The data that gets removed</returns>
+        public override T removeAt(int index)
         {
-            if (index >= nodeCount)
-                throw new IndexOutOfRangeException();
-
-            DoublyNode<T> nodeToGet = head;
-            for (int i = 0; i < index; i++)
-            {
-                nodeToGet = nodeToGet.next;
-            }
-
-            return nodeToGet.data;
-        }
-
-        public void remove(T data)
-        {
-            DoublyNode<T> current = head;
-            while (current != null)
-            {
-                if (current.data.Equals(data))
-                {
-                    if (current == head)
-                    {
-                        head = current.next;
-                    }
-                    if(current.previous != null)
-                    {
-                        current.previous.next = current.next;
-                    }
-                    if (current.next != null)
-                    {
-                        current.next.previous = current.previous;
-                    }
-                    nodeCount--;
-                    return;
-                }
-                current = current.next;
-            } 
-        }
-
-        public void clear()
-        {
-            head = null;
-            nodeCount = 0;
-        }
-
-        public bool contains(T item)
-        {
-            DoublyNode<T> current = head;
-            while (current != null)
-            {
-                if (current.data.Equals(item))
-                {
-                    return true;
-                }
-                current = current.next;
-            }
-            return false;
-        }
-
-        public int count()
-        {
-            return nodeCount;
-        }
-
-        public T[] toArray()
-        {
-            T[] array = new T[nodeCount];
-
-            DoublyNode<T> current = head;
-            for (int i = 0; i < nodeCount; i++)
-            {
-                array[i] = current.data;
-                current = current.next;
-            }
-
-            return array;
-        }
-
-        public int indexOf(T item)
-        {
-            DoublyNode<T> current = head;
-            int index = 0;
-            while (current != null)
-            {
-                if (current.data.Equals(item))
-                {
-                    return index;
-                }
-                index++;
-                current = current.next;
-            }
-            return -1;
-        }
-
-        public T removeAt(int index)
-        {
-            if (index >= nodeCount && index < 0)
+            //Check if the index is in range
+            if(index >= nodeCount && index < 0)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            DoublyNode<T> nodeToRemove = head;
-            for (int i = 0; i < index; i++)
+            //Create nodes to store where we are and the node before it
+            IDoublyNode<T> nodeToRemove = head.next;
+            IDoublyNode<T> previous = null;
+            IDoublyNode<T> next = null;
+
+            //Loop until we are at the index
+            for(int i = 0; i < index; i++)
             {
+                //If its the node before the index
+                if(i == (index - 1))
+                {
+                    //Store it
+                    previous = nodeToRemove;
+                }
                 nodeToRemove = nodeToRemove.next;
             }
+            next = nodeToRemove.next;
 
-            if (nodeToRemove == head)
+            if(next != null)
             {
-                head = nodeToRemove.next;
+                // Fix next node's previous link
+                next.previous = (Node<T>)previous;
             }
-            if (nodeToRemove.previous != null)
+            if(previous != null)
             {
-                nodeToRemove.previous.next = nodeToRemove.next;
+                // Fix previous node's next link
+                previous.next = (Node<T>)next;
             }
-            if (nodeToRemove.next != null)
-            {
-                nodeToRemove.next.previous = nodeToRemove.previous;
-            }
+
+            //Decrease the node count
             nodeCount--;
             return nodeToRemove.data;
         }
 
-        public void insert(T item, int index)
+        /// <summary>
+        /// Method to clear the list
+        /// </summary>
+        public override void clear()
         {
-            if (index > nodeCount)
+            //Remove any linkt to existing nodes
+            head.next = null;
+            head.previous = null;
+            nodeCount = 0;
+        }
+
+        /// <summary>
+        /// Method to insert an item into the list
+        /// </summary>
+        /// <param name="item">The item to insert</param>
+        /// <param name="index">The index to store the item at</param>
+        public override void insert(T item, int index)
+        {
+            //Check to see if index is inrange
+            if(index > nodeCount || index < 0)
             {
                 add(item);
             }
-
-            DoublyNode<T> current = head;
-            for (int i = 0; i < index - 1; i++)
+            else
             {
-                current = current.next;
-            }
+                //Create node to keep track of where we are
+                IDoublyNode<T> current = head.next;
+                //loop until we are at the index
+                for(int i = 0; i < index; i++)
+                {
+                    current = current.next;
+                }
+                // current now contains the node at index
 
-            DoublyNode<T> toAdd = new DoublyNode<T>(item);
-            toAdd.next = current.next;
-            current.next = toAdd;
+                //Create node to store the data
+                var toAdd = new Node<T>(item);
+                
+                toAdd.next = (Node<T>)current;
+                toAdd.previous = current.previous;
+                current.previous.next = toAdd;
+                current.previous = toAdd;
+                //Increase node count
+                nodeCount++;
+            }
         }
     }
 }

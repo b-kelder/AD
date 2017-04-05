@@ -154,13 +154,16 @@ namespace TestApp.Tests
             collectionTests.Add(doublyLinkedListTest);
 
             // Circular List
-            var circularListTest = new LinkedListTest<int>();
+            var circularListTest = new CircularListTest<int>();
             circularListTest.setTestData(intData);
             collectionTests.Add(circularListTest);
 
-            // BST?????
+            // BST
+            var bstTest = new BSTTest<int>();
+            bstTest.setTestData(intData);
+            collectionTests.Add(bstTest);
 
-            // Iterator???
+            // Iterator
             var iteratorTest = new IteratorTest<int>();
             collectionTests.Add(iteratorTest);
         }

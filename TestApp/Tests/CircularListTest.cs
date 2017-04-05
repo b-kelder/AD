@@ -7,20 +7,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
-    public class DoublyLinkedListTest<K> : CollectionTestBase<DoublyLinkedList<K>, K> where K:new()
+    public class CircularListTest<K> : CollectionTestBase<CircularList<K>, K> where K : new()
     {
         public override string name
         {
             get
             {
-                return "Doubly Linked List";
+                return "Circular List";
             }
         }
 
         public override void runTest()
         {
-            var list = new DoublyLinkedList<K>();
-           
+            var list = new CircularList<K>();
+
             // Test add
             foreach(var item in testData)
             {
@@ -54,10 +54,10 @@ namespace TestApp.Tests
                 list.removeAt(0);
             }
 
-            Assert.AreEqual(0, list.count());
-
-            // Verify that the head exists
-            Assert.AreNotEqual(null, list.getHeadNode());
+            // Verify that the head exists and links to itself again
+            var head = list.getHeadNode();
+            Assert.AreNotEqual(null, head);
+            Assert.AreEqual(head, head.next);
             Assert.AreEqual(0, list.count());
         }
     }

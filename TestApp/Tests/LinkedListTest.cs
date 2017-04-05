@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
-    public class LinkedListTest<K> : CollectionTestBase<SinglyLinkedList<K>, K>
+    public class LinkedListTest<K> : CollectionTestBase<SinglyLinkedList<K>, K> where K : new()
     {
         public override string name
         {
@@ -48,19 +48,15 @@ namespace TestApp.Tests
                 Assert.AreEqual(testData[i], list.get(i));
             }
 
-            // Verify that the head exists
-            Assert.AreNotEqual(null, list.getFirstNode());
-
             // Empty the list
             for(int i = 0; i < testData.Length; i++)
             {
                 list.removeAt(0);
             }
 
+            // Verify that the head exists
+            Assert.AreNotEqual(null, list.getHeadNode());
             Assert.AreEqual(0, list.count());
-
-            // Verify that the head is gone
-            Assert.AreEqual(null, list.getFirstNode());
         }
     }
 }

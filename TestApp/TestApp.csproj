@@ -53,6 +53,8 @@
     <Compile Include="AdvancedLog.Designer.cs">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tests\BSTTest.cs" />
+    <Compile Include="Tests\CircularListTest.cs" />
     <Compile Include="Tests\DoublyLinkedListTest.cs" />
     <Compile Include="Tests\IteratorTest.cs" />
     <Compile Include="Tests\LinkedListTest.cs" />

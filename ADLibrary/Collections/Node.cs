@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 namespace ADLibrary.Collections
 {
 
-    public class SinglyNode<T>
+    public class Node<T> : ISinglyNode<T>, IDoublyNode<T>
     {
-        public SinglyNode<T> next { get; set; }
+        public Node<T> next { get; set; }
+        public Node<T> previous { get; set; }
         public T data { get; set; }
 
-        public SinglyNode(T element)
+        public Node(T element)
         {
             this.data = element;
         }

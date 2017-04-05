@@ -6,7 +6,7 @@ namespace ADLibrary.Collections
     /// A generic Binary Search Tree list.
     /// </summary>
     /// <typeparam name="T">The type to store in this tree</typeparam>
-    class BinarySearchTree<T> : ICollection<T> where T : IComparable
+    public class BinarySearchTree<T> : ICollection<T> where T : IComparable
     {
         /// <summary>
         /// The root node of the tree
@@ -34,6 +34,7 @@ namespace ADLibrary.Collections
             if (root == null)
             {
                 root = toAdd;
+                nodeCount++;
             }
             else
             {
@@ -62,7 +63,7 @@ namespace ADLibrary.Collections
                     {
                         current = current.right;
                         //If the correct spot has been found
-                        if (current != null)
+                        if (current == null)
                         {
                             parent.right = toAdd;
                             //Increase node count
@@ -75,7 +76,7 @@ namespace ADLibrary.Collections
             }
         }
 
-        public void inOrder(TreeNode<T> root)
+        private void inOrder(TreeNode<T> root)
         {
             if (root != null)
             {
@@ -85,7 +86,7 @@ namespace ADLibrary.Collections
             }
         }
 
-        public void preOrder(TreeNode<T> root)
+        private void preOrder(TreeNode<T> root)
         {
             if (root != null)
             {
@@ -95,7 +96,7 @@ namespace ADLibrary.Collections
             }
         }
 
-        public void postOrder(TreeNode<T> root)
+        private void postOrder(TreeNode<T> root)
         {
             if (root != null)
             {
@@ -268,9 +269,11 @@ namespace ADLibrary.Collections
                 }
                 successor.left = current.left;
             }
+
+            nodeCount--;
         }
 
-        public TreeNode<T> getSuccessor(TreeNode<T> delNode)
+        private TreeNode<T> getSuccessor(TreeNode<T> delNode)
         {
             TreeNode<T> successorParent = delNode;
             TreeNode<T> successor = delNode;

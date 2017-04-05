@@ -209,9 +209,7 @@ namespace TestApp
 
                             log("Tests completed!");
                             log("");                        // Blank line
-
-                            log(Util.arrayToString(testData));   // Dump last used array?
-
+                            
                             onTestsFinished();
                         }
                     }));

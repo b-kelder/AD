@@ -16,7 +16,6 @@ namespace ADLibrary.Sorting
         {
             int length = array.Length;
             int nlength = 0;
-            bool swapped = true;
 
             //Loop until no item is being swapped
             while (length > 0)

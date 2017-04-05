@@ -15,31 +15,31 @@ namespace ADLibrary.Collections
         /// <summary>
         /// The first node in the list
         /// </summary>
-        private SinglyNode<T> head;
+        protected Node<T> head;
         /// <summary>
         /// Tht total amount of items in the list
         /// </summary>
-        private int nodeCount;
+        protected int nodeCount;
 
         /// <summary>
         /// The default constructor for SinglyLinkedList
         /// </summary>
         public SinglyLinkedList()
         {
-            head = new SinglyNode<T>(new T());
+            head = new Node<T>(new T());
         }
 
         /// <summary>
         /// Method to add data to the list
         /// </summary>
         /// <param name="data">The data to add</param>
-        public void add(T data)
+        public virtual void add(T data)
         {
             //Create a node to store the data in
-            SinglyNode<T> toAdd = new SinglyNode<T>(data); 
+            var toAdd = new Node<T>(data);
 
             //Create node to keep track of where we are
-            SinglyNode<T> current = head;
+            ISinglyNode<T> current = head;
             //Loop until we are at the end
             while (current.next != null)
             {
@@ -57,7 +57,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="index">The index of the item</param>
         /// <returns></returns>
-        public T get(int index)
+        public virtual T get(int index)
         {
             //Check if the index is in range
             if (index >= nodeCount && index < 0)
@@ -66,7 +66,7 @@ namespace ADLibrary.Collections
             }
 
             //Create node to keep track of where we are
-            SinglyNode<T> nodeToGet = head.next;
+            ISinglyNode<T> nodeToGet = head.next;
             //Loop until we are at the index
             for (int i = 0; i < index; i++)
             {
@@ -81,7 +81,7 @@ namespace ADLibrary.Collections
         /// Method to remove the first occurance of data
         /// </summary>
         /// <param name="data">The data to remove</param>
-        public void remove(T data)
+        public virtual void remove(T data)
         {
             //Get the index of the data to remove
             int index = indexOf(data);
@@ -98,7 +98,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="index">The index to remove the data from</param>
         /// <returns>The data that gets removed</returns>
-        public T removeAt(int index)
+        public virtual T removeAt(int index)
         {
             //Check if the index is in range
             if (index >= nodeCount && index < 0)
@@ -107,8 +107,8 @@ namespace ADLibrary.Collections
             }
 
             //Create nodes to store where we are and the node before it
-            SinglyNode<T> nodeToRemove = head.next;
-            SinglyNode<T> previous = null;
+            ISinglyNode<T> nodeToRemove = head.next;
+            ISinglyNode<T> previous = null;
             //Loop until we are at the index
             for (int i = 0; i < index; i++)
             {
@@ -134,7 +134,7 @@ namespace ADLibrary.Collections
         /// <summary>
         /// Method to clear the list
         /// </summary>
-        public void clear()
+        public virtual void clear()
         {
             //Remove any linkt to existing nodes
             head.next = null;
@@ -146,10 +146,10 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="item">The item to check for</param>
         /// <returns>True if found, false if not</returns>
-        public bool contains(T item)
+        public virtual bool contains(T item)
         {
             //Create node to keep track of where we are
-            SinglyNode<T> current = head.next;
+            ISinglyNode<T> current = head.next;
             //Loop until we are at the end
             while (current != null)
             {
@@ -167,7 +167,7 @@ namespace ADLibrary.Collections
         /// Method to get the total items in list
         /// </summary>
         /// <returns>The total items in the list</returns>
-        public int count()
+        public virtual int count()
         {
             return nodeCount;
         }
@@ -176,13 +176,13 @@ namespace ADLibrary.Collections
         /// Method to change the linked list into an array
         /// </summary>
         /// <returns>An array of items</returns>
-        public T[] toArray()
+        public virtual T[] toArray()
         {
             //Create an array with the correct size
             T[] array = new T[nodeCount];
 
             //Create node to keep track of where we are
-            SinglyNode<T> current = head.next;
+            ISinglyNode<T> current = head.next;
             //Loop through all nodes
             for (int i = 0; i < nodeCount; i++)
             {
@@ -200,10 +200,10 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="item">The item to get the index of</param>
         /// <returns>The index of the item, -1 if not found</returns>
-        public int indexOf(T item)
+        public virtual int indexOf(T item)
         {
             //Create node to keep track of where we are
-            SinglyNode<T> current = head.next;
+            ISinglyNode<T> current = head.next;
             int index = 0;
             //Loop until we are at the end
             while (current != null)
@@ -225,7 +225,7 @@ namespace ADLibrary.Collections
         /// </summary>
         /// <param name="item">The item to insert</param>
         /// <param name="index">The index to store the item at</param>
-        public void insert(T item, int index)
+        public virtual void insert(T item, int index)
         {
             //Check to see if index is inrange
             if (index > nodeCount || index < 0)
@@ -235,17 +235,21 @@ namespace ADLibrary.Collections
             else
             {
                 //Create node to keep track of where we are
-                SinglyNode<T> current = head;
+                ISinglyNode<T> current = head.next;
+                ISinglyNode<T> previous = head;
                 //loop until we are at the index
-                for (int i = 0; i < index - 1; i++)
+                for (int i = 0; i < index; i++)
                 {
+                    previous = current;
                     current = current.next;
                 }
+                // current now contains the node at index
+
                 //Create node to store the data
-                SinglyNode<T> toAdd = new SinglyNode<T>(item);
+                var toAdd = new Node<T>(item);
                 //Set its next
-                toAdd.next = current.next;
-                current.next = toAdd;
+                toAdd.next = (Node<T>)current;
+                previous.next = toAdd;
                 //Increase node count
                 nodeCount++;
             }
@@ -255,19 +259,9 @@ namespace ADLibrary.Collections
         /// Method to get from the first node
         /// </summary>
         /// <returns>The first node</returns>
-        public SinglyNode<T> getFirstNode()
+        public virtual Node<T> getHeadNode()
         {
             return head;
-        }
-
-        /// <summary>
-        /// Sets the head of this list. Used by Iterator.
-        /// DOES NOT update links.
-        /// </summary>
-        /// <param name="node">The head</param>
-        public void setFirstNode(SinglyNode<T> node)
-        {
-            head = node;
         }
     }
 }
