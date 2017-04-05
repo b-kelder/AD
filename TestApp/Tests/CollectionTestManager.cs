@@ -161,6 +161,8 @@ namespace TestApp.Tests
             // BST?????
 
             // Iterator???
+            var iteratorTest = new IteratorTest<int>();
+            collectionTests.Add(iteratorTest);
         }
 
         /// <summary>

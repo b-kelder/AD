@@ -269,5 +269,15 @@ namespace ADLibrary.Collections
         {
             return head;
         }
+
+        /// <summary>
+        /// Sets the head of this list. Used by Iterator.
+        /// DOES NOT update links.
+        /// </summary>
+        /// <param name="node">The head</param>
+        public void setFirstNode(SinglyNode<T> node)
+        {
+            head = node;
+        }
     }
 }

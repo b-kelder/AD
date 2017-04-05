@@ -20,7 +20,7 @@ namespace TestApp.Tests
 
         public override void runTest()
         {
-            var hash = new QuadraticHash<TKey, TValue>(testData.Length);
+            var hash = new QuadraticHash<TKey, TValue>(testData.Length * 2);
 
             // Arrange data in dictionary so we can compare results easily
             var dictionary = new Dictionary<TKey, TValue>();
