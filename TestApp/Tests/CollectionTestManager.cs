@@ -11,14 +11,14 @@ namespace TestApp.Tests
     public class CollectionTestManager
     {
         private static Random random;
-        System.Collections.Generic.List<ITestable> collectionTests;
+        List<ITestable> collectionTests;
         StringBuilder stringBuilder;
 
         public CollectionTestManager()
         {
             random = new Random();
             stringBuilder = new StringBuilder();
-            collectionTests = new System.Collections.Generic.List<ITestable>();
+            collectionTests = new List<ITestable>();
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace TestApp.Tests
         /// Creates and runs all tests.
         /// </summary>
         /// <param name="times">The amount of times the tests should be run.</param>
-        public void run(int times = 3)
+        public void run(int times = 1)
         {
             createTests();
 

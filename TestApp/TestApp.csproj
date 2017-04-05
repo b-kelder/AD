@@ -53,15 +53,15 @@
     <Compile Include="AdvancedLog.Designer.cs">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchingTestManager.cs" />
-    <Compile Include="SortingTestManager.cs" />
+    <Compile Include="Tests\SearchingTestManager.cs" />
+    <Compile Include="Tests\SortingTestManager.cs" />
     <Compile Include="TestAction.cs" />
     <Compile Include="Tests\ArraylistTest.cs" />
     <Compile Include="Tests\BucketHashTest.cs" />
     <Compile Include="Tests\HashTestBase.cs" />
     <Compile Include="Tests\LinearHashTest.cs" />
     <Compile Include="Tests\QuadraticHashTest.cs" />
-	<Compile Include="Tests\CollectionTestBase.cs" />
+    <Compile Include="Tests\CollectionTestBase.cs" />
     <Compile Include="Tests\ITestable.cs" />
     <Compile Include="Tests\PriorityQueueTest.cs" />
     <Compile Include="Tests\QueueTest.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-	<Compile Include="UI.cs">
+    <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI.Designer.cs">
@@ -90,7 +90,7 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="UI.resx">
+    <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
