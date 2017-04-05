@@ -146,16 +146,19 @@ namespace ADLibrary.Collections
             {
                 add(item);
             }
-
-            SinglyNode<T> current = head;
-            for (int i = 0; i < index - 1; i++)
+            else
             {
-                current = current.next;
-            }
+                SinglyNode<T> current = head;
+                for (int i = 0; i < index - 1; i++)
+                {
+                    current = current.next;
+                }
 
-            SinglyNode<T> toAdd = new SinglyNode<T>(item);
-            toAdd.next = current.next;
-            current.next = toAdd;
+                SinglyNode<T> toAdd = new SinglyNode<T>(item);
+                toAdd.next = current.next;
+                current.next = toAdd;
+                nodeCount++;
+            }
         }
 
         public SinglyNode<T> getFirstNode()
