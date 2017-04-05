@@ -74,6 +74,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testProgressBar = new System.Windows.Forms.ProgressBar();
             this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonAbort = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabCollections.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -106,7 +107,7 @@
             // buttonRun
             // 
             this.buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRun.Location = new System.Drawing.Point(427, 217);
+            this.buttonRun.Location = new System.Drawing.Point(358, 217);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(75, 23);
             this.buttonRun.TabIndex = 1;
@@ -133,7 +134,7 @@
             this.tabCollections.Controls.Add(this.tableLayoutPanel1);
             this.tabCollections.Location = new System.Drawing.Point(4, 22);
             this.tabCollections.Name = "tabCollections";
-            this.tabCollections.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabCollections.Padding = new System.Windows.Forms.Padding(3);
             this.tabCollections.Size = new System.Drawing.Size(563, 161);
             this.tabCollections.TabIndex = 0;
             this.tabCollections.Text = "Collections";
@@ -147,7 +148,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.54407F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.45593F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 182F));
             this.tableLayoutPanel1.Controls.Add(this.collectionsListBox, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
@@ -167,7 +168,7 @@
             this.collectionsListBox.FormattingEnabled = true;
             this.collectionsListBox.Location = new System.Drawing.Point(3, 16);
             this.collectionsListBox.Name = "collectionsListBox";
-            this.collectionsListBox.Size = new System.Drawing.Size(179, 139);
+            this.collectionsListBox.Size = new System.Drawing.Size(178, 139);
             this.collectionsListBox.TabIndex = 0;
             // 
             // label1
@@ -182,7 +183,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(188, 0);
+            this.label2.Location = new System.Drawing.Point(187, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 2;
@@ -191,7 +192,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(376, 0);
+            this.label3.Location = new System.Drawing.Point(375, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 3;
@@ -202,7 +203,7 @@
             this.tabSorting.Controls.Add(this.tableLayoutPanel2);
             this.tabSorting.Location = new System.Drawing.Point(4, 22);
             this.tabSorting.Name = "tabSorting";
-            this.tabSorting.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabSorting.Padding = new System.Windows.Forms.Padding(3);
             this.tabSorting.Size = new System.Drawing.Size(563, 161);
             this.tabSorting.TabIndex = 1;
             this.tabSorting.Text = "Sorting";
@@ -374,7 +375,7 @@
             // 
             this.checkBoxShowArray.AutoSize = true;
             this.checkBoxShowArray.Location = new System.Drawing.Point(90, 81);
-            this.checkBoxShowArray.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBoxShowArray.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxShowArray.Name = "checkBoxShowArray";
             this.checkBoxShowArray.Size = new System.Drawing.Size(15, 14);
             this.checkBoxShowArray.TabIndex = 8;
@@ -405,7 +406,7 @@
             this.tabSearching.Controls.Add(this.tableLayoutPanel4);
             this.tabSearching.Location = new System.Drawing.Point(4, 22);
             this.tabSearching.Name = "tabSearching";
-            this.tabSearching.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabSearching.Padding = new System.Windows.Forms.Padding(3);
             this.tabSearching.Size = new System.Drawing.Size(563, 161);
             this.tabSearching.TabIndex = 2;
             this.tabSearching.Text = "Searching";
@@ -651,7 +652,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.testProgressBar.Location = new System.Drawing.Point(12, 217);
             this.testProgressBar.Name = "testProgressBar";
-            this.testProgressBar.Size = new System.Drawing.Size(409, 23);
+            this.testProgressBar.Size = new System.Drawing.Size(340, 23);
             this.testProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.testProgressBar.TabIndex = 4;
             // 
@@ -666,11 +667,23 @@
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
+            // buttonAbort
+            // 
+            this.buttonAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAbort.Location = new System.Drawing.Point(439, 217);
+            this.buttonAbort.Name = "buttonAbort";
+            this.buttonAbort.Size = new System.Drawing.Size(62, 23);
+            this.buttonAbort.TabIndex = 6;
+            this.buttonAbort.Text = "Abort";
+            this.buttonAbort.UseVisualStyleBackColor = true;
+            this.buttonAbort.Click += new System.EventHandler(this.buttonAbort_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 451);
+            this.Controls.Add(this.buttonAbort);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.testProgressBar);
             this.Controls.Add(this.tabControl);
@@ -755,6 +768,7 @@
         private System.Windows.Forms.CheckBox checkBoxShowArray;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label labelWaring;
+        private System.Windows.Forms.Button buttonAbort;
     }
 }
 

@@ -31,6 +31,7 @@ namespace TestApp
 
         SortingTestManager sortingTestManager;
         SearchingTestManager searchingTestManager;
+        CollectionTestManager collectionTestManager;
         PerformanceTester pt;
         Random random;
 
@@ -39,6 +40,8 @@ namespace TestApp
             random = new Random();
             sortingTestManager = new SortingTestManager();
             searchingTestManager = new SearchingTestManager();
+            collectionTestManager = new CollectionTestManager();
+
             InitializeComponent();
 
             sortingTestManager.populateSortingTab(sortingListBox);
@@ -47,6 +50,8 @@ namespace TestApp
             searchingDataMethod.SelectedIndex = 0;
             searchingLocation.SelectedIndex = 2;
             sortingComboBox.SelectedIndex = 1;
+
+            buttonAbort.Enabled = false;
         }
 
         #region output
@@ -80,6 +85,9 @@ namespace TestApp
 
         private string arrayToString<T>(T[] array)
         {
+            if(array == null)
+                return "";
+
             var sb = new StringBuilder();
             sb.Append("(");
             foreach(var element in array)
@@ -91,15 +99,21 @@ namespace TestApp
         }
         #endregion
 
+        /// <summary>
+        /// Event handler for "Run Tests" button.
+        /// Sets up tests and starts the test thread.
+        /// </summary>
         private void buttonRun_Click(object sender, EventArgs e)
         {
-            List<TestAction> actionsToTime = new List<TestAction>();
-            Fisherman[] testData = null;
-            Fisherman[] originalTestData = null;
-            int targetIterations = 1;
+            // Things we need
+            List<TestAction> actionsToTime = new List<TestAction>();        // TestActions that will be run
+            Fisherman[] testData = new Fisherman[0];                        // Data array that gets passed to actions
+            Fisherman[] originalTestData = new Fisherman[0];                // Copy of generated data
+            int targetIterations = 1;                                       // Amount of runs we do per action
 
             if(tabControl.SelectedTab == tabSorting)
             {
+                // Sorting algorithms
                 if(sortingListBox.CheckedItems.Count > 0)
                 {
                     // Generate some test data
@@ -108,7 +122,7 @@ namespace TestApp
                     testData.CopyTo(originalTestData, 0);
 
                     // Generate test actions
-                    actionsToTime = sortingTestManager.generateSortingActions(testData, sortingListBox.CheckedItems.Cast<SortingTestManager.SortingListItem>());
+                    actionsToTime.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.CheckedItems.Cast<SortingTestManager.SortingListItem>()));
 
                     targetIterations = Convert.ToInt32(sortingIterations.Value);
 
@@ -123,6 +137,7 @@ namespace TestApp
             }
             else if(tabControl.SelectedTab == tabSearching)
             {
+                // Searching algorithms
                 if(searchingListBox.CheckedItems.Count > 0)
                 {
                     // Generate some test data
@@ -133,7 +148,8 @@ namespace TestApp
 
                     Fisherman valueToFind = testData[testData.Length / 2];
 
-                    actionsToTime = searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), valueToFind);
+                    // Get the test actions
+                    actionsToTime.AddRange(searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), valueToFind));
 
                     targetIterations = Convert.ToInt32(searchingIterations.Value);
                 }
@@ -144,28 +160,28 @@ namespace TestApp
             }
             else
             {
-                //                warning("Collection testing is not yet supported!");
-                onTestsStarted();
-
-                CollectionTestManager ctm = new CollectionTestManager();
-                ctm.run();
-                log(ctm.ToString());
-
-                onTestsFinished();
+                // Collection tests
+                // These are a bit different, they all run in one go for all of them instead of seperate
+                actionsToTime.Add(new TestAction {
+                    action = () => { collectionTestManager.run(); log(collectionTestManager.ToString()); },
+                    name = "Collection tests",
+                });
+                // Put something in the output log to ensure the user that things are happening
+                log("Testing Collections...");
             }
 
-            // Run timed tests
+            // Run the added tests
             if(actionsToTime.Count > 0)
             {
-                int testIndex = 0;
-                int iterationCounter = 0;
+                int testIndex = 0;                      // The index in actionsToTime of the currently running test
+                int iterationCounter = 0;               // The amount of times we have run the currently running test
                 long totalTime = 0;                     // Used to store total time for all iterations of an action
 
                 int progressBarDelta = 100 / (actionsToTime.Count * targetIterations);
                 if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
                     progressBarDelta = 1;
 
-                Action<int> runAction = null;
+                Action<int> runAction = null;           // Declare here because callback refers to it
                 // Action run when a single test is finished
                 Action<long> callback = (us) =>
                 {
@@ -185,12 +201,14 @@ namespace TestApp
                         }
                         else if(testIndex + 1 < actionsToTime.Count)
                         {
+                            // Done with all iterations for this action
                             // Log average time
                             log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
                             log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
+                            // Print blank line for formatting
+                            log("");
 
                             // Reset iteration specific things
-                            log("");                        // Blank line
                             iterationCounter = 0;
                             totalTime = 0;
                             // Run the next action in the list
@@ -198,6 +216,7 @@ namespace TestApp
                         }
                         else
                         {
+                            // Done with all of the tests
                             // Log average time
                             log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
                             log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
@@ -205,14 +224,14 @@ namespace TestApp
                             log("Tests completed!");
                             log("");                        // Blank line
 
-                            log(arrayToString(testData));
+                            log(arrayToString(testData));   // Dump last used array?
 
                             onTestsFinished();
                         }
                     }));
                 };
 
-                // Runs the test action at index in the list
+                // Runs the TestAction located at index in the list
                 runAction = (index) =>
                 {
                     testIndex = index;
@@ -318,6 +337,7 @@ namespace TestApp
         private void onTestsFinished()
         {
             buttonRun.Enabled = true;
+            buttonAbort.Enabled = false;
             testProgressBar.Value = 100;
         }
 
@@ -327,6 +347,7 @@ namespace TestApp
         private void onTestsStarted()
         {
             buttonRun.Enabled = false;
+            buttonAbort.Enabled = true;
             testProgressBar.Value = 0;
         }
 
@@ -372,6 +393,16 @@ namespace TestApp
             {
                 checkBoxShowArray.Enabled = true;
                 labelWaring.Text = "";
+            }
+        }
+
+        private void buttonAbort_Click(object sender, EventArgs e)
+        {
+            if(pt != null)
+            {
+                pt.abort();
+                warning("Test aborted!");
+                onTestsFinished();
             }
         }
     }

@@ -144,6 +144,9 @@ namespace TestApp.Tests
             collectionTests.Add(arraylistTest);
 
             // Linked List
+            var linkedListTest = new LinkedListTest<int>();
+            linkedListTest.setTestData(intData);
+            collectionTests.Add(linkedListTest);
 
             // Doubly Linked List
 
