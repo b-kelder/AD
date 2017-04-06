@@ -9,11 +9,23 @@ namespace TestApp
 {
     static class Util
     {
+        /// <summary>
+        /// Gets all types in a namespace.
+        /// </summary>
+        /// <param name="assembly">The assembly to search.</param>
+        /// <param name="nameSpace">The namespace.</param>
+        /// <returns>Array of types.</returns>
         public static Type[] getTypesInNamespace(Assembly assembly, string nameSpace)
         {
             return assembly.GetTypes().Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal) && t.IsInterface == false).ToArray();
         }
 
+        /// <summary>
+        /// Takes an array and returns a string of it's contents.
+        /// </summary>
+        /// <typeparam name="T">The type in the array.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <returns>Formatted string containing all elements of the array.</returns>
         public static string arrayToString<T>(T[] array)
         {
             if(array == null)

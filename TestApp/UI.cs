@@ -231,10 +231,9 @@ namespace TestApp
                             // Reset iteration specific things
                             iterationCounter = 0;
                             totalTime = 0;
-
-                            // Check and dump array
+                            
+                            // Result checking
                             var type = testActions[testIndex].type;
-
                             if(type == TestAction.Type.Sorting)
                             {
                                 // Compare array to expected result
@@ -291,6 +290,7 @@ namespace TestApp
                                 log("");
                             }
 
+                            // Display array
                             if(checkShowArray.Checked && type != TestAction.Type.Other)
                             {
                                 log("Array contents: ");
