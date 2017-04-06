@@ -33,11 +33,11 @@ namespace TestApp.Tests
         #endregion
 
         /// <summary>
-        /// Generates actions for searching algorithms. WARNING: BinarySearch DOES NOT work on unsorted data sets.
+        /// Generates actions for searching algorithms.
         /// </summary>
         /// <typeparam name="T">The type of data.</typeparam>
         /// <param name="testData">The test data array.</param>
-        /// <param name="sortedTestData">A sorted copy of the test data array.</param>
+        /// <param name="sortedTestData">A sorted copy of the test data array. Used for BinarySearch.</param>
         /// <param name="algortihmNames">Names of the algorithms to test, matching those returned by populateSearchingTab</param>
         /// <param name="valueToFind">The value to find in the array.</param>
         /// <param name="result">Result object which will be updated to contain the result of the last run action.</param>
