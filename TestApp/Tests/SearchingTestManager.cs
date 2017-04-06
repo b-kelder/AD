@@ -33,16 +33,15 @@ namespace TestApp.Tests
         #endregion
 
         /// <summary>
-        /// Generates actions for searching algorithms.
+        /// Generates actions for searching algorithms. Keep in mind BinarySearch does not work with unsorted data!
         /// </summary>
         /// <typeparam name="T">The type of data.</typeparam>
         /// <param name="testData">The test data array.</param>
-        /// <param name="sortedTestData">A sorted copy of the test data array. Used for BinarySearch.</param>
         /// <param name="algortihmNames">Names of the algorithms to test, matching those returned by populateSearchingTab</param>
         /// <param name="valueToFind">The value to find in the array.</param>
         /// <param name="result">Result object which will be updated to contain the result of the last run action.</param>
         /// <returns></returns>
-        public List<TestAction> generateSearchingActions<T>(T[] testData, T[] sortedTestData, IEnumerable<string> algortihmNames, T valueToFind, SearchResult<T> result) where T : IComparable
+        public List<TestAction> generateSearchingActions<T>(T[] testData, IEnumerable<string> algortihmNames, T valueToFind, SearchResult<T> result) where T : IComparable
         {
             var actions = new List<TestAction>();
 
@@ -57,7 +56,7 @@ namespace TestApp.Tests
                         type = TestAction.Type.Searching,
                         action = () =>
                         {
-                            result.index = BinarySearch.search(sortedTestData, valueToFind);
+                            result.index = BinarySearch.search(testData, valueToFind);
                         }
                     });
                 }

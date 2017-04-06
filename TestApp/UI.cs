@@ -270,7 +270,7 @@ namespace TestApp
                                     }
                                     else
                                     {
-                                        error("Item found does not match expected value! Found " + testData[testSearchResult.index] + ", expected " + testValueToFind);
+                                        error("Item " + testValueToFind + " found at " + testSearchResult.index + " does not match expected value! Found " + testData[testSearchResult.index] + ", expected " + testValueToFind);
                                     }
                                     
                                 }
@@ -284,7 +284,7 @@ namespace TestApp
                                 }
                                 else
                                 {
-                                    error("Search failed!");
+                                    error("Search for " + testValueToFind + " failed!");
                                 }
                                 // Print blank line for formatting
                                 log("");
@@ -350,7 +350,7 @@ namespace TestApp
             setUpTestData(true);
 
             testActions.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.Items.Cast<SortingTestManager.SortingListItem>()));
-            testActions.AddRange(searchingTestManager.generateSearchingActions(testData, testDataSortedCopy, searchingListBox.Items.Cast<string>(), testValueToFind, testSearchResult));
+            testActions.AddRange(searchingTestManager.generateSearchingActions(testData, searchingListBox.Items.Cast<string>(), testValueToFind, testSearchResult));
 
             runTests();
         }
@@ -373,7 +373,7 @@ namespace TestApp
             else if (searchingListBox.CheckedItems.Count > 0)
             {
                 // Get the test actions
-                testActions.AddRange(searchingTestManager.generateSearchingActions(testData, testDataSortedCopy, searchingListBox.CheckedItems.Cast<string>(), testValueToFind, testSearchResult));
+                testActions.AddRange(searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), testValueToFind, testSearchResult));
             }
             else
             {
@@ -495,7 +495,7 @@ namespace TestApp
                 log("Generating ascending test data");
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = fmg.generateRandomFisherman(i * 3);
+                    arr[i] = fmg.generateFisherman(i, 21, false);
                 }
             }
             else if (method == DataGenerationMode.Descending)
@@ -503,7 +503,7 @@ namespace TestApp
                 log("Generating descending test data");
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = fmg.generateRandomFisherman((arr.Length - i) * 3);
+                    arr[i] = fmg.generateFisherman((arr.Length - i), 21, false);
                 }
             }
             else

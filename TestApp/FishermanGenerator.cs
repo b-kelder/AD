@@ -103,26 +103,15 @@ namespace TestApp
         /// Method to generate a random fisherman
         /// </summary>
         /// <returns>A fisherman object</returns>
-        public Fisherman generateRandomFisherman(int fishLength)
+        public Fisherman generateFisherman(int fishLength, int age, bool boat)
         {
             //Create random variables.
             string firstName = firstNames[random.Next(firstNames.Count)];
             string lastName = lastNames[random.Next(lastNames.Count)];
-            int age = random.Next(80);
             int lenghtLargestFishEverCaught = fishLength;
-            //Randomly select true or false
-            bool ownsFishingBoat;
-            if (random.Next(2) == 1)
-            {
-                ownsFishingBoat = true;
-            }
-            else
-            {
-                ownsFishingBoat = false;
-            }
 
             //Return a new fisherman with de stats devined above
-            return new Fisherman(firstName, lastName, age, lenghtLargestFishEverCaught, ownsFishingBoat);
+            return new Fisherman(firstName, lastName, age, lenghtLargestFishEverCaught, boat);
         }
     }
 }
