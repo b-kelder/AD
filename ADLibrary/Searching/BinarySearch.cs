@@ -17,10 +17,10 @@ namespace ADLibrary.Searching
         public static int search<T>(T[] array, T item) where T : IComparable
         {
             int low = 0;
-            int high = array.Length;
+            int high = array.Length - 1;
             int midpoint;
 
-            while (low < high)
+            while (low <= high)
             {
                 midpoint = (high + low) / 2;                        // Midpoint is halfway between high and low and should be floored.
 
