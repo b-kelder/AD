@@ -244,6 +244,11 @@ namespace TestApp.Tests
             Console.WriteLine(text);
         }
 
+        public void clearBuffer()
+        {
+            stringBuilder.Clear();
+        }
+
         /// <summary>
         /// Returns the output as a string.
         /// </summary>

@@ -13,15 +13,36 @@ namespace TestApp.Tests
 
     public class SearchingTestManager
     {
+        #region Helper classes
+        /// <summary>
+        /// Used to access result of search tests.
+        /// </summary>
+        public class SearchResult<T> where T : IComparable
+        {
+            public int index { get; set; }
+            public T min { get; set; }
+            public T max { get; set; }
+
+            public void clear()
+            {
+                index = -1;
+                min = default(T);
+                max = default(T);
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Generates actions for searching algorithms. WARNING: BinarySearch DOES NOT work on unsorted data sets.
         /// </summary>
         /// <typeparam name="T">The type of data.</typeparam>
         /// <param name="testData">The test data array.</param>
+        /// <param name="sortedTestData">A sorted copy of the test data array.</param>
         /// <param name="algortihmNames">Names of the algorithms to test, matching those returned by populateSearchingTab</param>
         /// <param name="valueToFind">The value to find in the array.</param>
+        /// <param name="result">Result object which will be updated to contain the result of the last run action.</param>
         /// <returns></returns>
-        public List<TestAction> generateSearchingActions<T>(T[] testData, IEnumerable<string> algortihmNames, T valueToFind) where T : IComparable
+        public List<TestAction> generateSearchingActions<T>(T[] testData, T[] sortedTestData, IEnumerable<string> algortihmNames, T valueToFind, SearchResult<T> result) where T : IComparable
         {
             var actions = new List<TestAction>();
 
@@ -33,9 +54,10 @@ namespace TestApp.Tests
                     actions.Add(new TestAction()
                     {
                         name = "BinarySearch",
+                        type = TestAction.Type.Searching,
                         action = () =>
                         {
-                            BinarySearch.search(testData, valueToFind);
+                            result.index = BinarySearch.search(sortedTestData, valueToFind);
                         }
                     });
                 }
@@ -44,9 +66,10 @@ namespace TestApp.Tests
                     actions.Add(new TestAction()
                     {
                         name = "SequentialSearch",
+                        type = TestAction.Type.Searching,
                         action = () =>
                         {
-                            SequentialSearch.search(testData, valueToFind);
+                            result.index = SequentialSearch.search(testData, valueToFind);
                         }
                     });
                 }
@@ -55,9 +78,10 @@ namespace TestApp.Tests
                     actions.Add(new TestAction()
                     {
                         name = "MinSearch",
+                        type = TestAction.Type.Searching,
                         action = () =>
                         {
-                            MinMaxSearch.findMin(testData);
+                            result.min = MinMaxSearch.findMin(testData);
                         }
                     });
                 }
@@ -66,9 +90,10 @@ namespace TestApp.Tests
                     actions.Add(new TestAction()
                     {
                         name = "MaxSearch",
+                        type = TestAction.Type.Searching,
                         action = () =>
                         {
-                            MinMaxSearch.findMax(testData);
+                            result.max = MinMaxSearch.findMax(testData);
                         }
                     });
                 }

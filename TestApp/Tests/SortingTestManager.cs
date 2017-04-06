@@ -86,6 +86,7 @@ namespace TestApp.Tests
                 actions.Add(new TestAction()
                 {
                     action = action,
+                    type = TestAction.Type.Sorting,
                     name = sli.ToString()
                 });
             }

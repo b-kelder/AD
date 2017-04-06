@@ -13,6 +13,7 @@ using ADLibrary.Sorting;
 using System.Reflection;
 using ADLibrary.Searching;
 using TestApp.Tests;
+using System.IO;
 
 namespace TestApp
 {
@@ -25,12 +26,50 @@ namespace TestApp
             Descending
         }
 
+        enum SearchingLocation
+        {
+            Start,
+            Middle,
+            End,
+            Random
+        }
+
 
         SortingTestManager sortingTestManager;
         SearchingTestManager searchingTestManager;
         CollectionTestManager collectionTestManager;
         PerformanceTester pt;
         Random random;
+
+        /// <summary>
+        /// The amount of times each test action should be run.
+        /// </summary>
+        int testTargetIterations;
+        /// <summary>
+        /// The data array used for testing search and sorting algorithms.
+        /// Gets restored from testDataBackup between actions.
+        /// </summary>
+        Fisherman[] testData;
+        /// <summary>
+        /// A copy of the original test data.
+        /// </summary>
+        Fisherman[] testDataBackup;
+        /// <summary>
+        /// A sorted copy of the original test data.
+        /// </summary>
+        Fisherman[] testDataSortedCopy;
+        /// <summary>
+        /// The actions that are being tested.
+        /// </summary>
+        List<TestAction> testActions;
+        /// <summary>
+        /// The value the search algorithms should find.
+        /// </summary>
+        Fisherman testValueToFind;
+        /// <summary>
+        /// Stores the result of the last search test.
+        /// </summary>
+        SearchingTestManager.SearchResult<Fisherman> testSearchResult;
 
         public UI()
         {
@@ -48,6 +87,9 @@ namespace TestApp
             searchingLocation.SelectedIndex = 2;
 
             buttonAbort.Enabled = false;
+
+            saveFileDialog.Filter = "Text file|*.txt";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
 
         #region output
@@ -81,70 +123,82 @@ namespace TestApp
 
         #endregion
 
-        private void buttonStartDefaultTest_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Sets up test data and list.
+        /// </summary>
+        /// <param name="ignoreUserSettings">When true ignores UI settings. Iterations: 10, Data amount: 10000, Item location: Middle</param>
+        private void setUpTestData(bool ignoreUserSettings = false)
         {
-            //TODO: RUN EVERYTHING
-        }
+            // Reset action list
+            testActions = new List<TestAction>();
+            testSearchResult = new SearchingTestManager.SearchResult<Fisherman>();
 
-        private void buttonStartCustomTest_Click(object sender, EventArgs e)
-        {
-            // Things we need
-            List<TestAction> actionsToTime = new List<TestAction>();        // TestActions that will be run
-            Fisherman[] testData = new Fisherman[0];                        // Data array that gets passed to actions
-            Fisherman[] originalTestData = new Fisherman[0];                // Copy of generated data
-            int targetIterations = 1;                                       // Amount of runs we do per action
+            // Set iterations
+            testTargetIterations = ignoreUserSettings ? 10 : Convert.ToInt32(testIterationsUpDown.Value);                          // Amount of runs we do per action
 
             // Generate some test data
-            var dgm = getSelectedDataGenerationMode();
-            testData = generateTestData(Convert.ToInt32(searchingUpDown.Value), dgm);
-            originalTestData = new Fisherman[testData.Length];
-            testData.CopyTo(originalTestData, 0);
+            var dgm = ignoreUserSettings ? DataGenerationMode.Random : getSelectedDataGenerationMode();
+            int dataAmount = ignoreUserSettings ? 10000 : Convert.ToInt32(testDataAmountUpDown.Value);
+            testData = generateTestData(dataAmount, dgm);
+            testDataBackup = new Fisherman[testData.Length];
+            testDataSortedCopy = new Fisherman[testData.Length];
 
-            Fisherman valueToFind = testData[testData.Length / 2];
+            // Create copies
+            testData.CopyTo(testDataBackup, 0);
+            testData.CopyTo(testDataSortedCopy, 0);
+            // Using heapsort to sort the sorted test data because it's fast (and it works)
+            HeapSort.sort(testDataSortedCopy);
 
-            targetIterations = Convert.ToInt32(searchingIterations.Value);
-
-            // Log some info about the test data
-            log("Test data size: " + testData.Length);
-            log("Test data method: " + dataMethod.Text);
-
-            // Sorting algorithms
-            if (sortingListBox.CheckedItems.Count > 0)
+            // Get location of item to find
+            var valueLocation = ignoreUserSettings ? SearchingLocation.Middle : getSelectedSearchingLocation();
+            if(valueLocation == SearchingLocation.Middle)
             {
-                // Generate test actions
-                actionsToTime.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.CheckedItems.Cast<SortingTestManager.SortingListItem>()));
+                testValueToFind = testData[testData.Length / 2];
             }
-            // Searching algorithms
-            else if (searchingListBox.CheckedItems.Count > 0)
-            { 
-                // Get the test actions
-                actionsToTime.AddRange(searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), valueToFind));
+            else if(valueLocation == SearchingLocation.Start)
+            {
+                testValueToFind = testData[0];
+            }
+            else if(valueLocation == SearchingLocation.End)
+            {
+                testValueToFind = testData[testData.Length - 1];
             }
             else
             {
-                warning("No algorithms selected!");
+                testValueToFind = testData[random.Next(testData.Length)];
             }
 
-            // Collection tests
-            // These are a bit different, they all run in one go for all of them instead of seperate
-            actionsToTime.Add(new TestAction
+
+            // Log some info about the test data
+            log("Test data size: " + testData.Length);
+            log("Test data method: " + dgm);
+            log("Search item location: " + valueLocation);
+            log("Test iterations: " + testTargetIterations);
+
+            if(checkShowArray.Checked)
             {
-                action = () => { collectionTestManager.run(1, true); log(collectionTestManager.ToString()); },
-                name = "Collection tests",
-            });
-            // Put something in the output log to ensure the user that things are happening
-            log("Testing Collections...");
+                log("Test data array:");
+                log(Util.arrayToString(testData));
+            }
 
+            log("");            // Formatting
 
+        }
+
+        /// <summary>
+        /// Runs the current contents of testActions.
+        /// </summary>
+        private void runTests()
+        {
             // Run the added tests
-            if (actionsToTime.Count > 0)
+            if(testActions.Count > 0)
             {
                 int testIndex = 0;                      // The index in actionsToTime of the currently running test
                 int iterationCounter = 0;               // The amount of times we have run the currently running test
                 long totalTime = 0;                     // Used to store total time for all iterations of an action
 
-                int progressBarDelta = 100 / (actionsToTime.Count * targetIterations);
-                if (progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
+                int progressBarDelta = 100 / (testActions.Count * testTargetIterations);
+                if(progressBarDelta < 1)                // Progress bar won't work correctly for 100+ iterations but that's fine
                     progressBarDelta = 1;
 
                 Action<int> runAction = null;           // Declare here because callback refers to it
@@ -154,43 +208,94 @@ namespace TestApp
                     // Ensure that this is run from the main/UI thread
                     this.Invoke(new Action(() =>
                     {
-                        log("Test result for " + actionsToTime[testIndex].name + ": " + createMsString(us));
+                        log("Test result for " + testActions[testIndex].name + ": " + createMsString(us));
                         totalTime += us;
 
                         // Update progress bar
                         testProgressBar.Value = Math.Min(testProgressBar.Value + progressBarDelta, 100);
 
-                        if (iterationCounter < targetIterations)
+                        if(iterationCounter < testTargetIterations)
                         {
                             // We need more iterations, run the same test again
                             runAction.Invoke(testIndex);
                         }
-                        else if (testIndex + 1 < actionsToTime.Count)
+                        else
                         {
                             // Done with all iterations for this action
                             // Log average time
-                            log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
-                            log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
+                            log("Average time for " + testActions[testIndex].name + ": " + createMsString(totalTime / testTargetIterations));
+                            log("Total time for " + testActions[testIndex].name + ": " + createMsString(totalTime) + " over " + testTargetIterations + " iterations");
                             // Print blank line for formatting
                             log("");
 
                             // Reset iteration specific things
                             iterationCounter = 0;
                             totalTime = 0;
-                            // Run the next action in the list
-                            runAction.Invoke(testIndex + 1);
-                        }
-                        else
-                        {
-                            // Done with all of the tests
-                            // Log average time
-                            log("Average time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime / targetIterations));
-                            log("Total time for " + actionsToTime[testIndex].name + ": " + createMsString(totalTime) + " over " + targetIterations + " iterations");
 
-                            log("Tests completed!");
-                            log("");                        // Blank line
+                            // Check and dump array
+                            var type = testActions[testIndex].type;
 
-                            onTestsFinished();
+                            if(type == TestAction.Type.Sorting)
+                            {
+                                // Compare array to expected result
+                                bool fail = false;
+                                int i = 0;
+                                int l = testData.Length;
+                                while(i < l && fail != true)
+                                {
+                                    if(testData[i] != testDataSortedCopy[i])
+                                    {
+                                        error("Sort mismatch at index " + i + " got " + testData[i] + " but expected " + testDataSortedCopy[i]);
+                                        fail = true;
+                                    }
+                                    i++;
+                                }
+                                if(!fail)
+                                {
+                                    log("Sort result validated!");
+                                }
+
+                                // Print blank line for formatting
+                                log("");
+                            }
+                            else if(type == TestAction.Type.Searching)
+                            {
+                                // Log search result
+                                if(testSearchResult.index >= 0)
+                                {
+                                    log("Item found at index: " + testSearchResult.index);
+                                }
+                                else if(testSearchResult.max != default(Fisherman))
+                                {
+
+                                }
+                                // Print blank line for formatting
+                                log("");
+                            }
+
+                            if(checkShowArray.Checked)
+                            {
+                                log("Array contents: ");
+                                log(Util.arrayToString(testData));
+
+                                // Print blank line for formatting
+                                log("");
+                            }
+
+
+                            if(testIndex + 1 >= testActions.Count)
+                            {
+                                // Done with all of the tests
+                                log("Tests completed!");
+                                log("");                        // Blank line
+
+                                onTestsFinished();
+                            }
+                            else
+                            {
+                                // Run the next action in the list
+                                runAction.Invoke(testIndex + 1);
+                            }
                         }
                     }));
                 };
@@ -202,10 +307,11 @@ namespace TestApp
                     iterationCounter++;
 
                     // Reset test array
-                    originalTestData.CopyTo(testData, 0);
+                    testDataBackup.CopyTo(testData, 0);
+                    testSearchResult.clear();
 
                     // Run test
-                    pt = new PerformanceTester(actionsToTime[index].action, callback);
+                    pt = new PerformanceTester(testActions[index].action, callback);
                     pt.run();
                 };
 
@@ -213,6 +319,75 @@ namespace TestApp
                 onTestsStarted();
                 runAction.Invoke(0);
             }
+        }
+
+
+
+        /// <summary>
+        /// Event handler for default/all test button.
+        /// Runs all tests with default settings.
+        /// </summary>
+        private void buttonStartDefaultTest_Click(object sender, EventArgs e)
+        {
+            // Setup and run sorting and searching tests
+            setUpTestData(true);
+
+            testActions.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.Items.Cast<SortingTestManager.SortingListItem>()));
+            testActions.AddRange(searchingTestManager.generateSearchingActions(testData, testDataSortedCopy, searchingListBox.Items.Cast<string>(), testValueToFind, testSearchResult));
+
+            runTests();
+        }
+
+        /// <summary>
+        /// Event handler for custom test button.
+        /// Only runs the tests that are selected in the settings menu.
+        /// </summary>
+        private void buttonStartCustomTest_Click(object sender, EventArgs e)
+        {
+            setUpTestData();
+
+            // Sorting algorithms
+            if (sortingListBox.CheckedItems.Count > 0)
+            {
+                // Generate test actions
+                testActions.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.CheckedItems.Cast<SortingTestManager.SortingListItem>()));
+            }
+            // Searching algorithms
+            else if (searchingListBox.CheckedItems.Count > 0)
+            {
+                // Get the test actions
+                testActions.AddRange(searchingTestManager.generateSearchingActions(testData, testDataSortedCopy, searchingListBox.CheckedItems.Cast<string>(), testValueToFind, testSearchResult));
+            }
+            else
+            {
+                warning("No algorithms selected!");
+            }
+
+            runTests();            
+        }
+
+        /// <summary>
+        /// Event handler for custom test button.
+        /// Runs all possible tests.
+        /// </summary>
+        private void buttonTestCollections_Click(object sender, EventArgs e)
+        {
+            // Setup and run collection tests
+            setUpTestData();
+            testTargetIterations = 1;               // Not timed so only worth doing once
+            // Collection tests
+            // These are a bit different, they all run in one go for all of them instead of seperate
+            testActions.Add(new TestAction
+            {
+                action = () => {
+                    log("Testing Collections...");
+                    collectionTestManager.run(1, true);
+                    log(collectionTestManager.ToString());
+                    collectionTestManager.clearBuffer();
+                },
+                name = "Collection tests",
+            });
+            runTests();
         }
 
         private void buttonAbort_Click(object sender, EventArgs e)
@@ -256,6 +431,28 @@ namespace TestApp
                 return DataGenerationMode.Descending;
             }
             return (DataGenerationMode)(-1);
+        }
+
+        private SearchingLocation getSelectedSearchingLocation()
+        {
+            string text = searchingLocation.Text;
+            if(text.Equals("Random"))
+            {
+                return SearchingLocation.Random;
+            }
+            else if(text.Equals("Start"))
+            {
+                return SearchingLocation.Start;
+            }
+            else if(text.Equals("Middle"))
+            {
+                return SearchingLocation.Middle;
+            }
+            else if(text.Equals("End"))
+            {
+                return SearchingLocation.End;
+            }
+            return (SearchingLocation)(-1);
         }
 
         /// <summary>
@@ -306,7 +503,8 @@ namespace TestApp
         private void onTestsFinished()
         {
             buttonStartCustomTest.Enabled = true;
-            buttonStartDefaultTest.Enabled = true;
+            buttonStartAllTest.Enabled = true;
+            buttonTestCollections.Enabled = true;
             buttonAbort.Enabled = false;
             testProgressBar.Value = 100;
         }
@@ -317,7 +515,8 @@ namespace TestApp
         private void onTestsStarted()
         {
             buttonStartCustomTest.Enabled = false;
-            buttonStartDefaultTest.Enabled = false;
+            buttonStartAllTest.Enabled = false;
+            buttonTestCollections.Enabled = false;
             buttonAbort.Enabled = true;
             testProgressBar.Value = 0;
         }
@@ -331,5 +530,28 @@ namespace TestApp
                 pt.abort();
             }
         }
+
+        /// <summary>
+        /// Button handler for log saving
+        /// </summary>
+        private void buttonSaveLog_Click(object sender, EventArgs e)
+        {
+            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using(var file = File.Open(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
+                {
+                    using(var sw = new StreamWriter(file))
+                    {
+                        sw.Write(logBox.Text);
+                    }
+                }
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
     }
 }

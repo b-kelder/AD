@@ -11,7 +11,14 @@ namespace TestApp
     /// </summary>
     public struct TestAction
     {
+        public enum Type
+        {
+            Other,
+            Sorting,
+            Searching,
+        }
         public string name;
+        public Type type;
         public Action action;
     }
 }
