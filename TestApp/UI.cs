@@ -70,6 +70,10 @@ namespace TestApp
         /// Stores the result of the last search test.
         /// </summary>
         SearchingTestManager.SearchResult<Fisherman> testSearchResult;
+        /// <summary>
+        /// Indicates if the regular test data array is sorted (generated ascendingly)
+        /// </summary>
+        bool testDataIsAscending;
 
         public UI()
         {
@@ -138,6 +142,7 @@ namespace TestApp
 
             // Generate some test data
             var dgm = ignoreUserSettings ? DataGenerationMode.Random : getSelectedDataGenerationMode();
+            testDataIsAscending = (dgm == DataGenerationMode.Ascending);
             int dataAmount = ignoreUserSettings ? 10000 : Convert.ToInt32(testDataAmountUpDown.Value);
             testData = generateTestData(dataAmount, dgm);
             testDataBackup = new Fisherman[testData.Length];
@@ -326,6 +331,12 @@ namespace TestApp
                     // Reset test array
                     testDataBackup.CopyTo(testData, 0);
                     testSearchResult.clear();
+
+                    // Hardcoded warning for BinarySearch
+                    if(!testDataIsAscending && testActions[index].name == "BinarySearch")
+                    {
+                        warning("Trying to run BinarySearch on unsorted data!");
+                    }
 
                     // Run test
                     pt = new PerformanceTester(testActions[index].action, callback);
