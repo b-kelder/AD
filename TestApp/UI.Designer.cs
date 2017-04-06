@@ -40,6 +40,7 @@
             this.logBox = new System.Windows.Forms.TextBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkShowArray = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.searchingLocation = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@
             this.exportLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkShowArray = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tabSettings.SuspendLayout();
@@ -189,6 +189,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.logBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logBox.ForeColor = System.Drawing.SystemColors.Control;
             this.logBox.Location = new System.Drawing.Point(6, 56);
             this.logBox.Margin = new System.Windows.Forms.Padding(2);
@@ -235,6 +236,16 @@
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Settings";
+            // 
+            // checkShowArray
+            // 
+            this.checkShowArray.AutoSize = true;
+            this.checkShowArray.Location = new System.Drawing.Point(8, 162);
+            this.checkShowArray.Name = "checkShowArray";
+            this.checkShowArray.Size = new System.Drawing.Size(79, 17);
+            this.checkShowArray.TabIndex = 20;
+            this.checkShowArray.Text = "Show array";
+            this.checkShowArray.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -419,16 +430,6 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // checkShowArray
-            // 
-            this.checkShowArray.AutoSize = true;
-            this.checkShowArray.Location = new System.Drawing.Point(8, 162);
-            this.checkShowArray.Name = "checkShowArray";
-            this.checkShowArray.Size = new System.Drawing.Size(79, 17);
-            this.checkShowArray.TabIndex = 20;
-            this.checkShowArray.Text = "Show array";
-            this.checkShowArray.UseVisualStyleBackColor = true;
-            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -441,7 +442,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(384, 387);
+            this.MinimumSize = new System.Drawing.Size(480, 387);
             this.Name = "UI";
             this.Text = "UI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UI_FormClosing);

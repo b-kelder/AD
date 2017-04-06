@@ -21,11 +21,20 @@ namespace TestApp
 
             var sb = new StringBuilder();
             sb.Append("(");
-            foreach(var element in array)
+            int length = array.Length;
+            for(int i = 0; i < length; i++)
             {
-                sb.Append(element + ") - \r\n(");
+                sb.Append(array[i]);
+                if(i < length - 1)
+                {
+                    sb.Append(") - \r\n(");
+                }
+                else
+                {
+                    sb.Append(")");
+                }
             }
-            sb.Append("FINISHED)");
+            
             return sb.ToString();
         }
     }

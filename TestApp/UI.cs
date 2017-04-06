@@ -146,8 +146,8 @@ namespace TestApp
             // Create copies
             testData.CopyTo(testDataBackup, 0);
             testData.CopyTo(testDataSortedCopy, 0);
-            // Using heapsort to sort the sorted test data because it's fast (and it works)
-            HeapSort.sort(testDataSortedCopy);
+
+            Array.Sort(testDataSortedCopy);
 
             // Get location of item to find
             var valueLocation = ignoreUserSettings ? SearchingLocation.Middle : getSelectedSearchingLocation();
@@ -243,7 +243,7 @@ namespace TestApp
                                 int l = testData.Length;
                                 while(i < l && fail != true)
                                 {
-                                    if(testData[i] != testDataSortedCopy[i])
+                                    if(testData[i].CompareTo(testDataSortedCopy[i]) != 0)
                                     {
                                         error("Sort mismatch at index " + i + " got " + testData[i] + " but expected " + testDataSortedCopy[i]);
                                         fail = true;
@@ -260,20 +260,38 @@ namespace TestApp
                             }
                             else if(type == TestAction.Type.Searching)
                             {
+                                // Check and log search result
+
                                 // Log search result
                                 if(testSearchResult.index >= 0)
                                 {
-                                    log("Item found at index: " + testSearchResult.index);
+                                    if(testData[testSearchResult.index].CompareTo(testValueToFind) == 0)
+                                    {
+                                        log("Item found at index: " + testSearchResult.index);
+                                    }
+                                    else
+                                    {
+                                        error("Item found does not match expected value! Found " + testData[testSearchResult.index] + ", expected " + testValueToFind);
+                                    }
+                                    
                                 }
                                 else if(testSearchResult.max != default(Fisherman))
                                 {
-
+                                    log("Max item found: " + testSearchResult.max);
+                                }
+                                else if(testSearchResult.min != default(Fisherman))
+                                {
+                                    log("Min item found: " + testSearchResult.min);
+                                }
+                                else
+                                {
+                                    error("Search failed!");
                                 }
                                 // Print blank line for formatting
                                 log("");
                             }
 
-                            if(checkShowArray.Checked)
+                            if(checkShowArray.Checked && type != TestAction.Type.Other)
                             {
                                 log("Array contents: ");
                                 log(Util.arrayToString(testData));
@@ -287,7 +305,6 @@ namespace TestApp
                             {
                                 // Done with all of the tests
                                 log("Tests completed!");
-                                log("");                        // Blank line
 
                                 onTestsFinished();
                             }
@@ -499,6 +516,8 @@ namespace TestApp
 
         /// <summary>
         /// Called when tests are finished.
+        /// Sets UI to the correct state.
+        /// Also prints seperator in the log.
         /// </summary>
         private void onTestsFinished()
         {
@@ -507,6 +526,10 @@ namespace TestApp
             buttonTestCollections.Enabled = true;
             buttonAbort.Enabled = false;
             testProgressBar.Value = 100;
+
+            log("");
+            log("------------------------------------------------------------");
+            log("");
         }
 
         /// <summary>
