@@ -381,12 +381,13 @@ namespace TestApp
                 testActions.AddRange(sortingTestManager.generateSortingActions(testData, sortingListBox.CheckedItems.Cast<SortingTestManager.SortingListItem>()));
             }
             // Searching algorithms
-            else if (searchingListBox.CheckedItems.Count > 0)
+            if (searchingListBox.CheckedItems.Count > 0)
             {
                 // Get the test actions
                 testActions.AddRange(searchingTestManager.generateSearchingActions(testData, searchingListBox.CheckedItems.Cast<string>(), testValueToFind, testSearchResult));
             }
-            else
+            // Warning
+            if(testActions.Count < 1)
             {
                 warning("No algorithms selected!");
             }
