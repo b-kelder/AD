@@ -350,36 +350,6 @@ namespace TestApp
             logBox.Clear();
         }
 
-        private void sortingUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            checkForAdvancedLog();
-        }
-
-        private void checkBoxShowArray_CheckedChanged(object sender, EventArgs e)
-        {
-            checkForAdvancedLog();
-        }
-
-        private void checkForAdvancedLog()
-        {
-            int limit = 100000;
-            if (sortingUpDown.Value > limit)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("Advanced log with more than " + limit);
-                sb.AppendLine("items is not supported in the");
-                sb.AppendLine("unregistered version.");
-                labelWaring.Text = sb.ToString();
-                checkBoxShowArray.Checked = false;
-                checkBoxShowArray.Enabled = false;
-            }
-            else
-            {
-                checkBoxShowArray.Enabled = true;
-                labelWaring.Text = "";
-            }
-        }
-
         private void buttonAbort_Click(object sender, EventArgs e)
         {
             if(pt != null)
