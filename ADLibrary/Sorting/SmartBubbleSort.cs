@@ -38,7 +38,6 @@ namespace ADLibrary.Sorting
                     }
                 }
                 length = nlength;
-                //
             }
         }
     }

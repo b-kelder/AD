@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ADLibrary.Collections
+﻿namespace ADLibrary.Collections
 {
-
+    /// <summary>
+    /// Interface for all our nodes. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Node<T> : ISinglyNode<T>, IDoublyNode<T>
     {
         public Node<T> next { get; set; }

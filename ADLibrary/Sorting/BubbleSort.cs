@@ -17,9 +17,9 @@ namespace ADLibrary.Sorting
             T temp;                         //Create a variable to temporary save an item.
             int length = array.Length;      //Effiecient
 
-            for (int i = 0; i < length; i++)            //
+            for (int i = 0; i < length; i++)            //Loop through the array.
             {
-                for (int j = 1; j < length - i; j++)    //
+                for (int j = 1; j < length - i; j++)    //Loop through the array minus the last item.
                 {
                     if (array[j - 1].CompareTo(array[j]) > 0)   //Check if the current item is larger than next item in the array.
                     {

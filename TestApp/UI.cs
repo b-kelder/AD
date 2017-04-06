@@ -183,7 +183,7 @@ namespace TestApp
             if(checkShowArray.Checked)
             {
                 log("Test data array:");
-                log(Util.arrayToString(testData));
+                log(arrayToString(testData));
             }
 
             log("");            // Formatting
@@ -299,7 +299,7 @@ namespace TestApp
                             if(checkShowArray.Checked && type != TestAction.Type.Other)
                             {
                                 log("Array contents: ");
-                                log(Util.arrayToString(testData));
+                                log(arrayToString(testData));
 
                                 // Print blank line for formatting
                                 log("");
@@ -588,5 +588,35 @@ namespace TestApp
             Close();
         }
 
+
+        /// <summary>
+        /// Takes an array and returns a string of it's contents.
+        /// </summary>
+        /// <typeparam name="T">The type in the array.</typeparam>
+        /// <param name="array">The array.</param>
+        /// <returns>Formatted string containing all elements of the array.</returns>
+        private string arrayToString<T>(T[] array)
+        {
+            if (array == null)
+                return "";
+
+            var sb = new StringBuilder();
+            sb.Append("(");
+            int length = array.Length;
+            for (int i = 0; i < length; i++)
+            {
+                sb.Append(array[i]);
+                if (i < length - 1)
+                {
+                    sb.Append(") - \r\n(");
+                }
+                else
+                {
+                    sb.Append(")");
+                }
+            }
+
+            return sb.ToString();
+        }
     }
 }

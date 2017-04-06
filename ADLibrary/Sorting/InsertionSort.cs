@@ -14,21 +14,21 @@ namespace ADLibrary.Sorting
         /// <param name="array">The array to sort.</param>
         public static void sort<T>(T[] array) where T : IComparable
         {
-            int length = array.Length;
-            T temp;
+            int length = array.Length;      //Store the lenght of the array
+            T temp;                         //Create a temp var to store items
             int j;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++) //Loop through the array
             {
-                temp = array[i];
-                j = i - 1;
+                temp = array[i];    //store the item in temp
+                j = i - 1;          //get the previous index
 
-                while (j >= 0 && array[j].CompareTo(temp) > 0)
+                while (j >= 0 && array[j].CompareTo(temp) > 0)  //Keep moving item back to the start until a larger item is found
                 {
-                    array[j + 1] = array[j];
+                    array[j + 1] = array[j];    
                     j--;
                 }
-                array[j + 1] = temp;
+                array[j + 1] = temp; //insert temp back into the array
             }
         }
     }

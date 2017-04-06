@@ -116,7 +116,7 @@ namespace TestApp.Tests
         private Type[] getSortingTypes()
         {
             // Get all types in the sorting namespace
-            var typelist = Util.getTypesInNamespace(Assembly.GetAssembly(typeof(BubbleSort)), "ADLibrary.Sorting");
+            var typelist = getTypesInNamespace(Assembly.GetAssembly(typeof(BubbleSort)), "ADLibrary.Sorting");
             // Debug output
             for(int i = 0; i < typelist.Length; i++)
             {
@@ -124,6 +124,17 @@ namespace TestApp.Tests
             }
             // Make sure they have a static sort method
             return typelist.Where(t => null != t.GetMethod("sort", BindingFlags.Static | BindingFlags.Public)).ToArray();
+        }
+
+        /// <summary>
+        /// Gets all types in a namespace.
+        /// </summary>
+        /// <param name="assembly">The assembly to search.</param>
+        /// <param name="nameSpace">The namespace.</param>
+        /// <returns>Array of types.</returns>
+        private Type[] getTypesInNamespace(Assembly assembly, string nameSpace)
+        {
+            return assembly.GetTypes().Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal) && t.IsInterface == false).ToArray();
         }
     }
 }

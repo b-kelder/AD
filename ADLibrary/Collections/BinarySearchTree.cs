@@ -180,18 +180,22 @@ namespace ADLibrary.Collections
         }
 
         /// <summary>
-        /// 
+        /// Method to remove an item from the tree
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">The removed item</param>
         public void remove(T item)
         {
+            //Create node to keep track of where we are
             TreeNode<T> current = root;
             TreeNode<T> parent = root;
+            //Keep track if its a left node or not
             bool isLeftChild = true;
 
+            //Loop until data is not equal
             while (current.data.CompareTo(item) != 0)
             {
                 parent = current;
+                //if data is smaller traverse the left side else traverse the right side
                 if (item.CompareTo(current.data) < 0)
                 {
                     isLeftChild = true;
@@ -201,18 +205,22 @@ namespace ADLibrary.Collections
                     isLeftChild = false;
                     current = current.right;
                 }
+                //current equals null than the item was not found
                 if (current == null)
                 {
                     return;
                 }
             }
 
+            //If its left and right are null
             if ((current.left == null) && (current.right == null))
             {
+                //Check if item is root
                 if (current == root)
                 {
                     root = null;
                 }
+                //Set the correct child of its parent to null
                 else if (isLeftChild)
                 {
                     parent.left = null;
@@ -222,12 +230,15 @@ namespace ADLibrary.Collections
                     parent.right = null;
                 }
             }
+            //if only right is null
             else if (current.right == null)
             {
+                //Check if item is root
                 if (current == root)
                 {
                     root = current.left;
                 }
+                //Set the correct child of its parent to null
                 else if (isLeftChild)
                 {
                     parent.left = current.left;
@@ -237,12 +248,15 @@ namespace ADLibrary.Collections
                     parent.right = current.right;
                 }
             }
+            //if only left is null
             else if (current.left == null)
             {
+                //Check if item is root
                 if (current == root)
                 {
                     root = current.right;
                 }
+                //Set the correct child of its parent to null
                 else if (isLeftChild)
                 {
                     parent.left = parent.right;
@@ -252,13 +266,17 @@ namespace ADLibrary.Collections
                     parent.right = current.right;
                 }
             }
+            //If both childs are not null
             else
             {
+                //Get the successor
                 TreeNode<T> successor = getSuccessor(current);
+                //Check if item is root
                 if (current == root)
                 {
                     root = successor;
                 }
+                //Set the correct child of its parent to the successor
                 else if (isLeftChild)
                 {
                     parent.left = successor;
@@ -269,22 +287,29 @@ namespace ADLibrary.Collections
                 }
                 successor.left = current.left;
             }
-
+            //Decrease the node count
             nodeCount--;
         }
 
+        /// <summary>
+        /// Method used to get the successor
+        /// </summary>
+        /// <param name="delNode">node to delete</param>
+        /// <returns>the successor node</returns>
         private TreeNode<T> getSuccessor(TreeNode<T> delNode)
         {
+            //Keep track of nodes
             TreeNode<T> successorParent = delNode;
             TreeNode<T> successor = delNode;
             TreeNode<T> current = delNode.right;
-            while (!(current == null))
+            //Loop until current equals null
+            while (current != null)
             {
                 successorParent = current;
                 successor = current;
                 current = current.left;
             }
-            if (!(successor == delNode.right))
+            if (successor != delNode.right)
             {
                 successorParent.left = successor.right;
                 successor.right = delNode.right;

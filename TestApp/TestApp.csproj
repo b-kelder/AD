@@ -87,7 +87,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util.cs" />
     <EmbeddedResource Include="AdvancedLog.resx">
       <DependentUpon>AdvancedLog.cs</DependentUpon>
     </EmbeddedResource>
