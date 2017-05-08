@@ -14,6 +14,11 @@ namespace ADLibrary.Performance
     public class PerformanceTester
     {
         /// <summary>
+        /// Used for locking during test runs.
+        /// It is static to ensure locking between all PerformanceTester objects since they all want to run on the same core.
+        /// </summary>
+        static object staticLock = new object();
+        /// <summary>
         /// Our performance counter.
         /// </summary>
         PerformanceCounter pfc;
@@ -86,7 +91,7 @@ namespace ADLibrary.Performance
         /// </summary>
         private void threadRun()
         {
-            lock(action)                                    // Lock to prevent other threads from messing with our test
+            lock(staticLock)                                // Lock to prevent other threads from messing with our test
             {
                 setThreadProcessorAffinity();               // Set affinity to last processor
                 GC.Collect();                               // GC now to prevent it from happening during the test

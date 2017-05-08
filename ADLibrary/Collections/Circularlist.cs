@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ADLibrary.Collections
 {
     /// <summary>
-    /// A doubly linked circular list
+    /// A singly linked circular list
     /// </summary>
     /// <typeparam name="T">The type to store</typeparam>
     public class CircularList<T> : SinglyLinkedList<T> where T: new()

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ADLibrary.Collections
 {
+    /// <summary>
+    /// A doubly linked generic list.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     public class DoublyLinkedList<T> : SinglyLinkedList<T> where T: new()
     {
         public DoublyLinkedList()

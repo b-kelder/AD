@@ -14,8 +14,13 @@ namespace ADLibrary.Hashing
         Arraylist<KeyValuePair<TKey, TValue>>[] buckets;
         int itemCount;
 
+        /// <summary>
+        /// Creates a new BucketHash with the given max item count.
+        /// </summary>
+        /// <param name="size">Maximum amount of items (table size)</param>
         public BucketHash(int size)
         {
+            // Create buckets
             buckets = new Arraylist<KeyValuePair<TKey, TValue>>[size];
             for(int i = 0; i < size; i++)
             {
@@ -44,7 +49,7 @@ namespace ADLibrary.Hashing
             i = i % buckets.Length;
             if(i < 0)
             {
-                i += buckets.Length;                                // Ensure the result is positive
+                i += buckets.Length;                        // Ensure the result is positive
             }
             return i;
         }
@@ -64,7 +69,7 @@ namespace ADLibrary.Hashing
 
             var hashValue = hash(key);
             var kvPair = new KeyValuePair<TKey, TValue>(key, value);
-            if(!buckets[hashValue].contains(kvPair))                  // Only add it if it's not already stored in there
+            if(!buckets[hashValue].contains(kvPair))                    // Only add it if it's not already stored in there
             {
                 var bucket = buckets[hashValue];
                 var bucketSize = bucket.count();
@@ -96,14 +101,14 @@ namespace ADLibrary.Hashing
                 throw new ArgumentException("key can not be default(TKey) or NULL");
             }
 
-            var hashValue = hash(key);
-            var bucket = buckets[hashValue];
-            var bucketSize = bucket.count();
-            for(int i = 0; i < bucketSize; i++)
+            var hashValue = hash(key);                                      // Get hash
+            var bucket = buckets[hashValue];                                // Get bucket item should be in
+            var bucketSize = bucket.count();                                // Store amount of buckets
+            for(int i = 0; i < bucketSize; i++)                             // Check every bucket
             {
                 if(bucket[i].Key.Equals(key))
                 {
-                    return bucket[i].Value;
+                    return bucket[i].Value;                                 // Found the key, return value
                 }
             }
             return default(TValue);
@@ -121,15 +126,15 @@ namespace ADLibrary.Hashing
                 throw new ArgumentException("key can not be default(TKey) or NULL");
             }
 
-            var hashValue = hash(key);
-            var bucket = buckets[hashValue];
-            var bucketSize = bucket.count();
-            for(int i = 0; i < bucketSize; i++)
+            var hashValue = hash(key);                              // Get hash
+            var bucket = buckets[hashValue];                        // Get bucket item should be in
+            var bucketSize = bucket.count();                        // Store amount of buckets
+            for(int i = 0; i < bucketSize; i++)                     // Check every bucket
             {
-                if(bucket[i].Key.Equals(key))
+                if(bucket[i].Key.Equals(key))                       // Found the item, key matches
                 {
-                    itemCount--;
-                    return bucket.removeAt(i).Value;
+                    itemCount--;                                    // Update item count
+                    return bucket.removeAt(i).Value;                // Remove item from bucket and return it
                 }
             }
             return default(TValue);

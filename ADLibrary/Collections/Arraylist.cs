@@ -110,6 +110,7 @@ namespace ADLibrary.Collections
         /// <returns>The index of the item or -1 if it can't be found.</returns>
         public int indexOf(T item)
         {
+            // Perform a linear search
             for(int i = 0; i < itemCount; i++)
             {
                 if(array[i].Equals(item))

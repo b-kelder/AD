@@ -17,8 +17,14 @@ using System.IO;
 
 namespace TestApp
 {
+    /// <summary>
+    /// Main form for testing application.
+    /// </summary>
     public partial class UI : Form
     {
+        /// <summary>
+        /// Enum for method to use for test data generation
+        /// </summary>
         enum DataGenerationMode
         {
             Random,
@@ -26,6 +32,9 @@ namespace TestApp
             Descending
         }
 
+        /// <summary>
+        /// Enum for search test's item location
+        /// </summary>
         enum SearchingLocation
         {
             Start,
@@ -77,6 +86,7 @@ namespace TestApp
 
         public UI()
         {
+            // Set up test managers
             random = new Random();
             sortingTestManager = new SortingTestManager();
             searchingTestManager = new SearchingTestManager();
@@ -84,14 +94,18 @@ namespace TestApp
 
             InitializeComponent();
 
+            // Populate UI
             sortingTestManager.populateSortingTab(sortingListBox);
             searchingTestManager.populateSearchingTab(searchingListBox);
 
+            // Set some defaults
             dataMethod.SelectedIndex = 0;
             searchingLocation.SelectedIndex = 2;
 
+            // Can't abort tests that haven't started
             buttonAbort.Enabled = false;
 
+            // Set up saveFileDialog
             saveFileDialog.Filter = "Text file|*.txt";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
@@ -411,14 +425,17 @@ namespace TestApp
                 action = () => {
                     log("Testing Collections...");
                     collectionTestManager.run(1, true);
-                    log(collectionTestManager.ToString());
-                    collectionTestManager.clearBuffer();
+                    log(collectionTestManager.ToString());      // Log results
+                    collectionTestManager.clearBuffer();        // Clear internal string builder
                 },
                 name = "Collection tests",
             });
             runTests();
         }
 
+        /// <summary>
+        /// Event handler for abort test button
+        /// </summary>
         private void buttonAbort_Click(object sender, EventArgs e)
         {
             if (pt != null)
@@ -429,6 +446,9 @@ namespace TestApp
             }
         }
 
+        /// <summary>
+        /// Event handler for clear log button
+        /// </summary>
         private void btnClearLog_Click(object sender, EventArgs e)
         {
             logBox.Clear();
@@ -444,6 +464,10 @@ namespace TestApp
             return Math.Round(((double)microseconds) / 1000, 2) + " ms";
         }
 
+        /// <summary>
+        /// Gets a DataGenerationMode enum based on the dropdown settings.
+        /// </summary>
+        /// <returns>Current DataGenerationMode</returns>
         private DataGenerationMode getSelectedDataGenerationMode()
         {
             string text = dataMethod.Text;
@@ -462,6 +486,10 @@ namespace TestApp
             return (DataGenerationMode)(-1);
         }
 
+        /// <summary>
+        /// Gets search location enum based on dropdown.
+        /// </summary>
+        /// <returns>SearchingLocation for current settings</returns>
         private SearchingLocation getSelectedSearchingLocation()
         {
             string text = searchingLocation.Text;
@@ -507,7 +535,7 @@ namespace TestApp
                 log("Generating ascending test data");
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = fmg.generateFisherman(i, 21, false);
+                    arr[i] = fmg.generateFisherman(i, 21, false);                       // All the same except for fish length
                 }
             }
             else if (method == DataGenerationMode.Descending)
@@ -515,7 +543,7 @@ namespace TestApp
                 log("Generating descending test data");
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = fmg.generateFisherman((arr.Length - i), 21, false);
+                    arr[i] = fmg.generateFisherman((arr.Length - i), 21, false);        // All the same except for fish length
                 }
             }
             else
@@ -549,6 +577,7 @@ namespace TestApp
         /// </summary>
         private void onTestsStarted()
         {
+            // Enable and disable the buttons
             buttonStartCustomTest.Enabled = false;
             buttonStartAllTest.Enabled = false;
             buttonTestCollections.Enabled = false;
@@ -571,18 +600,28 @@ namespace TestApp
         /// </summary>
         private void buttonSaveLog_Click(object sender, EventArgs e)
         {
-            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                using(var file = File.Open(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
+                if(saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    using(var sw = new StreamWriter(file))
+                    using(var file = File.Open(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
                     {
-                        sw.Write(logBox.Text);
+                        using(var sw = new StreamWriter(file))
+                        {
+                            sw.Write(logBox.Text);                          // Write log contents to file
+                        }
                     }
                 }
             }
+            catch(Exception)
+            {
+                MessageBox.Show("Unable to save file!");                    // Show a generic error message
+            }   
         }
 
+        /// <summary>
+        /// Exit button event handler
+        /// </summary>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -598,25 +637,25 @@ namespace TestApp
         private string arrayToString<T>(T[] array)
         {
             if (array == null)
-                return "";
+                return "";                       // In case someone passes null
 
-            var sb = new StringBuilder();
+            var sb = new StringBuilder();       // Use StringBuilder for performance
             sb.Append("(");
             int length = array.Length;
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)    // Loop trough array
             {
                 sb.Append(array[i]);
                 if (i < length - 1)
                 {
-                    sb.Append(") - \r\n(");
+                    sb.Append(") - \r\n(");     // We use a (array[i]) - \r\n pattern
                 }
                 else
                 {
-                    sb.Append(")");
+                    sb.Append(")");             // Last item just needs a )
                 }
             }
 
-            return sb.ToString();
+            return sb.ToString();               // Return completed string
         }
     }
 }

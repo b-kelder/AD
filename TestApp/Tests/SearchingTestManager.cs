@@ -48,6 +48,7 @@ namespace TestApp.Tests
             // Create test actions
             foreach(var checkedItem in algortihmNames)
             {
+                // Check name and create and add the appropriate hard-coded test action
                 if(checkedItem.Equals("BinarySearch"))
                 {
                     actions.Add(new TestAction()

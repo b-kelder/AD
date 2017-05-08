@@ -4,14 +4,17 @@ using System.Collections.Generic;
 namespace ADLibrary.Hashing
 {
     /// <summary>
-    /// Demo class for Linear Hash implementation.
+    /// Linear hash map
     /// </summary>
     public class LinearHash<TKey, TValue> : IHashtable<TKey, TValue>
     {
         KeyValuePair<TKey, TValue>[] table;
-
         private int itemCount;
 
+        /// <summary>
+        /// Creates a new LinearHash which can store a max of size items.
+        /// </summary>
+        /// <param name="size">Max amount of items</param>
         public LinearHash(int size)
         {
             table = new KeyValuePair<TKey, TValue>[size];

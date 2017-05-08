@@ -4,14 +4,17 @@ using System.Collections.Generic;
 namespace ADLibrary.Hashing
 {
     /// <summary>
-    /// Demo class for Quadratic Hash implementation.
+    /// Quadratic Hash table
     /// </summary>
     public class QuadraticHash<TKey, TValue> : IHashtable<TKey, TValue>
     {
         KeyValuePair<TKey, TValue>[] table;
-
         private int itemCount;
 
+        /// <summary>
+        /// Creates a new QuadraticHash with the given max item count.
+        /// </summary>
+        /// <param name="size">Maximum amount of items (table size)</param>
         public QuadraticHash(int size)
         {
             table = new KeyValuePair<TKey, TValue>[size];
@@ -76,21 +79,6 @@ namespace ADLibrary.Hashing
             throw new HashTableFullException();             // The entire table has been checked, it must be full if we hit this point
         }
 
-        public static string arrayToString<T>(T[] array)
-        {
-            if(array == null)
-                return "";
-
-            var sb = new System.Text.StringBuilder();
-            sb.Append("(");
-            foreach(var element in array)
-            {
-                sb.Append(element + ") - \r\n(");
-            }
-            sb.Append("FINISHED)");
-            return sb.ToString();
-        }
-
         /// <summary>
         /// Removes an item from the table.
         /// </summary>
@@ -106,12 +94,12 @@ namespace ADLibrary.Hashing
             int colCount = 0;
             while(colCount < table.Length)                    // Loop as long as we have space in the table
             {
-                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))
+                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))      // Check if key matches
                 {
-                    TValue value = table[normalizedHash].Value;
-                    table[normalizedHash] = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-                    itemCount--;
-                    return value;
+                    TValue value = table[normalizedHash].Value;                                                 // Get value
+                    table[normalizedHash] = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));     // Restore slot to a default configuration
+                    itemCount--;                                                                                // Update item count
+                    return value;                                                           // Return value
                 }
 
                 normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
@@ -136,9 +124,9 @@ namespace ADLibrary.Hashing
             int colCount = 0;
             while(colCount < table.Length)                    // Loop as long as we have space in the table
             {
-                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))
+                if(table[normalizedHash].Key != null && table[normalizedHash].Key.Equals(key))      // Check if key matches
                 {
-                    return table[normalizedHash].Value;
+                    return table[normalizedHash].Value;                                     // Return value
                 }
 
                 normalizedHash = normalizeHash(key.GetHashCode() + colCount * colCount);    // Get next index by applying quadratic hash function
