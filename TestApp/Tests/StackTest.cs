@@ -4,6 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Stack collection.
+    /// </summary>
+    /// <typeparam name="K">The type in the collection</typeparam>
     public class StackTest<K> : CollectionTestBase<Stack<K>, K>
     {
         public override string name

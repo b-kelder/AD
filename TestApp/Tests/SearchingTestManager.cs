@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 namespace TestApp.Tests
 {
-
+    /// <summary>
+    /// Searching test manager class.
+    /// </summary>
     public class SearchingTestManager
     {
         #region Helper classes

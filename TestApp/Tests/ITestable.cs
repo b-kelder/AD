@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Interface for tests.
+    /// </summary>
     interface ITestable
     {
         string name { get; }

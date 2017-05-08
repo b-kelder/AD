@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for PriorityQueue collection.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     public class PriorityQueueTest<T> : CollectionTestBase<PriorityQueue<T>, T> where T : IComparable
     {
         private T expectedFirst;

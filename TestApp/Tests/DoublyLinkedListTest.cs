@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Doubly Linked List collection.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     public class DoublyLinkedListTest<K> : CollectionTestBase<DoublyLinkedList<K>, K> where K:new()
     {
         public override string name

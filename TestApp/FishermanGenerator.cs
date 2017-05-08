@@ -7,6 +7,9 @@ using ADLibrary.Collections;
 
 namespace TestApp
 {
+    /// <summary>
+    /// Class to generate random Fisherman instances
+    /// </summary>
     class FishermanGenerator
     {
         //List of names to be used in random generation.

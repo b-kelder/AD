@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Arraylist collection.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     public class ArraylistTest<K> : CollectionTestBase<Arraylist<K>, K>
     {
         public override string name

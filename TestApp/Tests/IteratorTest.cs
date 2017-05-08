@@ -4,6 +4,10 @@ using System;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Linked List Iterator.
+    /// </summary>
+    /// <typeparam name="T">Type to store in linked list</typeparam>
     public class IteratorTest<T> : ITestable where T: new()
     {
         public string name

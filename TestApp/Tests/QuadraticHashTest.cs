@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for QuadraticHash collection.
+    /// </summary>
+    /// <typeparam name="TKey">Key type</typeparam>
+    /// <typeparam name="TValue">Value type</typeparam>
     class QuadraticHashTest<TKey, TValue> : HashTestBase<TKey, TValue>
     {
         public override string name

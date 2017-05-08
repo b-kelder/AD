@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for BucketHash collection.
+    /// </summary>
+    /// <typeparam name="TKey">Key type</typeparam>
+    /// <typeparam name="TValue">Value type</typeparam>
     class BucketHashTest<TKey, TValue> : HashTestBase<TKey, TValue>
     {
         public override string name

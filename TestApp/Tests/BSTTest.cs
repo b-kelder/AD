@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for BST.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     class BSTTest<T> : CollectionTestBase<BinarySearchTree<T>, T> where T : IComparable
     {
         public override string name

@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Circular List collection.
+    /// </summary>
+    /// <typeparam name="T">Type to store</typeparam>
     public class CircularListTest<K> : CollectionTestBase<CircularList<K>, K> where K : new()
     {
         public override string name

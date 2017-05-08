@@ -10,6 +10,10 @@ using System.Windows.Forms;
 namespace TestApp.Tests
 {
 
+    /// <summary>
+    /// Test manager for sorting 
+    /// </summary>
+    /// <typeparam name="K">The type in the collection</typeparam>
     public class SortingTestManager
     {
         #region Helper Classes

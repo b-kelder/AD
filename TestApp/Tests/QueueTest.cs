@@ -7,6 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestApp.Tests
 {
+    /// <summary>
+    /// Tests for Queue collection.
+    /// </summary>
+    /// <typeparam name="K">The type in the collection</typeparam>
     public class QueueTest<K> : CollectionTestBase<Queue<K>, K>
     {
         public override string name

@@ -202,7 +202,13 @@ namespace ADLibrary.Collections
     /// </summary>
     public class PriorityItem : IComparable
     {
+        /// <summary>
+        /// The object to store
+        /// </summary>
         object item;
+        /// <summary>
+        /// The priority
+        /// </summary>
         int priority;
 
         public PriorityItem(object item, int priority)
@@ -211,16 +217,29 @@ namespace ADLibrary.Collections
             this.priority = priority;
         }
 
+        /// <summary>
+        /// Retrieve the item stored.
+        /// </summary>
+        /// <returns>Item</returns>
         public object getItem()
         {
             return item;
         }
 
+        /// <summary>
+        /// Get the priority
+        /// </summary>
+        /// <returns>priority value</returns>
         public int getPriority()
         {
             return priority;
         }
 
+        /// <summary>
+        /// Compares based on priority
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>-1, 0, 1</returns>
         public int CompareTo(object obj)
         {
             var other = obj as PriorityItem;
