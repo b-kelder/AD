@@ -76,36 +76,6 @@ namespace ADLibrary.Collections
             }
         }
 
-        private void inOrder(TreeNode<T> root)
-        {
-            if (root != null)
-            {
-                inOrder(root.left);
-                //root.DisplayNode();
-                inOrder(root.right);
-            }
-        }
-
-        private void preOrder(TreeNode<T> root)
-        {
-            if (root != null)
-            {
-                //theRoot.displayNode();
-                preOrder(root.left);
-                preOrder(root.right);
-            }
-        }
-
-        private void postOrder(TreeNode<T> root)
-        {
-            if (root != null)
-            {
-                postOrder(root.left);
-                postOrder(root.right);
-                //root.DisplayNode();
-            }
-        }
-
         /// <summary>
         /// Method to find the smallest item in the tree
         /// </summary>
